@@ -15,15 +15,19 @@
   --accent:#5c6bc0;
   --accent-hover:#3f51b5;
 }
+
 *{box-sizing:border-box;margin:0;padding:0}
+
 body{
   font-family:Segoe UI,Roboto;
   background:var(--bg);
   color:var(--text);
   padding:20px;
 }
+
 h1{text-align:center;margin-bottom:20px}
 h2{margin-bottom:10px;font-size:1.1rem}
+
 .box{
   background:var(--card);
   padding:20px;
@@ -31,12 +35,20 @@ h2{margin-bottom:10px;font-size:1.1rem}
   margin-bottom:20px;
   box-shadow:0 8px 20px rgba(0,0,0,.5);
 }
+
 .input-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:12px;
 }
-label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column}
+
+label{
+  font-size:.85rem;
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+}
+
 input{
   padding:10px;
   border-radius:10px;
@@ -44,6 +56,7 @@ input{
   background:#111;
   color:var(--text);
 }
+
 button{
   margin-top:12px;
   width:100%;
@@ -55,9 +68,24 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-table{width:100%;margin-top:10px;border-collapse:collapse}
-th,td{padding:10px;border-bottom:1px solid #333;text-align:left;font-size:.9rem}
-th{color:var(--muted);background:#111}
+
+table{
+  width:100%;
+  margin-top:10px;
+  border-collapse:collapse;
+}
+
+th,td{
+  padding:10px;
+  border-bottom:1px solid #333;
+  text-align:left;
+  font-size:.9rem;
+}
+
+th{
+  color:var(--muted);
+  background:#111;
+}
 </style>
 </head>
 
@@ -69,14 +97,14 @@ th{color:var(--muted);background:#111}
   <h2>Input Demand</h2>
   <div class="input-grid">
     <label>Vest Armor<input id="vest" type="number" value="0"></label>
-    <label>Ammo (Rifle + SMG)<input id="ammo" type="number" value="0"></label>
+    <label>Ammo Box<input id="ammo" type="number" value="0"></label>
     <label>Pistol Package<input id="pistol" type="number" value="0"></label>
   </div>
   <button onclick="calc()">Kira Full Craft</button>
 </div>
 
 <div class="box">
-<h2>PRODUCT TOTAL</h2>
+<h2>PRODUCT</h2>
 <table><tbody id="product"></tbody></table>
 </div>
 
@@ -91,85 +119,33 @@ th{color:var(--muted);background:#111}
 </div>
 
 <div class="box">
-<h2>RAW MATERIALS (FINAL FARM LIST)</h2>
+<h2>RAW MATERIALS</h2>
 <table><tbody id="raw"></tbody></table>
 </div>
 
 <script>
-
-function add(obj,k,v){obj[k]=(obj[k]||0)+v}
-
-// expand Tier3 → Tier4
-function expandT3(t3){
-  const t4 = {}
-
-  add(t4,'joint', t3.purecoke * 1)
-  add(t4,'morphine', t3.crack * 1)
-  add(t4,'heroin', t3.crack * 1)
-  add(t4,'cocaine', t3.ammonium * 1)
-
-  return t4
-}
-
-// expand Tier4 → Products
 function calc() {
 
-  const vest = +document.getElementById('vest').value
-  const ammo = +document.getElementById('ammo').value
-  const pistol = +document.getElementById('pistol').value
+  const vest = +document.getElementById('vest').value;
+  const ammo = +document.getElementById('ammo').value;
+  const pistol = +document.getElementById('pistol').value;
 
-  // ================= PRODUCT DEMAND =================
-  const product = {
-    vest_armor: vest,
-    rifle_ammo: ammo,
-    smg_ammo: ammo,
-    rifle: pistol,
-    smg: pistol,
-    pistol: pistol,
-    pistol_ammo: pistol
-  }
-
-  // ================= TIER 4 DIRECT FROM PRODUCT =================
-  const t4 = {}
-
-  // Vest Armor
-  add(t4,'joint', vest * 2)
-  add(t4,'cocaine', vest * 2)
-  add(t4,'morphine', vest * 1)
-  add(t4,'heroin', vest * 1)
-
-  // Rifle Ammo
-  add(t4,'cocaine', ammo * 1)
-  add(t4,'morphine', ammo * 1)
-
-  // SMG Ammo
-  add(t4,'cocaine', ammo * 1)
-  add(t4,'morphine', ammo * 1)
-
-  // Rifle
-  add(t4,'joint', pistol * 7)
-  add(t4,'heroin', pistol * 7)
-
-  // SMG
-  add(t4,'cocaine', pistol * 5)
-  add(t4,'heroin', pistol * 5)
-
-  // Pistol
-  add(t4,'morphine', pistol * 3)
-  add(t4,'heroin', pistol * 3)
-
-  // Pistol Ammo
-  add(t4,'cocaine', pistol * 1)
-  add(t4,'morphine', pistol * 1)
+  // ================= TIER 4 =================
+  const t4 = {
+    joint: vest * 2,
+    morphine: vest * 1 + ammo * 1 + pistol * 1,
+    heroin: vest * 1 + pistol * 3,
+    cocaine: vest * 2 + ammo * 1 + pistol * 1
+  };
 
   // ================= TIER 3 =================
   const t3 = {
     ammonium: t4.heroin + t4.cocaine,
     crack: t4.morphine + t4.heroin,
     purecoke: t4.joint + t4.cocaine
-  }
+  };
 
-  // ================= RAW EXPANSION =================
+  // ================= RAW =================
   const raw = {
     iron: pistol * 20,
     kayu: pistol * 20,
@@ -186,28 +162,81 @@ function calc() {
     acid: t3.ammonium * 5,
 
     water: t3.ammonium + t3.crack + t3.purecoke,
+    plastic: t4.joint + t4.morphine + t4.heroin + t4.cocaine
+  };
 
-    plastic:
-      t4.joint +
-      t4.cocaine +
-      t4.morphine +
-      t4.heroin
-  }
+  // ================= PRODUCT (FULL SEPARATE) =================
+  const product = {
 
-  render('product',product)
-  render('t4',t4)
-  render('t3',t3)
-  render('raw',raw)
+    rifle: {
+      iron: pistol * 20,
+      kayu: pistol * 20,
+      joint: pistol * 7,
+      heroin: pistol * 7
+    },
+
+    rifle_ammo: {
+      besi: ammo * 5,
+      kayu: ammo * 5,
+      cocaine: ammo * 1,
+      morphine: ammo * 1
+    },
+
+    smg: {
+      getah: pistol * 20,
+      keluli: pistol * 20,
+      cocaine: pistol * 5,
+      heroin: pistol * 5
+    },
+
+    smg_ammo: {
+      getah: ammo * 5,
+      keluli: ammo * 5,
+      cocaine: ammo * 1,
+      morphine: ammo * 1
+    },
+
+    pistol: {
+      tembaga: pistol * 20,
+      kain: pistol * 20,
+      morphine: pistol * 3,
+      heroin: pistol * 3
+    },
+
+    pistol_ammo: {
+      tembaga: pistol * 5,
+      kain: pistol * 5,
+      cocaine: pistol * 1,
+      morphine: pistol * 1
+    },
+
+    vest_armor: {
+      joint: vest * 2,
+      cocaine: vest * 2,
+      morphine: vest * 1,
+      heroin: vest * 1
+    }
+  };
+
+  render('product', product);
+  render('t4', t4);
+  render('t3', t3);
+  render('raw', raw);
 }
 
 function render(id,obj){
-  const el=document.getElementById(id)
-  el.innerHTML=''
+  const el=document.getElementById(id);
+  el.innerHTML='';
   for(const k in obj){
-    el.innerHTML+=`<tr><td>${k.toUpperCase()}</td><td>${obj[k]}</td></tr>`
+    if(typeof obj[k]==='object'){
+      for(const i in obj[k]){
+        el.innerHTML += `<tr><td>${k.toUpperCase()} → ${i.toUpperCase()}</td><td>${obj[k][i]}</td></tr>`;
+      }
+    } else {
+      el.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${obj[k]}</td></tr>`;
+    }
   }
 }
-
 </script>
 
 </body>
