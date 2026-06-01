@@ -7,54 +7,25 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   background: #0b0d12;
-  color: #fff;
+  color: white;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 900px;
   margin: auto;
   padding: 20px;
-}
-
-.header {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
 }
 
 .card {
   background: #151925;
   padding: 15px;
   border-radius: 10px;
-  margin-bottom: 15px;
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  margin-top: 8px;
-  background: #0f131c;
-  color: white;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 8px;
-  background: #00c2ff;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #00a6d6;
+h2 {
+  margin-top: 0;
 }
 
 .grid {
@@ -63,20 +34,56 @@ button:hover {
   gap: 10px;
 }
 
-.tierBox {
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: #111522;
   padding: 10px;
   border-radius: 10px;
-}
-
-.tierTitle {
-  font-weight: bold;
   margin-bottom: 8px;
-  color: #00c2ff;
 }
 
-.item {
-  padding: 4px 0;
+.btn {
+  background: #00c2ff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.qty {
+  min-width: 30px;
+  text-align: center;
+}
+
+button.calc {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #00c2ff;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.box {
+  background: #111522;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.title {
+  color: #00c2ff;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.itemLine {
+  padding: 3px 0;
   border-bottom: 1px solid #1f2635;
 }
 </style>
@@ -86,57 +93,99 @@ button:hover {
 
 <div class="container">
 
-  <div class="header">CRAFT CALCULATOR</div>
-
   <div class="card">
-    <label>Item Name (exact)</label>
-    <input id="item" placeholder="Rifle / SMG / Pistol / VestArmor / RifleAmmo..." />
+    <h2>CRAFT CALCULATOR</h2>
 
-    <label>Quantity</label>
-    <input id="qty" type="number" value="1" min="1" />
+    <div class="grid">
 
-    <button onclick="calc()">CALCULATE</button>
+      <div>
+        <div class="item">
+          Rifle
+          <div>
+            <button class="btn" onclick="change('Rifle',-1)">-</button>
+            <span id="Rifle" class="qty">0</span>
+            <button class="btn" onclick="change('Rifle',1)">+</button>
+          </div>
+        </div>
+
+        <div class="item">
+          SMG
+          <div>
+            <button class="btn" onclick="change('SMG',-1)">-</button>
+            <span id="SMG" class="qty">0</span>
+            <button class="btn" onclick="change('SMG',1)">+</button>
+          </div>
+        </div>
+
+        <div class="item">
+          Pistol
+          <div>
+            <button class="btn" onclick="change('Pistol',-1)">-</button>
+            <span id="Pistol" class="qty">0</span>
+            <button class="btn" onclick="change('Pistol',1)">+</button>
+          </div>
+        </div>
+
+        <div class="item">
+          Vest Armor
+          <div>
+            <button class="btn" onclick="change('VestArmor',-1)">-</button>
+            <span id="VestArmor" class="qty">0</span>
+            <button class="btn" onclick="change('VestArmor',1)">+</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <button class="calc" onclick="calc()">CALCULATE</button>
+
+        <div id="out"></div>
+      </div>
+
+    </div>
+
   </div>
-
-  <div id="output"></div>
 
 </div>
 
 <script>
 const recipes = {
 
-  // Tier 4
-  Rifle: { Joint:7, Heroin:7, Iron:20, Kayu:20 },
-  SMG: { Getah:20, Keluli:20, Cocaine:5, Heroin:5 },
-  Pistol: { Tembaga:20, Kain:20, Morphine:3, Heroin:3 },
-  VestArmor: { Joint:2, Cocaine:2, Morphine:1, Heroin:1 },
-  RifleAmmo: { Besi:5, Kayu:5, Cocaine:1, Morphine:1 },
-  SMGAmmo: { Getah:5, Keluli:5, Cocaine:1, Morphine:1 },
-  PistolAmmo: { Tembaga:5, Kain:5, Cocaine:1, Morphine:1 },
+Rifle: { Joint:7, Heroin:7, Iron:20, Kayu:20 },
+SMG: { Getah:20, Keluli:20, Cocaine:5, Heroin:5 },
+Pistol: { Tembaga:20, Kain:20, Morphine:3, Heroin:3 },
+VestArmor: { Joint:2, Cocaine:2, Morphine:1, Heroin:1 },
 
-  // Tier 3
-  Joint: { Weedbud:5, CokePure:1, Plastic:1 },
-  Morphine: { Weedbud:5, Crack:1, Plastic:1 },
-  Heroin: { Crack:1, AmmoniumChlorite:1, Plastic:1 },
-  Cocaine: { CokePure:1, AmmoniumChlorite:1, Plastic:1 },
+Joint: { Weedbud:5, CokePure:1, Plastic:1 },
+Morphine: { Weedbud:5, Crack:1, Plastic:1 },
+Heroin: { Crack:1, AmmoniumChlorite:1, Plastic:1 },
+Cocaine: { CokePure:1, AmmoniumChlorite:1, Plastic:1 },
 
-  // Tier 2
-  AmmoniumChlorite: { HydrochloricAcid:5, Water:1, Plastic:1 },
-  Crack: { Poppy:5, Water:1, Plastic:1 },
-  CokePure: { CokeLeaf:5, Water:1, Plastic:1 }
+AmmoniumChlorite: { HydrochloricAcid:5, Water:1, Plastic:1 },
+Crack: { Poppy:5, Water:1, Plastic:1 },
+CokePure: { CokeLeaf:5, Water:1, Plastic:1 }
+
 };
 
-function expand(item, qty, result = {}) {
+function change(id, val) {
+  let el = document.getElementById(id);
+  let current = parseInt(el.innerText);
+  current = Math.max(0, current + val);
+  el.innerText = current;
+}
+
+function expand(item, qty, out = {}) {
   if (!recipes[item]) {
-    result[item] = (result[item] || 0) + qty;
-    return result;
+    out[item] = (out[item] || 0) + qty;
+    return out;
   }
 
   for (let k in recipes[item]) {
-    expand(k, qty * recipes[item][k], result);
+    expand(k, qty * recipes[item][k], out);
   }
 
-  return result;
+  return out;
 }
 
 function tier(item) {
@@ -147,45 +196,51 @@ function tier(item) {
 }
 
 function calc() {
-  let item = document.getElementById("item").value.trim();
-  let qty = parseInt(document.getElementById("qty").value);
+  let final = {};
 
-  let raw = expand(item, qty);
+  for (let id of ["Rifle","SMG","Pistol","VestArmor"]) {
+    let qty = parseInt(document.getElementById(id).innerText);
 
-  let t1 = {}, t2 = {}, t3 = {}, t4 = {};
-
-  for (let k in raw) {
-    let t = tier(k);
-    if (t === 1) t1[k] = raw[k];
-    if (t === 2) t2[k] = raw[k];
-    if (t === 3) t3[k] = raw[k];
-    if (t === 4) t4[k] = raw[k];
+    if (qty > 0) {
+      let data = expand(id, qty);
+      for (let k in data) {
+        final[k] = (final[k] || 0) + data[k];
+      }
+    }
   }
 
-  document.getElementById("output").innerHTML = `
-    <div class="grid">
+  let t1={},t2={},t3={},t4={};
 
-      <div class="tierBox">
-        <div class="tierTitle">TIER 4</div>
-        ${Object.keys(t4).map(i=>`<div class="item">${i} : ${t4[i]}</div>`).join("") || "<div class='item'>-</div>"}
-      </div>
+  for (let k in final) {
+    let t = tier(k);
+    if (t===1) t1[k]=final[k];
+    if (t===2) t2[k]=final[k];
+    if (t===3) t3[k]=final[k];
+    if (t===4) t4[k]=final[k];
+  }
 
-      <div class="tierBox">
-        <div class="tierTitle">TIER 3</div>
-        ${Object.keys(t3).map(i=>`<div class="item">${i} : ${t3[i]}</div>`).join("") || "<div class='item'>-</div>"}
-      </div>
+  document.getElementById("out").innerHTML = `
 
-      <div class="tierBox">
-        <div class="tierTitle">TIER 2</div>
-        ${Object.keys(t2).map(i=>`<div class="item">${i} : ${t2[i]}</div>`).join("") || "<div class='item'>-</div>"}
-      </div>
+  <div class="box">
+    <div class="title">TIER 4</div>
+    ${Object.keys(t4).map(i=>`<div class="itemLine">${i} x${t4[i]}</div>`).join("") || "-"}
+  </div>
 
-      <div class="tierBox">
-        <div class="tierTitle">TIER 1 (RAW)</div>
-        ${Object.keys(t1).map(i=>`<div class="item">${i} : ${t1[i]}</div>`).join("") || "<div class='item'>-</div>"}
-      </div>
+  <div class="box">
+    <div class="title">TIER 3</div>
+    ${Object.keys(t3).map(i=>`<div class="itemLine">${i} x${t3[i]}</div>`).join("") || "-"}
+  </div>
 
-    </div>
+  <div class="box">
+    <div class="title">TIER 2</div>
+    ${Object.keys(t2).map(i=>`<div class="itemLine">${i} x${t2[i]}</div>`).join("") || "-"}
+  </div>
+
+  <div class="box">
+    <div class="title">TIER 1 RAW</div>
+    ${Object.keys(t1).map(i=>`<div class="itemLine">${i} x${t1[i]}</div>`).join("") || "-"}
+  </div>
+
   `;
 }
 </script>
