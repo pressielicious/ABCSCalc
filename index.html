@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   margin: auto;
   padding: 20px;
 }
@@ -29,7 +29,6 @@ body {
   padding: 15px;
   border-radius: 12px;
   margin-bottom: 15px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
 }
 
 .row {
@@ -51,7 +50,6 @@ select, input {
 
 button {
   background: #00c853;
-  color: black;
   font-weight: bold;
   cursor: pointer;
 }
@@ -61,14 +59,16 @@ button:hover {
 }
 
 .section-title {
-  font-size: 16px;
-  margin-bottom: 10px;
+  font-size: 14px;
   color: #00e676;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
@@ -91,7 +91,7 @@ button:hover {
 
   <div class="header">
     <h2>CRAFT CALCULATOR</h2>
-    <p class="small">Final Product → Breakdown → Raw Materials</p>
+    <p class="small">Final → Craft → Raw breakdown system</p>
   </div>
 
   <div class="card">
@@ -112,13 +112,21 @@ button:hover {
     </div>
   </div>
 
+  <!-- FINAL -->
   <div class="card">
-    <div class="section-title">FINAL PRODUCT REQUIREMENT</div>
-    <div id="final"></div>
+    <div class="section-title">FINAL PRODUCT</div>
+    <div id="final" class="grid"></div>
   </div>
 
+  <!-- CRAFT -->
   <div class="card">
-    <div class="section-title">RAW MATERIALS TOTAL</div>
+    <div class="section-title">CRAFT ITEMS (INTERMEDIATE)</div>
+    <div id="craft" class="grid"></div>
+  </div>
+
+  <!-- RAW -->
+  <div class="card">
+    <div class="section-title">RAW MATERIALS</div>
     <div id="raw" class="grid"></div>
   </div>
 
@@ -147,44 +155,50 @@ const recipes = {
   "Vest Armor": {"Joint":2, "Cocaine":2, "Morphine":1, "Heroin":1}
 };
 
-let finalList = {};
-let rawList = {};
+let final = {};
+let craft = {};
+let raw = {};
 
 function resolve(item, qty) {
   if (!recipes[item]) {
-    rawList[item] = (rawList[item] || 0) + qty;
+    raw[item] = (raw[item] || 0) + qty;
     return;
   }
 
-  finalList[item] = (finalList[item] || 0) + qty;
+  // classify craft vs final
+  if (item in recipes) {
+    if (recipes[item] && Object.keys(recipes[item]).length > 0) {
+      craft[item] = (craft[item] || 0) + qty;
+    }
+  }
 
   for (let k in recipes[item]) {
     resolve(k, recipes[item][k] * qty);
   }
 }
 
+function draw(obj, el) {
+  let html = "";
+  for (let k in obj) {
+    html += `<div class="item">${k}<br><b>${obj[k]}</b></div>`;
+  }
+  document.getElementById(el).innerHTML = html;
+}
+
 function calculate() {
-  finalList = {};
-  rawList = {};
+  final = {};
+  craft = {};
+  raw = {};
 
   const item = document.getElementById("item").value;
   const qty = parseInt(document.getElementById("qty").value);
 
+  final[item] = qty;
   resolve(item, qty);
 
-  // FINAL PRODUCT
-  let finalHTML = "";
-  for (let k in finalList) {
-    finalHTML += `<div class="item">${k}: ${finalList[k]}</div>`;
-  }
-  document.getElementById("final").innerHTML = finalHTML;
-
-  // RAW MATERIALS
-  let rawHTML = "";
-  for (let k in rawList) {
-    rawHTML += `<div class="item">${k}<br><b>${rawList[k]}</b></div>`;
-  }
-  document.getElementById("raw").innerHTML = rawHTML;
+  draw(final, "final");
+  draw(craft, "craft");
+  draw(raw, "raw");
 }
 </script>
 
