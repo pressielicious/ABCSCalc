@@ -1,176 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ABDCalc</title>
-  <style>
-    :root {
-      --bg: #0d0d10;
-      --card: #1a1a1f;
-      --border: #333;
-      --text: #e6e6eb;
-      --muted: #a0a0ab;
-      --accent: #5c6bc0;
-      --accent-hover: #3f51b5;
-    }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body {
-      font-family: 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 20px;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      letter-spacing: 1px;
-    }
-    h2 { margin-bottom: 12px; font-size: 1.1rem; }
-    .box {
-      background: var(--card);
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-    }
-    .input-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .input-grid label {
-      display: flex;
-      flex-direction: column;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-    input {
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #111;
-      color: var(--text);
-      font-size: 1rem;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      background: var(--accent);
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s;
-      font-size: 1rem;
-    }
-    button:hover { background: var(--accent-hover); }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 0.9rem;
-    }
-    th, td {
-      border-bottom: 1px solid var(--border);
-      padding: 10px 6px;
-      text-align: left;
-    }
-    th {
-      background: #111;
-      color: var(--muted);
-      font-weight: 500;
-    }
-    @media (max-width: 600px) {
-      .input-grid { grid-template-columns: 1fr; }
-      h1 { font-size: 1.5rem; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ABD Full Craft System</title>
+
+<style>
+:root {
+  --bg:#0d0d10;
+  --card:#1a1a1f;
+  --border:#333;
+  --text:#e6e6eb;
+  --muted:#a0a0ab;
+  --accent:#5c6bc0;
+  --accent-hover:#3f51b5;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Segoe UI,Roboto;
+  background:var(--bg);
+  color:var(--text);
+  padding:20px;
+}
+h1{text-align:center;margin-bottom:20px}
+h2{margin-bottom:10px;font-size:1.1rem}
+.box{
+  background:var(--card);
+  padding:20px;
+  border-radius:16px;
+  margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.5);
+}
+.input-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+label{font-size:.85rem;color:var(--muted);display:flex;flex-direction:column}
+input{
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#111;
+  color:var(--text);
+}
+button{
+  margin-top:12px;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:var(--accent);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+table{width:100%;margin-top:10px;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #333;text-align:left;font-size:.9rem}
+th{color:var(--muted);background:#111}
+</style>
 </head>
 
 <body>
-<h1>AB Dadih Calculator</h1>
+
+<h1>FULL CRAFT SYSTEM</h1>
 
 <div class="box">
-  <h2>Input</h2>
+  <h2>Input Demand</h2>
   <div class="input-grid">
-    <div><label>Vest<input type="number" id="vest" value="0" min="0" /></label></div>
-    <div><label>Ammo Box<input type="number" id="ammo" value="0" min="0" /></label></div>
-    <div><label>Pistol<input type="number" id="pistol" value="0" min="0" /></label></div>
+    <label>Vest Armor<input id="vest" type="number" value="0"></label>
+    <label>Ammo (Rifle + SMG)<input id="ammo" type="number" value="0"></label>
+    <label>Pistol Package<input id="pistol" type="number" value="0"></label>
   </div>
-  <button onclick="calculate()">Kira</button>
+  <button onclick="calc()">Kira Full Craft</button>
 </div>
 
 <div class="box">
-  <h2>Bahan Mentah (Farm/Buy)</h2>
-  <table>
-    <tr><th>Bahan</th><th>Jumlah</th></tr>
-    <tbody id="raw"></tbody>
-  </table>
+<h2>PRODUCT TOTAL</h2>
+<table><tbody id="product"></tbody></table>
 </div>
 
 <div class="box">
-  <h2>Tier 3 (Craft)</h2>
-  <table>
-    <tr><th>Item</th><th>Jumlah</th></tr>
-    <tbody id="tier3"></tbody>
-  </table>
+<h2>TIER 4</h2>
+<table><tbody id="t4"></tbody></table>
 </div>
 
 <div class="box">
-  <h2>Tier 4 (Craft)</h2>
-  <table>
-    <tr><th>Item</th><th>Jumlah</th></tr>
-    <tbody id="tier4"></tbody>
-  </table>
+<h2>TIER 3</h2>
+<table><tbody id="t3"></tbody></table>
+</div>
+
+<div class="box">
+<h2>RAW MATERIALS (FINAL FARM LIST)</h2>
+<table><tbody id="raw"></tbody></table>
 </div>
 
 <script>
-function calculate() {
-  const vest = Number(document.getElementById('vest').value);
-  const ammo = Number(document.getElementById('ammo').value);
-  const pistol = Number(document.getElementById('pistol').value);
 
-  const tier4 = {
-    joint: vest*2 + ammo*1 + pistol*1,
-    pillscoke: vest*2 + ammo*1 + pistol*1,
-    morphine: vest*1 + ammo*1 + pistol*2,
-    heroin: vest*1 + ammo*1 + pistol*2
-  };
+function add(obj,k,v){obj[k]=(obj[k]||0)+v}
 
-  const tier3 = {
-    cokepure: tier4.joint + tier4.pillscoke,
-    crack: tier4.morphine + tier4.heroin,
-    ammonium: tier4.heroin + tier4.pillscoke
-  };
+// expand Tier3 → Tier4
+function expandT3(t3){
+  const t4 = {}
 
-  const raw = {
-    weedbud: (tier4.joint + tier4.morphine) * 5,
-    cokeleaf: tier3.cokepure * 5,
-    poppy: tier3.crack * 5,
-    acid: tier3.ammonium * 5,
-    water: tier3.cokepure + tier3.crack + tier3.ammonium,
-    plastic: tier4.joint + tier4.pillscoke + tier4.morphine + tier4.heroin + tier3.cokepure + tier3.crack + tier3.ammonium
-  };
+  add(t4,'joint', t3.purecoke * 1)
+  add(t4,'morphine', t3.crack * 1)
+  add(t4,'heroin', t3.crack * 1)
+  add(t4,'cocaine', t3.ammonium * 1)
 
-  const r = document.getElementById('raw');
-  r.innerHTML = '';
-  for (let k in raw)
-    r.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${raw[k]}</td></tr>`;
-
-  const t3 = document.getElementById('tier3');
-  t3.innerHTML = '';
-  for (let k in tier3)
-    t3.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${tier3[k]}</td></tr>`;
-
-  const t4 = document.getElementById('tier4');
-  t4.innerHTML = '';
-  for (let k in tier4)
-    t4.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${tier4[k]}</td></tr>`;
+  return t4
 }
+
+// expand Tier4 → Products
+function calc() {
+
+  const vest = +document.getElementById('vest').value
+  const ammo = +document.getElementById('ammo').value
+  const pistol = +document.getElementById('pistol').value
+
+  // ================= PRODUCT DEMAND =================
+  const product = {
+    vest_armor: vest,
+    rifle_ammo: ammo,
+    smg_ammo: ammo,
+    rifle: pistol,
+    smg: pistol,
+    pistol: pistol,
+    pistol_ammo: pistol
+  }
+
+  // ================= TIER 4 DIRECT FROM PRODUCT =================
+  const t4 = {}
+
+  // Vest Armor
+  add(t4,'joint', vest * 2)
+  add(t4,'cocaine', vest * 2)
+  add(t4,'morphine', vest * 1)
+  add(t4,'heroin', vest * 1)
+
+  // Rifle Ammo
+  add(t4,'cocaine', ammo * 1)
+  add(t4,'morphine', ammo * 1)
+
+  // SMG Ammo
+  add(t4,'cocaine', ammo * 1)
+  add(t4,'morphine', ammo * 1)
+
+  // Rifle
+  add(t4,'joint', pistol * 7)
+  add(t4,'heroin', pistol * 7)
+
+  // SMG
+  add(t4,'cocaine', pistol * 5)
+  add(t4,'heroin', pistol * 5)
+
+  // Pistol
+  add(t4,'morphine', pistol * 3)
+  add(t4,'heroin', pistol * 3)
+
+  // Pistol Ammo
+  add(t4,'cocaine', pistol * 1)
+  add(t4,'morphine', pistol * 1)
+
+  // ================= TIER 3 =================
+  const t3 = {
+    ammonium: t4.heroin + t4.cocaine,
+    crack: t4.morphine + t4.heroin,
+    purecoke: t4.joint + t4.cocaine
+  }
+
+  // ================= RAW EXPANSION =================
+  const raw = {
+    iron: pistol * 20,
+    kayu: pistol * 20,
+
+    getah: pistol * 20 + ammo * 5,
+    keluli: pistol * 20 + ammo * 5,
+
+    tembaga: pistol * 20,
+    kain: pistol * 20,
+
+    weedbud: (t4.joint + t4.morphine) * 5,
+    poppy: t3.crack * 5,
+    cokeleaf: t3.purecoke * 5,
+    acid: t3.ammonium * 5,
+
+    water: t3.ammonium + t3.crack + t3.purecoke,
+
+    plastic:
+      t4.joint +
+      t4.cocaine +
+      t4.morphine +
+      t4.heroin
+  }
+
+  render('product',product)
+  render('t4',t4)
+  render('t3',t3)
+  render('raw',raw)
+}
+
+function render(id,obj){
+  const el=document.getElementById(id)
+  el.innerHTML=''
+  for(const k in obj){
+    el.innerHTML+=`<tr><td>${k.toUpperCase()}</td><td>${obj[k]}</td></tr>`
+  }
+}
+
 </script>
 
 </body>
