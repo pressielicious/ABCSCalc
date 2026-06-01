@@ -1,204 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Craft Calculator</title>
+  <meta charset="UTF-8">
+  <title>Tier Craft Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f1115;
+      color: #fff;
+      padding: 20px;
+    }
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b0b0b;
-  color: #fff;
-}
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #1a1d25;
+      padding: 20px;
+      border-radius: 12px;
+    }
 
-.container {
-  max-width: 1000px;
-  margin: auto;
-  padding: 20px;
-}
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-.header {
-  text-align: center;
-  margin-bottom: 20px;
-}
+    input, select, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 6px;
+      border: none;
+    }
 
-.card {
-  background: #161616;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 15px;
-}
+    button {
+      background: #4caf50;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
-.row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+    button:hover {
+      background: #45a049;
+    }
 
-select, input, button {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-}
+    .box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #11141b;
+      border-radius: 10px;
+    }
 
-select, input {
-  background: #222;
-  color: white;
-}
+    .tier {
+      margin-bottom: 10px;
+      padding: 10px;
+      background: #222634;
+      border-radius: 8px;
+    }
 
-button {
-  background: #00c853;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .title {
+      font-weight: bold;
+      color: #00d4ff;
+    }
 
-button:hover {
-  background: #00e676;
-}
-
-.section-title {
-  font-size: 14px;
-  color: #00e676;
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.item {
-  background: #222;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.small {
-  color: #aaa;
-  font-size: 12px;
-}
-</style>
+    .item {
+      margin-left: 10px;
+    }
+  </style>
 </head>
-
 <body>
 
 <div class="container">
+  <h1>Tier Craft Calculator</h1>
 
-  <div class="header">
-    <h2>CRAFT CALCULATOR</h2>
-    <p class="small">Final → Craft → Raw breakdown system</p>
-  </div>
+  <label>Select Item (Tier 4)</label>
+  <select id="item">
+    <option value="Rifle">Rifle</option>
+    <option value="RifleAmmo">Rifle Ammo</option>
+    <option value="SMG">SMG</option>
+    <option value="SMGAmmo">SMG Ammo</option>
+    <option value="Pistol">Pistol</option>
+    <option value="PistolAmmo">Pistol Ammo</option>
+    <option value="VestArmor">Vest Armor</option>
+  </select>
 
-  <div class="card">
-    <div class="row">
-      <select id="item">
-        <option>Rifle</option>
-        <option>Rifle Ammo</option>
-        <option>SMG</option>
-        <option>SMG Ammo</option>
-        <option>Pistol</option>
-        <option>Pistol Ammo</option>
-        <option>Vest Armor</option>
-      </select>
+  <label>Quantity</label>
+  <input type="number" id="qty" value="1" min="1">
 
-      <input type="number" id="qty" value="1" min="1">
+  <button onclick="calculate()">Calculate</button>
 
-      <button onclick="calculate()">CALCULATE</button>
-    </div>
-  </div>
-
-  <!-- FINAL -->
-  <div class="card">
-    <div class="section-title">FINAL PRODUCT</div>
-    <div id="final" class="grid"></div>
-  </div>
-
-  <!-- CRAFT -->
-  <div class="card">
-    <div class="section-title">CRAFT ITEMS (INTERMEDIATE)</div>
-    <div id="craft" class="grid"></div>
-  </div>
-
-  <!-- RAW -->
-  <div class="card">
-    <div class="section-title">RAW MATERIALS</div>
-    <div id="raw" class="grid"></div>
-  </div>
-
+  <div class="box" id="output"></div>
 </div>
 
 <script>
 const recipes = {
-  "Ammonium Chlorite": {"Hydrochloric Acid":5, "Water":1, "Plastic":1},
-  "Crack": {"Poppy":5, "Water":1, "Plastic":1},
-  "Coke Pure": {"Coke Leaf":5, "Water":1, "Plastic":1},
 
-  "Joint": {"Weedbud":5, "Coke Pure":1, "Plastic":1},
-  "Morphine": {"Weedbud":5, "Crack":1, "Plastic":1},
-  "Heroin": {"Crack":1, "Ammonium Chlorite":1, "Plastic":1},
-  "Cocaine": {"Coke Pure":1, "Ammonium Chlorite":1, "Plastic":1},
+  // TIER 3 -> TIER 4
+  Rifle: { Joint:7, Heroin:7, Iron:20, Kayu:20 },
+  RifleAmmo: { Besi:5, Kayu:5, Cocaine:1, Morphine:1 },
+  SMG: { Getah:20, Keluli:20, Cocaine:5, Heroin:5 },
+  SMGAmmo: { Getah:5, Keluli:5, Cocaine:1, Morphine:1 },
+  Pistol: { Tembaga:20, Kain:20, Morphine:3, Heroin:3 },
+  PistolAmmo: { Tembaga:5, Kain:5, Cocaine:1, Morphine:1 },
+  VestArmor: { Joint:2, Cocaine:2, Morphine:1, Heroin:1 },
 
-  "Rifle": {"Iron":20, "Kayu":20, "Joint":7, "Heroin":7},
-  "Rifle Ammo": {"Besi":5, "Kayu":5, "Cocaine":1, "Morphine":1},
+  // TIER 3
+  Joint: { Weedbud:5, CokePure:1, Plastic:1 },
+  Morphine: { Weedbud:5, Crack:1, Plastic:1 },
+  Heroin: { Crack:1, AmmoniumChlorite:1, Plastic:1 },
+  Cocaine: { CokePure:1, AmmoniumChlorite:1, Plastic:1 },
 
-  "SMG": {"Getah":20, "Keluli":20, "Cocaine":5, "Heroin":5},
-  "SMG Ammo": {"Getah":5, "Keluli":5, "Cocaine":1, "Morphine":1},
-
-  "Pistol": {"Tembaga":20, "Kain":20, "Morphine":3, "Heroin":3},
-  "Pistol Ammo": {"Tembaga":5, "Kain":5, "Cocaine":1, "Morphine":1},
-
-  "Vest Armor": {"Joint":2, "Cocaine":2, "Morphine":1, "Heroin":1}
+  // TIER 2
+  AmmoniumChlorite: { HydrochloricAcid:5, Water:1, Plastic:1 },
+  Crack: { Poppy:5, Water:1, Plastic:1 },
+  CokePure: { CokeLeaf:5, Water:1, Plastic:1 }
 };
 
-let final = {};
-let craft = {};
-let raw = {};
-
-function resolve(item, qty) {
+function expand(item, qty, result = {}) {
   if (!recipes[item]) {
-    raw[item] = (raw[item] || 0) + qty;
-    return;
+    result[item] = (result[item] || 0) + qty;
+    return result;
   }
 
-  // classify craft vs final
-  if (item in recipes) {
-    if (recipes[item] && Object.keys(recipes[item]).length > 0) {
-      craft[item] = (craft[item] || 0) + qty;
-    }
+  for (let mat in recipes[item]) {
+    expand(mat, qty * recipes[item][mat], result);
   }
 
-  for (let k in recipes[item]) {
-    resolve(k, recipes[item][k] * qty);
-  }
-}
-
-function draw(obj, el) {
-  let html = "";
-  for (let k in obj) {
-    html += `<div class="item">${k}<br><b>${obj[k]}</b></div>`;
-  }
-  document.getElementById(el).innerHTML = html;
+  return result;
 }
 
 function calculate() {
-  final = {};
-  craft = {};
-  raw = {};
-
   const item = document.getElementById("item").value;
   const qty = parseInt(document.getElementById("qty").value);
 
-  final[item] = qty;
-  resolve(item, qty);
+  const raw = expand(item, qty);
 
-  draw(final, "final");
-  draw(craft, "craft");
-  draw(raw, "raw");
+  let html = `<div class="tier"><div class="title">RAW MATERIALS REQUIRED</div>`;
+
+  for (let key in raw) {
+    html += `<div class="item">${key} : ${raw[key]}</div>`;
+  }
+
+  html += `</div>`;
+
+  document.getElementById("output").innerHTML = html;
 }
 </script>
 
