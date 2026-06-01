@@ -1,115 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Tier Craft Calculator</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f1115;
-      color: #fff;
-      padding: 20px;
-    }
+<meta charset="UTF-8">
+<title>Craft Calculator</title>
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: #1a1d25;
-      padding: 20px;
-      border-radius: 12px;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0d12;
+  color: #fff;
+}
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+}
 
-    input, select, button {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-      border-radius: 6px;
-      border: none;
-    }
+.header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
 
-    button {
-      background: #4caf50;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-    }
+.card {
+  background: #151925;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
 
-    button:hover {
-      background: #45a049;
-    }
+input {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 8px;
+  background: #0f131c;
+  color: white;
+}
 
-    .box {
-      margin-top: 20px;
-      padding: 15px;
-      background: #11141b;
-      border-radius: 10px;
-    }
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #00c2ff;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .tier {
-      margin-bottom: 10px;
-      padding: 10px;
-      background: #222634;
-      border-radius: 8px;
-    }
+button:hover {
+  background: #00a6d6;
+}
 
-    .title {
-      font-weight: bold;
-      color: #00d4ff;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
 
-    .item {
-      margin-left: 10px;
-    }
-  </style>
+.tierBox {
+  background: #111522;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.tierTitle {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #00c2ff;
+}
+
+.item {
+  padding: 4px 0;
+  border-bottom: 1px solid #1f2635;
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
-  <h1>Tier Craft Calculator</h1>
 
-  <label>Select Item (Tier 4)</label>
-  <select id="item">
-    <option value="Rifle">Rifle</option>
-    <option value="RifleAmmo">Rifle Ammo</option>
-    <option value="SMG">SMG</option>
-    <option value="SMGAmmo">SMG Ammo</option>
-    <option value="Pistol">Pistol</option>
-    <option value="PistolAmmo">Pistol Ammo</option>
-    <option value="VestArmor">Vest Armor</option>
-  </select>
+  <div class="header">CRAFT CALCULATOR</div>
 
-  <label>Quantity</label>
-  <input type="number" id="qty" value="1" min="1">
+  <div class="card">
+    <label>Item Name (exact)</label>
+    <input id="item" placeholder="Rifle / SMG / Pistol / VestArmor / RifleAmmo..." />
 
-  <button onclick="calculate()">Calculate</button>
+    <label>Quantity</label>
+    <input id="qty" type="number" value="1" min="1" />
 
-  <div class="box" id="output"></div>
+    <button onclick="calc()">CALCULATE</button>
+  </div>
+
+  <div id="output"></div>
+
 </div>
 
 <script>
 const recipes = {
 
-  // TIER 3 -> TIER 4
+  // Tier 4
   Rifle: { Joint:7, Heroin:7, Iron:20, Kayu:20 },
-  RifleAmmo: { Besi:5, Kayu:5, Cocaine:1, Morphine:1 },
   SMG: { Getah:20, Keluli:20, Cocaine:5, Heroin:5 },
-  SMGAmmo: { Getah:5, Keluli:5, Cocaine:1, Morphine:1 },
   Pistol: { Tembaga:20, Kain:20, Morphine:3, Heroin:3 },
-  PistolAmmo: { Tembaga:5, Kain:5, Cocaine:1, Morphine:1 },
   VestArmor: { Joint:2, Cocaine:2, Morphine:1, Heroin:1 },
+  RifleAmmo: { Besi:5, Kayu:5, Cocaine:1, Morphine:1 },
+  SMGAmmo: { Getah:5, Keluli:5, Cocaine:1, Morphine:1 },
+  PistolAmmo: { Tembaga:5, Kain:5, Cocaine:1, Morphine:1 },
 
-  // TIER 3
+  // Tier 3
   Joint: { Weedbud:5, CokePure:1, Plastic:1 },
   Morphine: { Weedbud:5, Crack:1, Plastic:1 },
   Heroin: { Crack:1, AmmoniumChlorite:1, Plastic:1 },
   Cocaine: { CokePure:1, AmmoniumChlorite:1, Plastic:1 },
 
-  // TIER 2
+  // Tier 2
   AmmoniumChlorite: { HydrochloricAcid:5, Water:1, Plastic:1 },
   Crack: { Poppy:5, Water:1, Plastic:1 },
   CokePure: { CokeLeaf:5, Water:1, Plastic:1 }
@@ -121,28 +132,61 @@ function expand(item, qty, result = {}) {
     return result;
   }
 
-  for (let mat in recipes[item]) {
-    expand(mat, qty * recipes[item][mat], result);
+  for (let k in recipes[item]) {
+    expand(k, qty * recipes[item][k], result);
   }
 
   return result;
 }
 
-function calculate() {
-  const item = document.getElementById("item").value;
-  const qty = parseInt(document.getElementById("qty").value);
+function tier(item) {
+  if (["HydrochloricAcid","Poppy","CokeLeaf","Weedbud","Water","Plastic","Iron","Kayu","Getah","Keluli","Tembaga","Kain","Besi"].includes(item)) return 1;
+  if (["AmmoniumChlorite","Crack","CokePure"].includes(item)) return 2;
+  if (["Joint","Morphine","Heroin","Cocaine"].includes(item)) return 3;
+  return 4;
+}
 
-  const raw = expand(item, qty);
+function calc() {
+  let item = document.getElementById("item").value.trim();
+  let qty = parseInt(document.getElementById("qty").value);
 
-  let html = `<div class="tier"><div class="title">RAW MATERIALS REQUIRED</div>`;
+  let raw = expand(item, qty);
 
-  for (let key in raw) {
-    html += `<div class="item">${key} : ${raw[key]}</div>`;
+  let t1 = {}, t2 = {}, t3 = {}, t4 = {};
+
+  for (let k in raw) {
+    let t = tier(k);
+    if (t === 1) t1[k] = raw[k];
+    if (t === 2) t2[k] = raw[k];
+    if (t === 3) t3[k] = raw[k];
+    if (t === 4) t4[k] = raw[k];
   }
 
-  html += `</div>`;
+  document.getElementById("output").innerHTML = `
+    <div class="grid">
 
-  document.getElementById("output").innerHTML = html;
+      <div class="tierBox">
+        <div class="tierTitle">TIER 4</div>
+        ${Object.keys(t4).map(i=>`<div class="item">${i} : ${t4[i]}</div>`).join("") || "<div class='item'>-</div>"}
+      </div>
+
+      <div class="tierBox">
+        <div class="tierTitle">TIER 3</div>
+        ${Object.keys(t3).map(i=>`<div class="item">${i} : ${t3[i]}</div>`).join("") || "<div class='item'>-</div>"}
+      </div>
+
+      <div class="tierBox">
+        <div class="tierTitle">TIER 2</div>
+        ${Object.keys(t2).map(i=>`<div class="item">${i} : ${t2[i]}</div>`).join("") || "<div class='item'>-</div>"}
+      </div>
+
+      <div class="tierBox">
+        <div class="tierTitle">TIER 1 (RAW)</div>
+        ${Object.keys(t1).map(i=>`<div class="item">${i} : ${t1[i]}</div>`).join("") || "<div class='item'>-</div>"}
+      </div>
+
+    </div>
+  `;
 }
 </script>
 
