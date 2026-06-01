@@ -25,9 +25,9 @@
       text-align: center;
       margin-bottom: 20px;
       font-size: 1.8rem;
-      letter-spacing: 1px;
     }
     h2 { margin-bottom: 12px; font-size: 1.1rem; }
+
     .box {
       background: var(--card);
       border-radius: 16px;
@@ -35,18 +35,21 @@
       margin-bottom: 20px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     }
+
     .input-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
       margin-bottom: 12px;
     }
+
     .input-grid label {
       display: flex;
       flex-direction: column;
       font-size: 0.85rem;
       color: var(--muted);
     }
+
     input {
       padding: 10px;
       border-radius: 10px;
@@ -55,6 +58,7 @@
       color: var(--text);
       font-size: 1rem;
     }
+
     button {
       width: 100%;
       padding: 12px;
@@ -67,23 +71,27 @@
       transition: 0.2s;
       font-size: 1rem;
     }
+
     button:hover { background: var(--accent-hover); }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
       font-size: 0.9rem;
     }
+
     th, td {
       border-bottom: 1px solid var(--border);
       padding: 10px 6px;
       text-align: left;
     }
+
     th {
       background: #111;
       color: var(--muted);
-      font-weight: 500;
     }
+
     @media (max-width: 600px) {
       .input-grid { grid-template-columns: 1fr; }
       h1 { font-size: 1.5rem; }
@@ -92,6 +100,7 @@
 </head>
 
 <body>
+
 <h1>AB Dadih Calculator</h1>
 
 <div class="box">
@@ -134,38 +143,44 @@ function calculate() {
   const ammo = Number(document.getElementById('ammo').value);
   const pistol = Number(document.getElementById('pistol').value);
 
+  // ===== TIER 4 =====
   const tier4 = {
-    joint: vest*2 + ammo*1 + pistol*1,
-    pillscoke: vest*2 + ammo*1 + pistol*1,
-    morphine: vest*1 + ammo*1 + pistol*2,
-    heroin: vest*1 + ammo*1 + pistol*2
+    joint: vest*2 + ammo + pistol,
+    cocaine: vest*2 + ammo + pistol, // 1x ammo for cocaine
+    morphine: vest + ammo + pistol*2,
+    heroin: vest + ammo + pistol*2
   };
 
+  // ===== TIER 3 =====
   const tier3 = {
-    cokepure: tier4.joint + tier4.pillscoke,
+    cokepure: tier4.joint + tier4.cocaine,
     crack: tier4.morphine + tier4.heroin,
-    ammonium: tier4.heroin + tier4.pillscoke
+    ammonium: tier4.heroin + tier4.cocaine
   };
 
+  // ===== RAW =====
   const raw = {
     weedbud: (tier4.joint + tier4.morphine) * 5,
     cokeleaf: tier3.cokepure * 5,
     poppy: tier3.crack * 5,
     acid: tier3.ammonium * 5,
     water: tier3.cokepure + tier3.crack + tier3.ammonium,
-    plastic: tier4.joint + tier4.pillscoke + tier4.morphine + tier4.heroin + tier3.cokepure + tier3.crack + tier3.ammonium
+    plastic: Object.values(tier4).reduce((a,b)=>a+b,0) + Object.values(tier3).reduce((a,b)=>a+b,0)
   };
 
+  // render raw
   const r = document.getElementById('raw');
   r.innerHTML = '';
   for (let k in raw)
     r.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${raw[k]}</td></tr>`;
 
+  // render tier3
   const t3 = document.getElementById('tier3');
   t3.innerHTML = '';
   for (let k in tier3)
     t3.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${tier3[k]}</td></tr>`;
 
+  // render tier4
   const t4 = document.getElementById('tier4');
   t4.innerHTML = '';
   for (let k in tier4)
