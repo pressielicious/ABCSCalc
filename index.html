@@ -2,68 +2,126 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Craft Calculator</title>
+
 <style>
-  body {
-    font-family: Arial;
-    background: #0f0f0f;
-    color: #fff;
-    padding: 20px;
-  }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0b0b;
+  color: #fff;
+}
 
-  h2 { margin-bottom: 10px; }
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
 
-  select, input, button {
-    padding: 8px;
-    margin: 5px;
-  }
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .box {
-    background: #1c1c1c;
-    padding: 15px;
-    border-radius: 10px;
-    max-width: 600px;
-  }
+.card {
+  background: #161616;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
 
-  .result {
-    margin-top: 20px;
-    background: #222;
-    padding: 15px;
-    border-radius: 10px;
-    white-space: pre-line;
-  }
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+select, input, button {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+select, input {
+  background: #222;
+  color: white;
+}
+
+button {
+  background: #00c853;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #00e676;
+}
+
+.section-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #00e676;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.item {
+  background: #222;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.small {
+  color: #aaa;
+  font-size: 12px;
+}
 </style>
 </head>
+
 <body>
 
-<div class="box">
-  <h2>CRAFT CALCULATOR</h2>
+<div class="container">
 
-  <label>Item:</label>
-  <select id="item">
-    <option>Rifle</option>
-    <option>Rifle Ammo</option>
-    <option>SMG</option>
-    <option>SMG Ammo</option>
-    <option>Pistol</option>
-    <option>Pistol Ammo</option>
-    <option>Vest Armor</option>
-    <option>Joint</option>
-    <option>Morphine</option>
-    <option>Heroin</option>
-    <option>Cocaine</option>
-  </select>
+  <div class="header">
+    <h2>CRAFT CALCULATOR</h2>
+    <p class="small">Final Product → Breakdown → Raw Materials</p>
+  </div>
 
-  <br>
+  <div class="card">
+    <div class="row">
+      <select id="item">
+        <option>Rifle</option>
+        <option>Rifle Ammo</option>
+        <option>SMG</option>
+        <option>SMG Ammo</option>
+        <option>Pistol</option>
+        <option>Pistol Ammo</option>
+        <option>Vest Armor</option>
+      </select>
 
-  <label>Amount:</label>
-  <input type="number" id="qty" value="1" min="1">
+      <input type="number" id="qty" value="1" min="1">
 
-  <br>
+      <button onclick="calculate()">CALCULATE</button>
+    </div>
+  </div>
 
-  <button onclick="calculate()">Calculate</button>
+  <div class="card">
+    <div class="section-title">FINAL PRODUCT REQUIREMENT</div>
+    <div id="final"></div>
+  </div>
 
-  <div class="result" id="output"></div>
+  <div class="card">
+    <div class="section-title">RAW MATERIALS TOTAL</div>
+    <div id="raw" class="grid"></div>
+  </div>
+
 </div>
 
 <script>
@@ -89,32 +147,44 @@ const recipes = {
   "Vest Armor": {"Joint":2, "Cocaine":2, "Morphine":1, "Heroin":1}
 };
 
-function resolve(item, qty, output) {
+let finalList = {};
+let rawList = {};
+
+function resolve(item, qty) {
   if (!recipes[item]) {
-    output[item] = (output[item] || 0) + qty;
+    rawList[item] = (rawList[item] || 0) + qty;
     return;
   }
 
-  const req = recipes[item];
-  for (let key in req) {
-    resolve(key, req[key] * qty, output);
+  finalList[item] = (finalList[item] || 0) + qty;
+
+  for (let k in recipes[item]) {
+    resolve(k, recipes[item][k] * qty);
   }
 }
 
 function calculate() {
+  finalList = {};
+  rawList = {};
+
   const item = document.getElementById("item").value;
   const qty = parseInt(document.getElementById("qty").value);
 
-  let result = {};
+  resolve(item, qty);
 
-  resolve(item, qty, result);
-
-  let text = "RAW MATERIALS NEEDED:\n\n";
-  for (let k in result) {
-    text += `${k}: ${result[k]}\n`;
+  // FINAL PRODUCT
+  let finalHTML = "";
+  for (let k in finalList) {
+    finalHTML += `<div class="item">${k}: ${finalList[k]}</div>`;
   }
+  document.getElementById("final").innerHTML = finalHTML;
 
-  document.getElementById("output").innerText = text;
+  // RAW MATERIALS
+  let rawHTML = "";
+  for (let k in rawList) {
+    rawHTML += `<div class="item">${k}<br><b>${rawList[k]}</b></div>`;
+  }
+  document.getElementById("raw").innerHTML = rawHTML;
 }
 </script>
 
