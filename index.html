@@ -1,232 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ABD Full Craft Chain</title>
-
+<meta charset="UTF-8">
+<title>Craft Calculator</title>
 <style>
-:root{
-  --bg:#0d0d10;
-  --card:#1a1a1f;
-  --border:#333;
-  --text:#e6e6eb;
-  --muted:#a0a0ab;
-  --accent:#5c6bc0;
-  --accent-hover:#3f51b5;
-}
+  body {
+    font-family: Arial;
+    background: #0f0f0f;
+    color: #fff;
+    padding: 20px;
+  }
 
-*{box-sizing:border-box;margin:0;padding:0}
+  h2 { margin-bottom: 10px; }
 
-body{
-  font-family:Segoe UI,Roboto,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  padding:20px;
-}
+  select, input, button {
+    padding: 8px;
+    margin: 5px;
+  }
 
-h1{text-align:center;margin-bottom:20px}
+  .box {
+    background: #1c1c1c;
+    padding: 15px;
+    border-radius: 10px;
+    max-width: 600px;
+  }
 
-.box{
-  background:var(--card);
-  border-radius:16px;
-  padding:20px;
-  margin-bottom:20px;
-}
-
-.input-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
-
-label{
-  display:flex;
-  flex-direction:column;
-  font-size:.85rem;
-  color:var(--muted);
-}
-
-input{
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#111;
-  color:var(--text);
-}
-
-button{
-  margin-top:12px;
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  background:var(--accent);
-  color:#fff;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button:hover{background:var(--accent-hover)}
-
-table{
-  width:100%;
-  margin-top:10px;
-  border-collapse:collapse;
-}
-
-th,td{
-  padding:10px;
-  border-bottom:1px solid var(--border);
-}
-
-th{background:#111;color:var(--muted)}
-
-@media(max-width:600px){
-  .input-grid{grid-template-columns:1fr}
-}
+  .result {
+    margin-top: 20px;
+    background: #222;
+    padding: 15px;
+    border-radius: 10px;
+    white-space: pre-line;
+  }
 </style>
 </head>
-
 <body>
 
-<h1>FULL CRAFT CHAIN SYSTEM</h1>
-
 <div class="box">
-<h2>Weapons Input</h2>
+  <h2>CRAFT CALCULATOR</h2>
 
-<div class="input-grid">
+  <label>Item:</label>
+  <select id="item">
+    <option>Rifle</option>
+    <option>Rifle Ammo</option>
+    <option>SMG</option>
+    <option>SMG Ammo</option>
+    <option>Pistol</option>
+    <option>Pistol Ammo</option>
+    <option>Vest Armor</option>
+    <option>Joint</option>
+    <option>Morphine</option>
+    <option>Heroin</option>
+    <option>Cocaine</option>
+  </select>
 
-<label>Rifle
-<input type="number" id="rifle" value="0">
-</label>
+  <br>
 
-<label>Rifle Ammo
-<input type="number" id="rifleAmmo" value="0">
-</label>
+  <label>Amount:</label>
+  <input type="number" id="qty" value="1" min="1">
 
-<label>SMG
-<input type="number" id="smg" value="0">
-</label>
+  <br>
 
-<label>SMG Ammo
-<input type="number" id="smgAmmo" value="0">
-</label>
+  <button onclick="calculate()">Calculate</button>
 
-<label>Pistol
-<input type="number" id="pistol" value="0">
-</label>
-
-<label>Pistol Ammo
-<input type="number" id="pistolAmmo" value="0">
-</label>
-
-<label>Vest Armor
-<input type="number" id="vest" value="0">
-</label>
-
-</div>
-
-<button onclick="calc()">Kira Full Chain</button>
-</div>
-
-<div class="box">
-<h2>Tier 4 (Drugs)</h2>
-<table>
-<tr><th>Item</th><th>Qty</th></tr>
-<tbody id="t4"></tbody>
-</table>
-</div>
-
-<div class="box">
-<h2>Tier 3</h2>
-<table>
-<tr><th>Item</th><th>Qty</th></tr>
-<tbody id="t3"></tbody>
-</table>
-</div>
-
-<div class="box">
-<h2>RAW MATERIALS</h2>
-<table>
-<tr><th>Item</th><th>Qty</th></tr>
-<tbody id="raw"></tbody>
-</table>
+  <div class="result" id="output"></div>
 </div>
 
 <script>
+const recipes = {
+  "Ammonium Chlorite": {"Hydrochloric Acid":5, "Water":1, "Plastic":1},
+  "Crack": {"Poppy":5, "Water":1, "Plastic":1},
+  "Coke Pure": {"Coke Leaf":5, "Water":1, "Plastic":1},
 
-function v(id){ return +document.getElementById(id).value }
+  "Joint": {"Weedbud":5, "Coke Pure":1, "Plastic":1},
+  "Morphine": {"Weedbud":5, "Crack":1, "Plastic":1},
+  "Heroin": {"Crack":1, "Ammonium Chlorite":1, "Plastic":1},
+  "Cocaine": {"Coke Pure":1, "Ammonium Chlorite":1, "Plastic":1},
 
-// ================= MAIN =================
-function calc(){
+  "Rifle": {"Iron":20, "Kayu":20, "Joint":7, "Heroin":7},
+  "Rifle Ammo": {"Besi":5, "Kayu":5, "Cocaine":1, "Morphine":1},
 
-// ===== INPUT =====
-const rifle = v("rifle");
-const rifleAmmo = v("rifleAmmo");
-const smg = v("smg");
-const smgAmmo = v("smgAmmo");
-const pistol = v("pistol");
-const pistolAmmo = v("pistolAmmo");
-const vest = v("vest");
+  "SMG": {"Getah":20, "Keluli":20, "Cocaine":5, "Heroin":5},
+  "SMG Ammo": {"Getah":5, "Keluli":5, "Cocaine":1, "Morphine":1},
 
-// ================= TIER 4 (DRUGS FROM WEAPONS) =================
-const tier4 = {
-  joint: vest*2,
-  cocaine: vest*2 + rifleAmmo + smg + smgAmmo + pistolAmmo,
-  morphine: vest + rifleAmmo + smgAmmo + pistol + pistolAmmo,
-  heroin: vest + rifle + smg + pistol
+  "Pistol": {"Tembaga":20, "Kain":20, "Morphine":3, "Heroin":3},
+  "Pistol Ammo": {"Tembaga":5, "Kain":5, "Cocaine":1, "Morphine":1},
+
+  "Vest Armor": {"Joint":2, "Cocaine":2, "Morphine":1, "Heroin":1}
 };
 
-// ================= TIER 3 (FROM TIER 4) =================
-const tier3 = {
-  cokepure: tier4.joint + tier4.cocaine,
-  crack: tier4.morphine + tier4.heroin,
-  ammonium: tier4.heroin + tier4.cocaine
-};
+function resolve(item, qty, output) {
+  if (!recipes[item]) {
+    output[item] = (output[item] || 0) + qty;
+    return;
+  }
 
-// ================= RAW MATERIALS (FULL BASE FARM) =================
-const raw = {
-  iron: rifle*20,
-  wood: rifle*20,
-
-  rubber: smg*20 + smgAmmo*5,
-  steel: smg*20 + smgAmmo*5,
-
-  copper: pistol*20 + pistolAmmo*5,
-  cloth: pistol*20 + pistolAmmo*5,
-
-  joint_leaf: tier3.cokepure*5,
-  coke_leaf: tier3.cokepure*5,
-  poppy: tier3.crack*5,
-  acid: tier3.ammonium*5,
-
-  water: tier3.cokepure + tier3.crack + tier3.ammonium,
-
-  plastic: sum(tier4) + sum(tier3)
-};
-
-// ===== render =====
-render("t4", tier4)
-render("t3", tier3)
-render("raw", raw)
-
-}
-
-// ================= HELPERS =================
-
-function sum(obj){
-  return Object.values(obj).reduce((a,b)=>a+b,0)
-}
-
-function render(id,obj){
-  const el = document.getElementById(id)
-  el.innerHTML=""
-  for(let k in obj){
-    el.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${obj[k]}</td></tr>`
+  const req = recipes[item];
+  for (let key in req) {
+    resolve(key, req[key] * qty, output);
   }
 }
 
+function calculate() {
+  const item = document.getElementById("item").value;
+  const qty = parseInt(document.getElementById("qty").value);
+
+  let result = {};
+
+  resolve(item, qty, result);
+
+  let text = "RAW MATERIALS NEEDED:\n\n";
+  for (let k in result) {
+    text += `${k}: ${result[k]}\n`;
+  }
+
+  document.getElementById("output").innerText = text;
+}
 </script>
 
 </body>
