@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pailang ABCS Simulator</title>
+<title>Tournament Simulator</title>
 
 <style>
 * {
@@ -16,12 +16,22 @@
     --bg: #08080b;
     --panel: #111116;
     --panel2: #18181e;
-    --border: #2b2b33;
-    --text: #ffffff;
+    --panel3: #202027;
+    --border: #2d2d35;
+    --text: #fff;
     --muted: #777780;
+
     --red: #650000;
-    --red2: #8a0000;
-    --green: #174d2a;
+    --red2: #920000;
+
+    --green: #164b28;
+    --green2: #1d6737;
+
+    --yellow: #725900;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -31,13 +41,18 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+
+/* =========================================================
+   HEADER
+========================================================= */
+
 header {
     position: sticky;
     top: 0;
     z-index: 100;
 
-    background: rgba(12,12,16,.96);
-    backdrop-filter: blur(10px);
+    background: rgba(10,10,14,.97);
+    backdrop-filter: blur(12px);
 
     border-bottom: 1px solid var(--border);
 
@@ -47,13 +62,13 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 26px;
+    font-size: 25px;
 }
 
 header p {
     margin: 7px 0 0;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .controls {
@@ -69,21 +84,25 @@ button {
     border: 0;
     border-radius: 8px;
 
-    padding: 11px 17px;
+    padding: 10px 15px;
 
     color: white;
     background: #292930;
 
+    font-size: 11px;
     font-weight: bold;
+
     cursor: pointer;
+
+    transition: .15s;
 }
 
 button:hover {
-    background: #3a3a43;
+    background: #3b3b43;
 }
 
 button:disabled {
-    opacity: .35;
+    opacity: .3;
     cursor: not-allowed;
 }
 
@@ -97,7 +116,7 @@ button:disabled {
 
 
 /* =========================================================
-   GENERAL
+   SECTIONS
 ========================================================= */
 
 section {
@@ -109,9 +128,10 @@ section {
     margin: 0 auto 18px;
 
     border-left: 4px solid var(--red2);
+
     padding-left: 10px;
 
-    font-size: 21px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -126,6 +146,7 @@ section {
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+
     gap: 15px;
 }
 
@@ -140,6 +161,7 @@ section {
 
 .group h3 {
     margin: 0;
+
     font-size: 17px;
 }
 
@@ -147,7 +169,7 @@ section {
     margin: 6px 0 13px;
 
     color: var(--muted);
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .team-list {
@@ -161,7 +183,8 @@ section {
 
     display: flex;
     align-items: center;
-    gap: 9px;
+
+    gap: 8px;
 
     padding: 0 9px;
 
@@ -179,7 +202,7 @@ section {
 }
 
 .team-item:hover {
-    background: #222229;
+    background: #24242b;
 }
 
 .team-item.dragging {
@@ -188,7 +211,7 @@ section {
 
 .team-item.drag-over {
     border-color: var(--red2);
-    background: #351010;
+    background: #350909;
 }
 
 .team-item.locked {
@@ -197,7 +220,9 @@ section {
 
 .handle {
     width: 18px;
-    color: #686870;
+
+    color: #666;
+
     text-align: center;
 }
 
@@ -209,16 +234,16 @@ section {
     align-items: center;
     justify-content: center;
 
+    flex-shrink: 0;
+
     border-radius: 50%;
 
     background: #292930;
 
     color: #aaa;
 
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
-
-    flex-shrink: 0;
 }
 
 .team-item:nth-child(-n+3) .rank {
@@ -227,25 +252,26 @@ section {
 }
 
 .team-name {
-    font-size: 13px;
-    font-weight: bold;
-
     overflow: hidden;
+
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    font-size: 13px;
+    font-weight: bold;
 }
 
 .qualify {
     margin-left: auto;
 
+    color: #777;
+
     font-size: 8px;
     font-weight: bold;
-
-    color: #777;
 }
 
 .team-item:nth-child(-n+3) .qualify {
-    color: #d07a7a;
+    color: #d47b7b;
 }
 
 .group-footer {
@@ -256,12 +282,15 @@ section {
     padding: 9px;
 
     background: #19191f;
+
     border-radius: 7px;
+
+    color: #666;
 
     text-align: center;
 
-    color: #666;
-    font-size: 10px;
+    font-size: 9px;
+    font-weight: bold;
 }
 
 .group-status.confirmed {
@@ -278,7 +307,6 @@ section {
 
 .group-actions button {
     flex: 1;
-    font-size: 10px;
 }
 
 .confirm-btn {
@@ -296,6 +324,7 @@ section {
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+
     gap: 15px;
 }
 
@@ -310,34 +339,39 @@ section {
 
 .qualified-box h3 {
     margin: 0 0 10px;
-    font-size: 15px;
+
+    font-size: 14px;
 }
 
 .qualified-team {
     margin-bottom: 6px;
+
     padding: 9px;
 
     background: var(--panel2);
+
     border-radius: 7px;
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
 }
 
 .qualified-team span {
     display: inline-block;
+
     width: 25px;
+
     color: #777;
 }
 
 .qualified-empty {
-    color: #666;
-    font-size: 11px;
+    color: #555;
+    font-size: 10px;
 }
 
 
 /* =========================================================
-   BRACKET
+   BRACKET AREA
 ========================================================= */
 
 .bracket-section {
@@ -350,12 +384,18 @@ section {
 }
 
 .bracket-title {
-    margin: 20px 0 12px;
+    margin: 20px 0 10px;
 
     font-size: 17px;
     font-weight: bold;
+}
 
-    color: #ddd;
+.bracket-subtitle {
+    margin: 0 0 12px;
+
+    color: #666;
+
+    font-size: 10px;
 }
 
 .bracket-scroll {
@@ -367,39 +407,86 @@ section {
     -webkit-overflow-scrolling: touch;
 }
 
-.bracket {
+
+/* =========================================================
+   BRACKET COLUMNS
+========================================================= */
+
+.upper-layout,
+.lower-layout {
     min-width: 1450px;
 
+    position: relative;
+}
+
+.bracket-row {
     display: flex;
+
     gap: 20px;
 
     align-items: flex-start;
 }
 
-
-/* =========================================================
-   COLUMNS
-========================================================= */
-
 .bracket-column {
     width: 180px;
-    flex-shrink: 0;
 
-    display: flex;
-    flex-direction: column;
+    flex-shrink: 0;
 }
 
 .column-label {
-    height: 25px;
+    height: 27px;
 
     display: flex;
     align-items: center;
-
     justify-content: center;
 
     color: #666;
+
     font-size: 9px;
+    font-weight: bold;
     text-transform: uppercase;
+}
+
+
+/* Upper positioning */
+
+.upper-row-1 {
+    margin-top: 0;
+}
+
+.upper-row-2 {
+    margin-top: 55px;
+}
+
+.upper-row-3 {
+    margin-top: 55px;
+}
+
+.upper-row-4 {
+    margin-top: 55px;
+}
+
+
+/* Lower positioning */
+
+.lower-row-1 {
+    margin-top: 0;
+}
+
+.lower-row-2 {
+    margin-top: 55px;
+}
+
+.lower-row-3 {
+    margin-top: 55px;
+}
+
+.lower-row-4 {
+    margin-top: 55px;
+}
+
+.lower-row-5 {
+    margin-top: 55px;
 }
 
 
@@ -411,15 +498,44 @@ section {
     background: var(--panel);
 
     border: 1px solid var(--border);
+
     border-radius: 9px;
 
     overflow: hidden;
 
-    box-shadow: 0 4px 14px rgba(0,0,0,.2);
+    box-shadow: 0 5px 15px rgba(0,0,0,.25);
+
+    transition: .2s;
+}
+
+.match-card.active {
+    border-color: var(--red2);
+
+    box-shadow:
+        0 0 0 1px rgba(146,0,0,.2),
+        0 5px 18px rgba(0,0,0,.3);
+}
+
+.match-card.completed {
+    border-color: #34343b;
+}
+
+.match-card.locked {
+    opacity: .55;
+}
+
+.match-card.waiting {
+    opacity: .65;
 }
 
 .match-header {
-    padding: 8px 10px;
+    min-height: 35px;
+
+    padding: 7px 9px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
     background: #19191f;
 
@@ -427,19 +543,57 @@ section {
 
     font-size: 11px;
     font-weight: bold;
+}
 
+.match-header-right {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
 }
 
-.match-header span {
+.match-status {
     color: #666;
+
     font-size: 8px;
-    font-weight: normal;
 }
+
+.match-status.active {
+    color: #e47777;
+}
+
+.match-status.done {
+    color: #72bb83;
+}
+
+.match-status.locked {
+    color: #555;
+}
+
+.undo-btn {
+    padding: 4px 6px;
+
+    background: #2b2020;
+
+    color: #c77777;
+
+    font-size: 8px;
+}
+
+.undo-btn:hover {
+    background: #4a2222;
+}
+
+.undo-btn:disabled {
+    display: none;
+}
+
+
+/* =========================================================
+   MATCH TEAM
+========================================================= */
 
 .match-team {
-    min-height: 42px;
+    min-height: 43px;
 
     padding: 9px;
 
@@ -454,131 +608,65 @@ section {
     font-size: 12px;
     font-weight: bold;
 
-    cursor: pointer;
+    transition: .15s;
 }
 
 .match-team:last-child {
     border-bottom: 0;
 }
 
-.match-team:hover {
-    background: #25252c;
+.match-team.clickable {
+    cursor: pointer;
+}
+
+.match-team.clickable:hover {
+    background: #292930;
 }
 
 .match-team.waiting {
-    color: #4d4d54;
-    cursor: default;
+    color: #4e4e55;
 }
 
 .match-team.selected {
-    background: #4b0000;
+    background: #470000;
     color: white;
 }
 
-.match-team.eliminated {
-    opacity: .28;
-    cursor: default;
+.match-team.loser {
+    opacity: .27;
+
     text-decoration: line-through;
 }
 
-.match-result {
-    margin-left: 5px;
-    font-size: 9px;
-    flex-shrink: 0;
+.match-team.locked-team {
+    color: #4c4c53;
 }
 
 .team-text {
     overflow: hidden;
+
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
+.result {
+    margin-left: 5px;
 
-/* =========================================================
-   UPPER BRACKET LAYOUT
-========================================================= */
+    flex-shrink: 0;
 
-.upper-bracket {
-    position: relative;
+    font-size: 9px;
 }
 
-.upper-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
+.match-lock {
+    padding: 7px 9px;
 
-    min-width: 1450px;
-}
+    background: #0f0f13;
 
-/*
-    M1-M4
-*/
+    color: #555;
 
-.upper-r1 .bracket-column {
-    margin-top: 0;
-}
+    text-align: center;
 
-/*
-    M5-M8
-*/
-
-.upper-r2 .bracket-column {
-    margin-top: 55px;
-}
-
-/*
-    M15-M16
-*/
-
-.upper-r3 .bracket-column {
-    margin-top: 110px;
-}
-
-/*
-    M20
-*/
-
-.upper-r4 .bracket-column {
-    margin-top: 220px;
-}
-
-
-/* =========================================================
-   LOWER BRACKET LAYOUT
-========================================================= */
-
-.lower-bracket {
-    position: relative;
-
-    margin-top: 10px;
-}
-
-.lower-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-
-    min-width: 1450px;
-}
-
-.lower-r1 .bracket-column {
-    margin-top: 0;
-}
-
-.lower-r2 .bracket-column {
-    margin-top: 55px;
-}
-
-.lower-r3 .bracket-column {
-    margin-top: 110px;
-}
-
-.lower-r4 .bracket-column {
-    margin-top: 165px;
-}
-
-.lower-r5 .bracket-column {
-    margin-top: 220px;
+    font-size: 8px;
 }
 
 
@@ -588,6 +676,7 @@ section {
 
 .final-section {
     max-width: 700px;
+
     margin: 35px auto 60px;
 
     text-align: center;
@@ -604,25 +693,30 @@ section {
 }
 
 .final-card h2 {
-    margin: 0 0 15px;
+    margin: 0 0 16px;
+
+    font-size: 20px;
 }
 
-.final-match {
-    margin-bottom: 20px;
+.final-card .match-card {
+    text-align: left;
 }
 
 .champion-name {
-    font-size: 30px;
-    font-weight: bold;
-
-    margin-top: 15px;
+    margin-top: 18px;
 
     color: #ffb000;
+
+    font-size: 30px;
+    font-weight: bold;
 }
 
 .champion-info {
+    margin-top: 5px;
+
     color: #666;
-    font-size: 11px;
+
+    font-size: 10px;
 }
 
 
@@ -641,6 +735,10 @@ section {
 
 @media (max-width: 600px) {
 
+    header {
+        padding: 15px 12px;
+    }
+
     header h1 {
         font-size: 21px;
     }
@@ -654,8 +752,9 @@ section {
         grid-template-columns: 1fr;
     }
 
-    .bracket {
-        min-width: 1450px;
+    .bracket-scroll {
+        padding-left: 2px;
+        padding-right: 2px;
     }
 
     .bracket-column {
@@ -664,6 +763,11 @@ section {
 
     .match-team {
         min-height: 45px;
+    }
+
+    .final-section {
+        padding-left: 12px;
+        padding-right: 12px;
     }
 
 }
@@ -680,7 +784,7 @@ section {
 
 <header>
 
-    <h1>🏆 Pailang ABCS Simulator</h1>
+    <h1>🏆 Tournament Simulator</h1>
 
     <p>
         24 Teams • 4 Groups • Top 3 • Double Elimination
@@ -744,7 +848,7 @@ section {
 
 
 <!-- =====================================================
-     BRACKET
+     DOUBLE ELIMINATION
 ===================================================== -->
 
 <section class="bracket-section">
@@ -753,53 +857,71 @@ section {
         DOUBLE ELIMINATION
     </div>
 
-
     <div class="bracket-area">
 
 
-        <!-- ==============================
+        <!-- =================================================
              UPPER BRACKET
-        =============================== -->
+        ================================================== -->
 
         <div class="bracket-title">
             🔼 UPPER BRACKET
         </div>
 
+        <div class="bracket-subtitle">
+            Matches unlock strictly in order: M1 → M2 → M3 → ...
+        </div>
+
         <div class="bracket-scroll">
 
-            <div class="upper-bracket">
+            <div class="upper-layout">
 
 
                 <!-- M1-M4 -->
 
-                <div class="upper-row upper-r1">
+                <div class="bracket-row upper-row-1">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
-                            Round 1
+                            Upper Round 1
                         </div>
+
                         <div id="slot-M1"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
-                            Round 1
+                            Upper Round 1
                         </div>
+
                         <div id="slot-M2"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
-                            Round 1
+                            Upper Round 1
                         </div>
+
                         <div id="slot-M3"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
-                            Round 1
+                            Upper Round 1
                         </div>
+
                         <div id="slot-M4"></div>
+
                     </div>
 
                 </div>
@@ -807,34 +929,49 @@ section {
 
                 <!-- M5-M8 -->
 
-                <div class="upper-row upper-r2">
+                <div class="bracket-row upper-row-2">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Upper Round 2
                         </div>
+
                         <div id="slot-M5"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Upper Round 2
                         </div>
+
                         <div id="slot-M6"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Upper Round 2
                         </div>
+
                         <div id="slot-M7"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Upper Round 2
                         </div>
+
                         <div id="slot-M8"></div>
+
                     </div>
 
                 </div>
@@ -842,20 +979,27 @@ section {
 
                 <!-- M15-M16 -->
 
-                <div class="upper-row upper-r3">
+                <div class="bracket-row upper-row-3">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Upper Semi
                         </div>
+
                         <div id="slot-M15"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Upper Semi
                         </div>
+
                         <div id="slot-M16"></div>
+
                     </div>
 
                 </div>
@@ -863,13 +1007,16 @@ section {
 
                 <!-- M20 -->
 
-                <div class="upper-row upper-r4">
+                <div class="bracket-row upper-row-4">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Upper Final
                         </div>
+
                         <div id="slot-M20"></div>
+
                     </div>
 
                 </div>
@@ -880,49 +1027,68 @@ section {
         </div>
 
 
-        <!-- ==============================
+        <!-- =================================================
              LOWER BRACKET
-        =============================== -->
+        ================================================== -->
 
         <div class="bracket-title">
             🔽 LOWER BRACKET
         </div>
 
+        <div class="bracket-subtitle">
+            Losers are automatically transferred according to the bracket mapping.
+        </div>
+
         <div class="bracket-scroll">
 
-            <div class="lower-bracket">
+            <div class="lower-layout">
 
 
                 <!-- M9-M12 -->
 
-                <div class="lower-row lower-r1">
+                <div class="bracket-row lower-row-1">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 1
                         </div>
+
                         <div id="slot-M9"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 1
                         </div>
+
                         <div id="slot-M10"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 1
                         </div>
+
                         <div id="slot-M11"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 1
                         </div>
+
                         <div id="slot-M12"></div>
+
                     </div>
 
                 </div>
@@ -930,20 +1096,27 @@ section {
 
                 <!-- M13-M14 -->
 
-                <div class="lower-row lower-r2">
+                <div class="bracket-row lower-row-2">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 2
                         </div>
+
                         <div id="slot-M13"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 2
                         </div>
+
                         <div id="slot-M14"></div>
+
                     </div>
 
                 </div>
@@ -951,20 +1124,27 @@ section {
 
                 <!-- M17-M18 -->
 
-                <div class="lower-row lower-r3">
+                <div class="bracket-row lower-row-3">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 3
                         </div>
+
                         <div id="slot-M17"></div>
+
                     </div>
 
+
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Round 3
                         </div>
+
                         <div id="slot-M18"></div>
+
                     </div>
 
                 </div>
@@ -972,13 +1152,16 @@ section {
 
                 <!-- M19 -->
 
-                <div class="lower-row lower-r4">
+                <div class="bracket-row lower-row-4">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Lower Final
                         </div>
+
                         <div id="slot-M19"></div>
+
                     </div>
 
                 </div>
@@ -986,13 +1169,16 @@ section {
 
                 <!-- M21 -->
 
-                <div class="lower-row lower-r5">
+                <div class="bracket-row lower-row-5">
 
                     <div class="bracket-column">
+
                         <div class="column-label">
                             Grand Final Qualifier
                         </div>
+
                         <div id="slot-M21"></div>
+
                     </div>
 
                 </div>
@@ -1003,20 +1189,19 @@ section {
         </div>
 
 
-        <!-- ==============================
-             M22
-        =============================== -->
+        <!-- =================================================
+             GRAND FINAL M22
+        ================================================== -->
 
         <div class="final-section">
 
             <div class="final-card">
 
-                <h2>🏆 GRAND FINAL — M22</h2>
+                <h2>
+                    🏆 GRAND FINAL — M22
+                </h2>
 
-                <div
-                    class="final-match"
-                    id="slot-M22">
-                </div>
+                <div id="slot-M22"></div>
 
                 <div
                     class="champion-name"
@@ -1030,7 +1215,7 @@ section {
                     class="champion-info"
                     id="championInfo">
 
-                    Complete M22 to determine the champion.
+                    Complete all matches to determine the champion.
 
                 </div>
 
@@ -1091,31 +1276,27 @@ const defaultGroups = {
 };
 
 
+/* =========================================================
+   STATE
+========================================================= */
+
 let groups = clone(defaultGroups);
 
-
 let confirmed = {
-
     A: false,
     B: false,
     C: false,
     D: false
-
 };
 
-
 let qualified = {
-
     A: [],
     B: [],
     C: [],
     D: []
-
 };
 
-
 let matches = {};
-
 
 let draggedElement = null;
 let draggedGroup = null;
@@ -1123,7 +1304,7 @@ let draggedIndex = null;
 
 
 /* =========================================================
-   EXACT BRACKET
+   EXACT BRACKET MAPPING
 ========================================================= */
 
 const bracketDefinition = {
@@ -1274,7 +1455,7 @@ function renderGroups() {
                 ${
                     locked
                     ? "Ranking confirmed."
-                    : "Drag and drop to set ranking."
+                    : "Drag teams to arrange ranking."
                 }
 
             </div>
@@ -1294,7 +1475,7 @@ function renderGroups() {
                     ${
                         locked
                         ? "✓ GROUP CONFIRMED"
-                        : "Top 3 not confirmed"
+                        : "TOP 3 NOT CONFIRMED"
                     }
 
                 </div>
@@ -1305,16 +1486,18 @@ function renderGroups() {
                         locked
 
                         ? `
+
                             <button
-                                class="edit-btn"
                                 onclick="editGroup('${group}')">
 
-                                EDIT GROUP
+                                EDIT
 
                             </button>
+
                         `
 
                         : `
+
                             <button
                                 class="confirm-btn"
                                 onclick="confirmGroup('${group}')">
@@ -1322,6 +1505,7 @@ function renderGroups() {
                                 CONFIRM GROUP
 
                             </button>
+
                         `
                     }
 
@@ -1472,7 +1656,7 @@ function createTeamItem(
 
 
 /* =========================================================
-   DRAG & DROP
+   DRAG DESKTOP
 ========================================================= */
 
 function handleDragStart(event) {
@@ -1528,7 +1712,9 @@ function handleDragOver(event) {
         target.dataset.group !==
         draggedGroup
     ) {
+
         return;
+
     }
 
 
@@ -1570,7 +1756,9 @@ function handleDrop(event) {
         target.dataset.group !==
         draggedGroup
     ) {
+
         return;
+
     }
 
 
@@ -1587,6 +1775,10 @@ function handleDrop(event) {
 
 }
 
+
+/* =========================================================
+   DRAG MOBILE
+========================================================= */
 
 function handleTouchStart(event) {
 
@@ -1791,6 +1983,11 @@ function confirmGroup(group) {
     confirmed[group] = true;
 
 
+    /*
+       Any existing bracket prediction
+       becomes invalid.
+    */
+
     matches = {};
 
 
@@ -1809,6 +2006,17 @@ function confirmGroup(group) {
 ========================================================= */
 
 function editGroup(group) {
+
+    if (
+        !confirm(
+            "Editing this group will reset the bracket predictions. Continue?"
+        )
+    ) {
+
+        return;
+
+    }
+
 
     confirmed[group] = false;
 
@@ -1982,7 +2190,7 @@ function buildBracket() {
 
 
 /* =========================================================
-   INITIALIZE
+   INITIALIZE MATCHES
 ========================================================= */
 
 function initializeMatches() {
@@ -2002,7 +2210,10 @@ function initializeMatches() {
 
             a: null,
             b: null,
-            winner: null
+
+            winner: null,
+
+            completed: false
 
         };
 
@@ -2023,7 +2234,7 @@ function resolveReference(ref) {
 
 
     /*
-       Group position
+       GROUP POSITION
        A1 / A2 / A3 etc.
     */
 
@@ -2050,7 +2261,7 @@ function resolveReference(ref) {
 
 
     /*
-       Winner
+       WINNER
     */
 
     if (
@@ -2071,7 +2282,7 @@ function resolveReference(ref) {
 
 
     /*
-       Loser
+       LOSER
     */
 
     if (
@@ -2089,7 +2300,7 @@ function resolveReference(ref) {
 
         if (
             !match ||
-            !match.winner
+            !match.completed
         ) {
 
             return null;
@@ -2128,7 +2339,7 @@ function resolveReference(ref) {
 
 
 /* =========================================================
-   RESOLVE MATCHES
+   RESOLVE ALL MATCHES
 ========================================================= */
 
 function resolveAllMatches() {
@@ -2187,8 +2398,9 @@ function resolveAllMatches() {
 
 
                 /*
-                   If old winner no longer exists,
-                   clear it.
+                   If the old winner
+                   no longer exists,
+                   clear result.
                 */
 
                 if (
@@ -2198,6 +2410,7 @@ function resolveAllMatches() {
                 ) {
 
                     match.winner = null;
+                    match.completed = false;
 
                 }
 
@@ -2219,7 +2432,63 @@ function resolveAllMatches() {
 
 
 /* =========================================================
-   SELECT WINNER
+   STRICT MATCH ORDER
+========================================================= */
+
+/*
+    Only ONE match can be active.
+
+    M1 → M2 → M3 → ... → M22
+*/
+
+function getActiveMatch() {
+
+    for (
+        let i = 1;
+        i <= 22;
+        i++
+    ) {
+
+        const match =
+            matches["M" + i];
+
+
+        if (
+            !match ||
+            !match.completed
+        ) {
+
+            return "M" + i;
+
+        }
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   CAN PLAY MATCH
+========================================================= */
+
+function canPlayMatch(matchId) {
+
+    const active =
+        getActiveMatch();
+
+
+    return (
+        active === matchId
+    );
+
+}
+
+
+/* =========================================================
+   CHOOSE WINNER
 ========================================================= */
 
 function chooseWinner(
@@ -2227,12 +2496,51 @@ function chooseWinner(
     team
 ) {
 
+    if (
+        !matches[matchId]
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       STRICT ORDER LOCK
+    */
+
+    if (
+        !canPlayMatch(matchId)
+    ) {
+
+        alert(
+            `${matchId} is locked. Complete the matches in order.`
+        );
+
+        return;
+
+    }
+
+
     const match =
         matches[matchId];
 
 
-    if (!match) {
+    /*
+       Both teams must exist.
+    */
+
+    if (
+        !match.a ||
+        !match.b
+    ) {
+
+        alert(
+            `${matchId} is waiting for its teams.`
+        );
+
         return;
+
     }
 
 
@@ -2250,11 +2558,153 @@ function chooseWinner(
         team;
 
 
+    match.completed =
+        true;
+
+
     resolveAllMatches();
 
     renderBracket();
 
     updateChampion();
+
+
+    /*
+       Automatically scroll to
+       next active match.
+    */
+
+    setTimeout(() => {
+
+        const next =
+            getActiveMatch();
+
+
+        if (!next) {
+            return;
+        }
+
+
+        const nextElement =
+            document.getElementById(
+                "slot-" + next
+            );
+
+
+        if (
+            nextElement &&
+            nextElement.offsetParent !== null
+        ) {
+
+            nextElement.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center"
+            });
+
+        }
+
+    }, 150);
+
+}
+
+
+/* =========================================================
+   UNDO
+========================================================= */
+
+function undoMatch(matchId) {
+
+    const number =
+        Number(
+            matchId.substring(1)
+        );
+
+
+    if (
+        !matches[matchId]
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        !matches[matchId].completed
+    ) {
+
+        return;
+
+    }
+
+
+    const ok =
+        confirm(
+            `Undo ${matchId}?\n\nAll predictions from ${matchId} onward will be reset.`
+        );
+
+
+    if (!ok) {
+        return;
+    }
+
+
+    /*
+       Because matches are strictly sequential,
+       reset this match and every match after it.
+    */
+
+    for (
+        let i = number;
+        i <= 22;
+        i++
+    ) {
+
+        const id =
+            "M" + i;
+
+
+        matches[id].winner =
+            null;
+
+
+        matches[id].completed =
+            false;
+
+    }
+
+
+    resolveAllMatches();
+
+    renderBracket();
+
+    updateChampion();
+
+
+    /*
+       Return to undone match.
+    */
+
+    setTimeout(() => {
+
+        const element =
+            document.getElementById(
+                "slot-" + matchId
+            );
+
+
+        if (element) {
+
+            element.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "center"
+            });
+
+        }
+
+    }, 100);
 
 }
 
@@ -2264,6 +2714,15 @@ function chooseWinner(
 ========================================================= */
 
 function renderBracket() {
+
+    if (
+        Object.keys(matches).length === 0
+    ) {
+
+        return;
+
+    }
+
 
     resolveAllMatches();
 
@@ -2296,13 +2755,12 @@ function renderBracket() {
 
 
     /*
-       Add click events after HTML
-       is rendered.
+       Add click events.
     */
 
     document
         .querySelectorAll(
-            ".match-team[data-available='true']"
+            ".match-team.clickable"
         )
         .forEach(element => {
 
@@ -2320,11 +2778,38 @@ function renderBracket() {
 
         });
 
+
+    /*
+       Add undo events.
+    */
+
+    document
+        .querySelectorAll(
+            ".undo-btn"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+
+                    undoMatch(
+                        button.dataset.match
+                    );
+
+                }
+            );
+
+        });
+
 }
 
 
 /* =========================================================
-   MATCH HTML
+   CREATE MATCH
 ========================================================= */
 
 function createMatchHtml(matchId) {
@@ -2334,37 +2819,130 @@ function createMatchHtml(matchId) {
 
 
     if (!match) {
-
         return "";
+    }
+
+
+    const active =
+        canPlayMatch(matchId);
+
+
+    const completed =
+        match.completed;
+
+
+    let status =
+        "LOCKED";
+
+
+    if (completed) {
+
+        status =
+            "DONE";
+
+    } else if (active) {
+
+        status =
+            "YOUR TURN";
+
+    }
+
+
+    let cardClass =
+        "match-card";
+
+
+    if (active) {
+
+        cardClass +=
+            " active";
+
+    }
+
+
+    if (completed) {
+
+        cardClass +=
+            " completed";
+
+    }
+
+
+    if (!active && !completed) {
+
+        cardClass +=
+            " locked";
 
     }
 
 
     return `
 
-        <div class="match-card">
+        <div class="${cardClass}">
 
             <div class="match-header">
 
-                ${matchId}
-
                 <span>
-                    Click winner
+                    ${matchId}
                 </span>
+
+                <div class="match-header-right">
+
+                    <span
+                        class="match-status ${
+                            active
+                            ? "active"
+                            : completed
+                            ? "done"
+                            : "locked"
+                        }">
+
+                        ${status}
+
+                    </span>
+
+                    <button
+                        class="undo-btn"
+                        data-match="${matchId}"
+                        ${completed ? "" : "disabled"}>
+
+                        UNDO
+
+                    </button>
+
+                </div>
 
             </div>
 
 
-            ${createTeamHtml(
+            ${createMatchTeamHtml(
                 matchId,
                 match.a
             )}
 
 
-            ${createTeamHtml(
+            ${createMatchTeamHtml(
                 matchId,
                 match.b
             )}
+
+
+            ${
+                !active && !completed
+
+                ? `
+
+                    <div class="match-lock">
+
+                        🔒 Waiting for previous match
+
+                    </div>
+
+                `
+
+                : ""
+
+            }
 
         </div>
 
@@ -2374,10 +2952,10 @@ function createMatchHtml(matchId) {
 
 
 /* =========================================================
-   TEAM HTML
+   CREATE TEAM
 ========================================================= */
 
-function createTeamHtml(
+function createMatchTeamHtml(
     matchId,
     team
 ) {
@@ -2404,58 +2982,45 @@ function createTeamHtml(
 
 
     /*
-       Winner
+       Match completed
     */
 
-    if (
-        match.winner === team
-    ) {
+    if (match.completed) {
+
+        if (
+            match.winner === team
+        ) {
+
+            return `
+
+                <div
+                    class="match-team selected">
+
+                    <span class="team-text">
+                        ${escapeHtml(team)}
+                    </span>
+
+                    <span class="result">
+                        ✓
+                    </span>
+
+                </div>
+
+            `;
+
+        }
+
 
         return `
 
             <div
-                class="match-team selected"
-                data-match="${matchId}"
-                data-team="${escapeAttribute(team)}"
-                data-available="false">
+                class="match-team loser">
 
                 <span class="team-text">
                     ${escapeHtml(team)}
                 </span>
 
-                <span class="match-result">
-                    ✓
-                </span>
-
-            </div>
-
-        `;
-
-    }
-
-
-    /*
-       Loser
-    */
-
-    if (
-        match.winner &&
-        match.winner !== team
-    ) {
-
-        return `
-
-            <div
-                class="match-team eliminated"
-                data-match="${matchId}"
-                data-team="${escapeAttribute(team)}"
-                data-available="false">
-
-                <span class="team-text">
-                    ${escapeHtml(team)}
-                </span>
-
-                <span class="match-result">
+                <span class="result">
                     ✕
                 </span>
 
@@ -2467,16 +3032,43 @@ function createTeamHtml(
 
 
     /*
-       Available
+       Active match
+    */
+
+    if (
+        canPlayMatch(matchId)
+    ) {
+
+        return `
+
+            <div
+                class="match-team clickable"
+                data-match="${matchId}"
+                data-team="${escapeAttribute(team)}">
+
+                <span class="team-text">
+                    ${escapeHtml(team)}
+                </span>
+
+                <span class="result">
+                    →
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+       Locked match
     */
 
     return `
 
         <div
-            class="match-team"
-            data-match="${matchId}"
-            data-team="${escapeAttribute(team)}"
-            data-available="true">
+            class="match-team locked-team">
 
             <span class="team-text">
                 ${escapeHtml(team)}
@@ -2513,6 +3105,7 @@ function updateChampion() {
 
     if (
         final &&
+        final.completed &&
         final.winner
     ) {
 
@@ -2521,16 +3114,30 @@ function updateChampion() {
 
 
         info.innerText =
-            "🏆 Tournament Champion";
+            "🏆 TOURNAMENT CHAMPION";
+
+        return;
+
+    }
+
+
+    name.innerText =
+        "—";
+
+
+    const active =
+        getActiveMatch();
+
+
+    if (active) {
+
+        info.innerText =
+            `Current match: ${active}`;
 
     } else {
 
-        name.innerText =
-            "—";
-
-
         info.innerText =
-            "Click a team in every match to simulate the tournament.";
+            "Complete M22 to determine the champion.";
 
     }
 
@@ -2556,7 +3163,9 @@ function clearBracket() {
 
 
         if (slot) {
+
             slot.innerHTML = "";
+
         }
 
     }
@@ -2572,7 +3181,7 @@ function resetAll() {
 
     if (
         !confirm(
-            "Reset all groups and predictions?"
+            "Reset all groups and tournament predictions?"
         )
     ) {
 
@@ -2617,13 +3226,14 @@ function resetAll() {
 
     document.getElementById(
         "championName"
-    ).innerText = "—";
+    ).innerText =
+        "—";
 
 
     document.getElementById(
         "championInfo"
     ).innerText =
-        "Complete M22 to determine the champion.";
+        "Complete all matches to determine the champion.";
 
 }
 
