@@ -2467,15 +2467,27 @@ function buildBracket() {
 
     setTimeout(() => {
 
-        document
-            .querySelector(
-                ".bracket-section"
-            )
-            .scrollIntoView({
-                behavior: "smooth"
-            });
+    const section =
+        document.querySelector(".bracket-section");
 
-    }, 100);
+    const header =
+        document.querySelector("header");
+
+    const headerHeight =
+        header ? header.offsetHeight : 0;
+
+    const targetY =
+        section.getBoundingClientRect().top +
+        window.scrollY -
+        headerHeight -
+        10;
+
+    window.scrollTo({
+        top: targetY,
+        behavior: "smooth"
+    });
+
+}, 100);
 
 }
 
