@@ -2,18 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ABCS Predictor</title>
+<title>Tournament Bracket Simulator</title>
 
 <style>
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
-}
-
-html {
-    scroll-behavior: smooth;
 }
 
 body {
@@ -23,56 +19,51 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* =========================
-   HEADER
-========================= */
-
 header {
-    background: #101014;
-    border-bottom: 1px solid #292930;
-    padding: 22px 18px;
-    text-align: center;
     position: sticky;
     top: 0;
     z-index: 100;
+
+    background: #101014;
+    border-bottom: 1px solid #292930;
+
+    padding: 18px;
+    text-align: center;
 }
 
 header h1 {
     margin: 0;
-    font-size: 28px;
+    font-size: 27px;
 }
 
 header p {
     margin: 7px 0 0;
-    color: #888891;
-    font-size: 14px;
+    color: #85858e;
+    font-size: 13px;
 }
 
 .controls {
-    margin-top: 17px;
     display: flex;
     justify-content: center;
     gap: 10px;
     flex-wrap: wrap;
+    margin-top: 16px;
 }
 
 button {
     border: 0;
     border-radius: 8px;
     padding: 11px 18px;
-    color: #fff;
+
     background: #292930;
-    cursor: pointer;
+    color: white;
+
     font-weight: bold;
-    transition: 0.15s;
+    cursor: pointer;
 }
 
 button:hover {
-    background: #3b3b44;
-}
-
-button:active {
-    transform: scale(0.97);
+    background: #3a3a43;
 }
 
 .primary {
@@ -83,34 +74,41 @@ button:active {
     background: #850000;
 }
 
+button:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+}
+
 /* =========================
    SECTION
 ========================= */
 
 section {
-    padding: 30px 20px;
+    padding: 30px 18px;
 }
 
 .section-title {
-    max-width: 1600px;
+    max-width: 1500px;
     margin: 0 auto 20px;
-    padding-left: 10px;
+
     border-left: 4px solid #850000;
-    font-size: 22px;
+    padding-left: 10px;
+
+    font-size: 21px;
     font-weight: bold;
 }
 
 /* =========================
-   GROUP STAGE
+   GROUPS
 ========================= */
 
 .groups {
-    max-width: 1600px;
+    max-width: 1500px;
     margin: auto;
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+    gap: 16px;
 }
 
 .group {
@@ -121,19 +119,14 @@ section {
 }
 
 .group h3 {
-    margin: 0 0 14px;
-    font-size: 18px;
+    margin: 0 0 6px;
 }
 
-.group-instruction {
-    color: #707078;
+.group-help {
+    color: #66666e;
     font-size: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 13px;
 }
-
-/* =========================
-   DRAG LIST
-========================= */
 
 .team-list {
     display: flex;
@@ -141,15 +134,18 @@ section {
     gap: 7px;
 }
 
-.team-item {
-    position: relative;
+/* =========================
+   TEAM
+========================= */
 
+.team-item {
     min-height: 47px;
-    padding: 0 11px;
 
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
+
+    padding: 0 10px;
 
     background: #1b1b21;
     border: 1px solid #2d2d35;
@@ -162,98 +158,113 @@ section {
 
     touch-action: none;
 
-    transition:
-        transform 0.15s,
-        background 0.15s,
-        border-color 0.15s,
-        opacity 0.15s;
+    transition: .15s;
 }
 
 .team-item:hover {
-    background: #25252c;
-}
-
-.team-item:active {
-    cursor: grabbing;
+    background: #24242b;
 }
 
 .team-item.dragging {
-    opacity: 0.35;
-    transform: scale(0.98);
+    opacity: .35;
 }
 
 .team-item.drag-over {
-    border-color: #8b0000;
-    background: #2b1111;
+    border-color: #a00000;
+    background: #351010;
 }
 
-.drag-handle {
-    width: 20px;
-    color: #666;
-    font-size: 17px;
+.team-item.locked {
+    cursor: default;
+}
+
+.handle {
+    width: 18px;
+    color: #686870;
     text-align: center;
     flex-shrink: 0;
 }
 
-.rank-number {
-    width: 23px;
-    height: 23px;
+.rank {
+    width: 24px;
+    height: 24px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     border-radius: 50%;
-    background: #292930;
 
+    background: #292930;
     color: #aaa;
+
     font-size: 12px;
     font-weight: bold;
 
     flex-shrink: 0;
 }
 
-.team-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.team-item:nth-child(-n+3) .rank-number {
-    background: #5a0000;
+.team-item:nth-child(-n+3) .rank {
+    background: #650000;
     color: white;
 }
 
-.qualify-status {
-    margin-left: auto;
-    font-size: 10px;
-    color: #888;
+.team-name {
+    font-weight: bold;
+    font-size: 14px;
 }
 
-.team-item:nth-child(-n+3) .qualify-status {
-    color: #b94b4b;
+.qualify {
+    margin-left: auto;
+
+    font-size: 9px;
+    font-weight: bold;
+
+    color: #777;
+}
+
+.team-item:nth-child(-n+3) .qualify {
+    color: #c45c5c;
+}
+
+.group-footer {
+    margin-top: 12px;
 }
 
 .group-status {
-    margin-top: 12px;
-    text-align: center;
-
     padding: 9px;
 
+    background: #1b1b21;
     border-radius: 7px;
 
-    background: #1b1b21;
     color: #777;
+    text-align: center;
 
-    font-size: 12px;
+    font-size: 11px;
 }
 
-.group-status.ready {
+.group-status.confirmed {
     background: #350000;
-    color: #e4a1a1;
+    color: #e9a4a4;
+}
+
+.group-actions {
+    display: flex;
+    gap: 7px;
+    margin-top: 8px;
+}
+
+.group-actions button {
+    flex: 1;
+    font-size: 11px;
+}
+
+.confirm-btn {
+    background: #650000;
+}
+
+.edit-btn {
+    background: #292930;
 }
 
 /* =========================
@@ -261,28 +272,28 @@ section {
 ========================= */
 
 .qualified {
-    max-width: 1600px;
+    max-width: 1500px;
     margin: auto;
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
+    gap: 16px;
 }
 
-.qualified-group {
+.qualified-box {
     background: #121217;
     border: 1px solid #292930;
-    border-radius: 12px;
-    padding: 15px;
+    border-radius: 10px;
+    padding: 14px;
 }
 
-.qualified-group h3 {
-    margin: 0 0 12px;
+.qualified-box h3 {
+    margin: 0 0 10px;
 }
 
 .qualified-team {
     padding: 10px;
-    margin: 6px 0;
+    margin-bottom: 6px;
 
     background: #1b1b21;
     border-radius: 7px;
@@ -291,57 +302,65 @@ section {
 }
 
 .qualified-team span {
+    display: inline-block;
+    width: 25px;
     color: #777;
-    margin-right: 8px;
 }
 
-.empty-message {
+.qualified-empty {
     color: #666;
-    font-size: 13px;
+    font-size: 12px;
 }
 
 /* =========================
    BRACKET
 ========================= */
 
-.bracket-wrapper {
+.bracket-section {
+    padding-bottom: 60px;
+}
+
+.bracket-scroll {
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
 
-    padding-bottom: 25px;
+    padding: 5px 0 25px;
 
     -webkit-overflow-scrolling: touch;
 }
 
 .bracket {
     display: flex;
-    align-items: flex-start;
-    gap: 22px;
+    gap: 14px;
 
-    min-width: 2350px;
+    min-width: max-content;
 
-    padding: 0 20px 10px;
+    padding: 0 20px;
 }
 
-.round {
-    width: 220px;
+/* Every match gets its own column */
+
+.match-column {
+    width: 190px;
     flex-shrink: 0;
 }
 
-.round-title {
-    height: 38px;
+.match-number {
+    height: 36px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    text-align: center;
+    background: #15151a;
+    border: 1px solid #292930;
+    border-radius: 8px 8px 0 0;
+
+    font-size: 13px;
+    font-weight: bold;
 
     color: #aaa;
-    font-size: 12px;
-    font-weight: bold;
-    text-transform: uppercase;
 }
 
 /* =========================
@@ -349,31 +368,20 @@ section {
 ========================= */
 
 .match {
+    border: 1px solid #292930;
+    border-top: 0;
+
+    border-radius: 0 0 8px 8px;
+
     overflow: hidden;
 
-    margin-bottom: 25px;
-
     background: #111116;
-    border: 1px solid #2c2c33;
-    border-radius: 9px;
-
-    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
-}
-
-.match-header {
-    padding: 7px 10px;
-
-    background: #1c1c22;
-
-    color: #999;
-    font-size: 12px;
-    font-weight: bold;
 }
 
 .match-team {
-    min-height: 44px;
+    min-height: 49px;
 
-    padding: 11px 10px;
+    padding: 10px;
 
     display: flex;
     align-items: center;
@@ -381,40 +389,63 @@ section {
 
     border-top: 1px solid #28282f;
 
-    background: #16161c;
+    background: #17171d;
 
     cursor: pointer;
 
-    transition: 0.15s;
+    transition: .15s;
 }
 
 .match-team:hover {
-    background: #28282f;
+    background: #292930;
 }
 
-.match-team.empty {
-    color: #4f4f56;
+.match-team:first-child {
+    border-top: 0;
+}
+
+.match-team.waiting {
+    color: #555;
     cursor: default;
 }
 
-.match-team.winner {
-    background: #620000;
-    color: #fff;
+.match-team.selected {
+    background: #650000;
+    color: white;
     font-weight: bold;
 }
 
-.match-team.loser {
-    opacity: 0.35;
+.match-team.eliminated {
+    opacity: .32;
+    cursor: default;
 }
 
-.match-team.pending {
-    color: #777;
+.match-team span:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.match-status {
+.match-result {
     margin-left: 7px;
-    font-size: 11px;
     flex-shrink: 0;
+
+    font-size: 9px;
+    font-weight: bold;
+}
+
+/* =========================
+   MATCH TYPE
+========================= */
+
+.match-type {
+    margin-top: 7px;
+
+    text-align: center;
+
+    font-size: 9px;
+    color: #555;
+    text-transform: uppercase;
 }
 
 /* =========================
@@ -422,75 +453,61 @@ section {
 ========================= */
 
 .champion {
-    width: calc(100% - 40px);
-    max-width: 700px;
+    width: calc(100% - 36px);
+    max-width: 650px;
 
-    margin: 20px auto 60px;
+    margin: 0 auto 60px;
 
-    padding: 30px;
+    padding: 28px;
 
-    text-align: center;
-
-    background: linear-gradient(
-        135deg,
-        #131318,
-        #280000
-    );
+    background: #121217;
 
     border: 1px solid #650000;
-    border-radius: 15px;
+    border-radius: 14px;
+
+    text-align: center;
 }
 
 .champion h2 {
-    margin: 0 0 12px;
+    margin: 0 0 10px;
 }
 
 .champion-name {
-    font-size: 36px;
+    font-size: 34px;
     font-weight: bold;
+
     color: #ffb000;
+
     word-break: break-word;
 }
 
-.champion-hint {
+.champion-info {
     margin-top: 8px;
-    color: #777;
-    font-size: 13px;
+
+    color: #666;
+    font-size: 12px;
 }
 
 /* =========================
    MOBILE
 ========================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
 
     .groups,
     .qualified {
         grid-template-columns: repeat(2, 1fr);
     }
-
-    section {
-        padding: 24px 15px;
-    }
 }
 
 @media (max-width: 600px) {
-
-    header {
-        padding: 17px 12px;
-    }
 
     header h1 {
         font-size: 22px;
     }
 
-    header p {
-        font-size: 12px;
-    }
-
-    .controls button {
-        flex: 1;
-        min-width: 140px;
+    section {
+        padding: 24px 12px;
     }
 
     .groups,
@@ -498,23 +515,24 @@ section {
         grid-template-columns: 1fr;
     }
 
-    .section-title {
-        font-size: 19px;
-    }
-
-    .team-item {
-        min-height: 50px;
+    .controls button {
+        min-width: 140px;
     }
 
     .bracket {
-        min-width: 2350px;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding: 0 12px;
+    }
+
+    .match-column {
+        width: 175px;
+    }
+
+    .champion {
+        width: calc(100% - 24px);
     }
 }
 </style>
 </head>
-
 
 <body>
 
@@ -524,7 +542,7 @@ section {
 
 <header>
 
-    <h1>🏆 Tournament Predictor</h1>
+    <h1>🏆 Tournament Simulator</h1>
 
     <p>
         24 Teams • 4 Groups • Top 3 • Double Elimination
@@ -533,18 +551,17 @@ section {
     <div class="controls">
 
         <button
+            id="buildBtn"
             class="primary"
-            onclick="buildBracket()">
+            onclick="buildBracket()"
+            disabled>
 
             BUILD BRACKET
 
         </button>
 
-        <button
-            onclick="resetAll()">
-
+        <button onclick="resetAll()">
             RESET
-
         </button>
 
     </div>
@@ -562,7 +579,10 @@ section {
         Group Stage
     </div>
 
-    <div class="groups" id="groups"></div>
+    <div
+        class="groups"
+        id="groups">
+    </div>
 
 </section>
 
@@ -574,13 +594,12 @@ section {
 <section>
 
     <div class="section-title">
-        Qualified Teams — Top 3
+        Qualified Teams
     </div>
 
     <div
         class="qualified"
         id="qualified">
-
     </div>
 
 </section>
@@ -590,18 +609,17 @@ section {
      BRACKET
 ===================================================== -->
 
-<section>
+<section class="bracket-section">
 
     <div class="section-title">
-        Double Elimination Bracket
+        Double Elimination — M1 → M22
     </div>
 
-    <div class="bracket-wrapper">
+    <div class="bracket-scroll">
 
         <div
             class="bracket"
             id="bracket">
-
         </div>
 
     </div>
@@ -626,10 +644,10 @@ section {
     </div>
 
     <div
-        class="champion-hint"
-        id="championHint">
+        class="champion-info"
+        id="championInfo">
 
-        Complete M22 to determine the champion.
+        Complete the tournament to determine the champion.
 
     </div>
 
@@ -639,7 +657,7 @@ section {
 <script>
 
 /* =========================================================
-   FIXED TEAMS
+   GROUP DATA
 ========================================================= */
 
 const defaultGroups = {
@@ -687,8 +705,18 @@ let groups = clone(defaultGroups);
 
 
 /* =========================================================
-   QUALIFIED
+   GROUP CONFIRMATION
 ========================================================= */
+
+let confirmed = {
+
+    A: false,
+    B: false,
+    C: false,
+    D: false
+
+};
+
 
 let qualified = {
 
@@ -701,21 +729,28 @@ let qualified = {
 
 
 /* =========================================================
-   MATCHES
+   DRAG VARIABLES
+========================================================= */
+
+let draggedElement = null;
+
+let draggedGroup = null;
+
+let draggedIndex = null;
+
+
+/* =========================================================
+   MATCH DATA
 ========================================================= */
 
 let matches = {};
 
 
 /* =========================================================
-   EXACT BRACKET
+   EXACT MATCH MAPPING
 ========================================================= */
 
 const bracketDefinition = {
-
-    /* =====================
-       UPPER ROUND 1
-    ===================== */
 
     M1: {
         a: "B2",
@@ -737,11 +772,6 @@ const bracketDefinition = {
         b: "B3"
     },
 
-
-    /* =====================
-       UPPER ROUND 2
-    ===================== */
-
     M5: {
         a: "A1",
         b: "W1"
@@ -761,11 +791,6 @@ const bracketDefinition = {
         a: "D1",
         b: "W4"
     },
-
-
-    /* =====================
-       LOWER ROUND 1
-    ===================== */
 
     M9: {
         a: "L5",
@@ -787,11 +812,6 @@ const bracketDefinition = {
         b: "L1"
     },
 
-
-    /* =====================
-       LOWER ROUND 2
-    ===================== */
-
     M13: {
         a: "W10",
         b: "W9"
@@ -801,11 +821,6 @@ const bracketDefinition = {
         a: "W12",
         b: "W11"
     },
-
-
-    /* =====================
-       UPPER SEMIFINAL
-    ===================== */
 
     M15: {
         a: "W5",
@@ -817,11 +832,6 @@ const bracketDefinition = {
         b: "W8"
     },
 
-
-    /* =====================
-       LOWER ROUND 3
-    ===================== */
-
     M17: {
         a: "L15",
         b: "W14"
@@ -832,40 +842,20 @@ const bracketDefinition = {
         b: "W13"
     },
 
-
-    /* =====================
-       LOWER ROUND 4
-    ===================== */
-
     M19: {
         a: "W17",
         b: "W18"
     },
-
-
-    /* =====================
-       UPPER FINAL
-    ===================== */
 
     M20: {
         a: "W15",
         b: "W16"
     },
 
-
-    /* =====================
-       LOWER FINAL
-    ===================== */
-
     M21: {
         a: "L20",
         b: "W19"
     },
-
-
-    /* =====================
-       GRAND FINAL
-    ===================== */
 
     M22: {
         a: "W21",
@@ -873,108 +863,6 @@ const bracketDefinition = {
     }
 
 };
-
-
-/* =========================================================
-   VISUAL ROUNDS
-========================================================= */
-
-const rounds = [
-
-    {
-        title: "Upper Round 1",
-        ids: [
-            "M1",
-            "M2",
-            "M3",
-            "M4"
-        ]
-    },
-
-    {
-        title: "Upper Round 2",
-        ids: [
-            "M5",
-            "M6",
-            "M7",
-            "M8"
-        ]
-    },
-
-    {
-        title: "Lower Round 1",
-        ids: [
-            "M9",
-            "M10",
-            "M11",
-            "M12"
-        ]
-    },
-
-    {
-        title: "Upper Semifinal",
-        ids: [
-            "M15",
-            "M16"
-        ]
-    },
-
-    {
-        title: "Lower Round 2",
-        ids: [
-            "M13",
-            "M14"
-        ]
-    },
-
-    {
-        title: "Lower Round 3",
-        ids: [
-            "M17",
-            "M18"
-        ]
-    },
-
-    {
-        title: "Lower Round 4",
-        ids: [
-            "M19"
-        ]
-    },
-
-    {
-        title: "Upper Final",
-        ids: [
-            "M20"
-        ]
-    },
-
-    {
-        title: "Lower Final",
-        ids: [
-            "M21"
-        ]
-    },
-
-    {
-        title: "Grand Final",
-        ids: [
-            "M22"
-        ]
-    }
-
-];
-
-
-/* =========================================================
-   DRAG STATE
-========================================================= */
-
-let draggedElement = null;
-
-let draggedGroup = null;
-
-let draggedIndex = null;
 
 
 /* =========================================================
@@ -997,13 +885,20 @@ function renderGroups() {
         box.className = "group";
 
 
+        const isConfirmed =
+            confirmed[group];
+
+
         box.innerHTML = `
 
             <h3>GROUP ${group}</h3>
 
-            <div class="group-instruction">
-                Drag teams to set ranking.
-                Top 3 qualify.
+            <div class="group-help">
+
+                ${isConfirmed
+                    ? "Ranking confirmed."
+                    : "Drag teams to set ranking."}
+
             </div>
 
             <div
@@ -1011,11 +906,47 @@ function renderGroups() {
                 data-group="${group}">
             </div>
 
-            <div
-                class="group-status"
-                id="status-${group}">
+            <div class="group-footer">
 
-                Top 3 not confirmed
+                <div
+                    class="group-status ${isConfirmed ? "confirmed" : ""}"
+                    id="status-${group}">
+
+                    ${
+                        isConfirmed
+                        ? "✓ GROUP CONFIRMED"
+                        : "Top 3 not confirmed"
+                    }
+
+                </div>
+
+                <div class="group-actions">
+
+                    ${
+                        isConfirmed
+
+                        ? `
+                            <button
+                                class="edit-btn"
+                                onclick="editGroup('${group}')">
+
+                                EDIT GROUP
+
+                            </button>
+                        `
+
+                        : `
+                            <button
+                                class="confirm-btn"
+                                onclick="confirmGroup('${group}')">
+
+                                CONFIRM GROUP
+
+                            </button>
+                        `
+                    }
+
+                </div>
 
             </div>
 
@@ -1033,7 +964,8 @@ function renderGroups() {
                     createTeamItem(
                         group,
                         team,
-                        index
+                        index,
+                        isConfirmed
                     );
 
 
@@ -1043,54 +975,53 @@ function renderGroups() {
         );
 
 
-        /*
-           Enable desktop drag & drop
-        */
+        if (!isConfirmed) {
 
-        list.addEventListener(
-            "dragover",
-            handleDragOver
-        );
+            list.addEventListener(
+                "dragover",
+                handleDragOver
+            );
 
-        list.addEventListener(
-            "drop",
-            handleDrop
-        );
+            list.addEventListener(
+                "drop",
+                handleDrop
+            );
 
+            list.addEventListener(
+                "touchmove",
+                handleTouchMove,
+                {
+                    passive: false
+                }
+            );
 
-        /*
-           Enable touch dragging
-        */
+            list.addEventListener(
+                "touchend",
+                handleTouchEnd
+            );
 
-        list.addEventListener(
-            "touchmove",
-            handleTouchMove,
-            {
-                passive: false
-            }
-        );
-
-        list.addEventListener(
-            "touchend",
-            handleTouchEnd
-        );
+        }
 
 
         container.appendChild(box);
 
     });
 
+
+    updateBuildButton();
+
 }
 
 
 /* =========================================================
-   CREATE TEAM ITEM
+   CREATE TEAM
 ========================================================= */
 
 function createTeamItem(
     group,
     team,
-    index
+    index,
+    locked
 ) {
 
     const item =
@@ -1098,14 +1029,17 @@ function createTeamItem(
 
 
     item.className =
-        "team-item";
+        "team-item" +
+        (locked ? " locked" : "");
 
 
-    item.draggable = true;
+    item.draggable =
+        !locked;
 
 
     item.dataset.group =
         group;
+
 
     item.dataset.index =
         index;
@@ -1113,11 +1047,11 @@ function createTeamItem(
 
     item.innerHTML = `
 
-        <div class="drag-handle">
-            ☰
+        <div class="handle">
+            ${locked ? "" : "☰"}
         </div>
 
-        <div class="rank-number">
+        <div class="rank">
             ${index + 1}
         </div>
 
@@ -1125,39 +1059,34 @@ function createTeamItem(
             ${escapeHtml(team)}
         </div>
 
-        <div class="qualify-status">
+        <div class="qualify">
             ${index < 3 ? "QUALIFY" : ""}
         </div>
 
     `;
 
 
-    /*
-       Desktop
-    */
+    if (!locked) {
 
-    item.addEventListener(
-        "dragstart",
-        handleDragStart
-    );
+        item.addEventListener(
+            "dragstart",
+            handleDragStart
+        );
 
-    item.addEventListener(
-        "dragend",
-        handleDragEnd
-    );
+        item.addEventListener(
+            "dragend",
+            handleDragEnd
+        );
 
+        item.addEventListener(
+            "touchstart",
+            handleTouchStart,
+            {
+                passive: true
+            }
+        );
 
-    /*
-       Mobile touch
-    */
-
-    item.addEventListener(
-        "touchstart",
-        handleTouchStart,
-        {
-            passive: true
-        }
-    );
+    }
 
 
     return item;
@@ -1166,7 +1095,7 @@ function createTeamItem(
 
 
 /* =========================================================
-   DESKTOP DRAG START
+   DESKTOP DRAG
 ========================================================= */
 
 function handleDragStart(event) {
@@ -1174,10 +1103,8 @@ function handleDragStart(event) {
     draggedElement =
         event.currentTarget;
 
-
     draggedGroup =
         draggedElement.dataset.group;
-
 
     draggedIndex =
         Number(
@@ -1189,16 +1116,8 @@ function handleDragStart(event) {
         "dragging"
     );
 
-
-    event.dataTransfer.effectAllowed =
-        "move";
-
 }
 
-
-/* =========================================================
-   DESKTOP DRAG END
-========================================================= */
 
 function handleDragEnd() {
 
@@ -1223,40 +1142,40 @@ function handleDragEnd() {
 
 
     draggedElement = null;
-
     draggedGroup = null;
-
     draggedIndex = null;
 
 }
 
-
-/* =========================================================
-   DESKTOP DRAG OVER
-========================================================= */
 
 function handleDragOver(event) {
 
     event.preventDefault();
 
 
-    const item =
+    if (!draggedElement) {
+        return;
+    }
+
+
+    const target =
         event.target.closest(
             ".team-item"
         );
 
 
-    if (!item) {
+    if (!target) {
         return;
     }
 
 
     if (
-        item.dataset.group !==
+        target.dataset.group !==
         draggedGroup
     ) {
 
         return;
+
     }
 
 
@@ -1271,16 +1190,12 @@ function handleDragOver(event) {
         });
 
 
-    item.classList.add(
+    target.classList.add(
         "drag-over"
     );
 
 }
 
-
-/* =========================================================
-   DESKTOP DROP
-========================================================= */
 
 function handleDrop(event) {
 
@@ -1298,16 +1213,13 @@ function handleDrop(event) {
     }
 
 
-    const targetGroup =
-        target.dataset.group;
-
-
     if (
-        targetGroup !==
+        target.dataset.group !==
         draggedGroup
     ) {
 
         return;
+
     }
 
 
@@ -1315,15 +1227,6 @@ function handleDrop(event) {
         Number(
             target.dataset.index
         );
-
-
-    if (
-        targetIndex ===
-        draggedIndex
-    ) {
-
-        return;
-    }
 
 
     moveTeam(
@@ -1336,7 +1239,7 @@ function handleDrop(event) {
 
 
 /* =========================================================
-   TOUCH START
+   TOUCH DRAG
 ========================================================= */
 
 function handleTouchStart(event) {
@@ -1344,10 +1247,8 @@ function handleTouchStart(event) {
     draggedElement =
         event.currentTarget;
 
-
     draggedGroup =
         draggedElement.dataset.group;
-
 
     draggedIndex =
         Number(
@@ -1361,10 +1262,6 @@ function handleTouchStart(event) {
 
 }
 
-
-/* =========================================================
-   TOUCH MOVE
-========================================================= */
 
 function handleTouchMove(event) {
 
@@ -1420,10 +1317,6 @@ function handleTouchMove(event) {
 }
 
 
-/* =========================================================
-   TOUCH END
-========================================================= */
-
 function handleTouchEnd(event) {
 
     if (!draggedElement) {
@@ -1470,6 +1363,15 @@ function handleTouchEnd(event) {
     }
 
 
+    if (draggedElement) {
+
+        draggedElement.classList.remove(
+            "dragging"
+        );
+
+    }
+
+
     document
         .querySelectorAll(".drag-over")
         .forEach(element => {
@@ -1481,19 +1383,8 @@ function handleTouchEnd(event) {
         });
 
 
-    if (draggedElement) {
-
-        draggedElement.classList.remove(
-            "dragging"
-        );
-
-    }
-
-
     draggedElement = null;
-
     draggedGroup = null;
-
     draggedIndex = null;
 
 }
@@ -1509,19 +1400,13 @@ function moveTeam(
     toIndex
 ) {
 
-    const list =
-        groups[group];
-
-
-    if (
-        fromIndex < 0 ||
-        toIndex < 0 ||
-        fromIndex >= list.length ||
-        toIndex >= list.length
-    ) {
-
+    if (confirmed[group]) {
         return;
     }
+
+
+    const list =
+        groups[group];
 
 
     const moved =
@@ -1538,17 +1423,89 @@ function moveTeam(
     );
 
 
-    /*
-       Ranking changed.
+    renderGroups();
 
-       Clear old qualification because
-       Top 3 have changed.
+}
+
+
+/* =========================================================
+   CONFIRM GROUP
+========================================================= */
+
+function confirmGroup(group) {
+
+    if (confirmed[group]) {
+        return;
+    }
+
+
+    qualified[group] =
+        groups[group].slice(0, 3);
+
+
+    confirmed[group] = true;
+
+
+    renderGroups();
+
+    renderQualified();
+
+
+    /*
+       If bracket already exists,
+       rebuild because ranking changed.
     */
+
+    if (
+        Object.keys(matches).length > 0
+    ) {
+
+        initializeMatches();
+
+        resolveAllMatches();
+
+        renderBracket();
+
+        updateChampion();
+
+    }
+
+}
+
+
+/* =========================================================
+   EDIT GROUP
+========================================================= */
+
+function editGroup(group) {
+
+    confirmed[group] = false;
 
     qualified[group] = [];
 
 
-    clearBracketOnly();
+    /*
+       Changing a group after bracket
+       exists invalidates predictions.
+    */
+
+    matches = {};
+
+
+    document.getElementById(
+        "bracket"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "championName"
+    ).innerText = "—";
+
+
+    document.getElementById(
+        "championInfo"
+    ).innerText =
+        "Confirm all groups to rebuild the tournament.";
 
 
     renderGroups();
@@ -1559,78 +1516,7 @@ function moveTeam(
 
 
 /* =========================================================
-   GROUP STATUS
-========================================================= */
-
-function updateGroupStatus() {
-
-    Object.keys(groups).forEach(group => {
-
-        const status =
-            document.getElementById(
-                `status-${group}`
-            );
-
-
-        if (!status) {
-            return;
-        }
-
-
-        if (
-            qualified[group].length === 3
-        ) {
-
-            status.innerText =
-                "TOP 3 CONFIRMED ✓";
-
-            status.classList.add(
-                "ready"
-            );
-
-        } else {
-
-            status.innerText =
-                "Top 3 not confirmed";
-
-            status.classList.remove(
-                "ready"
-            );
-
-        }
-
-    });
-
-}
-
-
-/* =========================================================
-   SELECT TOP 3
-=========================================================
-
-   Instead of needing a button,
-   the first 3 positions automatically
-   represent qualification.
-
-   BUILD BRACKET will read positions
-   1, 2 and 3.
-========================================================= */
-
-function autoQualifyGroups() {
-
-    Object.keys(groups).forEach(group => {
-
-        qualified[group] =
-            groups[group]
-                .slice(0, 3);
-
-    });
-
-}
-
-
-/* =========================================================
-   QUALIFIED RENDER
+   QUALIFIED
 ========================================================= */
 
 function renderQualified() {
@@ -1649,34 +1535,33 @@ function renderQualified() {
         const box =
             document.createElement("div");
 
+
         box.className =
-            "qualified-group";
+            "qualified-box";
 
 
         box.innerHTML =
             `<h3>GROUP ${group}</h3>`;
 
 
-        const teams =
-            qualified[group];
-
-
         if (
-            teams.length !== 3
+            qualified[group].length !== 3
         ) {
 
             box.innerHTML += `
 
-                <div class="empty-message">
-                    Drag teams to set ranking.
-                    Top 3 will qualify.
+                <div class="qualified-empty">
+
+                    Waiting for Group ${group}
+                    confirmation.
+
                 </div>
 
             `;
 
         } else {
 
-            teams.forEach(
+            qualified[group].forEach(
                 (team, index) => {
 
                     box.innerHTML += `
@@ -1703,8 +1588,25 @@ function renderQualified() {
 
     });
 
+}
 
-    updateGroupStatus();
+
+/* =========================================================
+   BUILD BUTTON
+========================================================= */
+
+function updateBuildButton() {
+
+    const allConfirmed =
+        Object.values(
+            confirmed
+        ).every(Boolean);
+
+
+    document.getElementById(
+        "buildBtn"
+    ).disabled =
+        !allConfirmed;
 
 }
 
@@ -1715,63 +1617,38 @@ function renderQualified() {
 
 function buildBracket() {
 
-    /*
-       Automatically take first 3
-       from every group.
-    */
-
-    autoQualifyGroups();
-
-
-    /*
-       Make sure every group has 6 teams.
-    */
-
-    for (
-        const group of
-        ["A", "B", "C", "D"]
+    if (
+        !Object.values(
+            confirmed
+        ).every(Boolean)
     ) {
 
-        if (
-            groups[group].length !== 6
-        ) {
+        alert(
+            "Confirm all 4 groups first."
+        );
 
-            alert(
-                `Group ${group} must contain 6 teams.`
-            );
-
-            return;
-        }
+        return;
 
     }
 
 
-    renderQualified();
-
-
     initializeMatches();
-
 
     resolveAllMatches();
 
-
     renderBracket();
-
 
     updateChampion();
 
 
-    /*
-       Scroll to bracket
-    */
-
     setTimeout(() => {
 
         document
-            .getElementById("bracket")
+            .querySelector(
+                ".bracket-section"
+            )
             .scrollIntoView({
-                behavior: "smooth",
-                block: "start"
+                behavior: "smooth"
             });
 
     }, 100);
@@ -1788,11 +1665,15 @@ function initializeMatches() {
     matches = {};
 
 
-    Object.keys(
-        bracketDefinition
-    ).forEach(matchId => {
+    for (
+        let i = 1;
+        i <= 22;
+        i++
+    ) {
 
-        matches[matchId] = {
+        matches[
+            "M" + i
+        ] = {
 
             a: null,
 
@@ -1802,7 +1683,7 @@ function initializeMatches() {
 
         };
 
-    });
+    }
 
 }
 
@@ -1819,11 +1700,7 @@ function resolveReference(ref) {
 
 
     /*
-       GROUP PLACEMENT
-
-       A1 = 1st Group A
-       A2 = 2nd Group A
-       A3 = 3rd Group A
+       Group position
     */
 
     if (
@@ -1831,12 +1708,12 @@ function resolveReference(ref) {
     ) {
 
         const group =
-            ref.charAt(0);
+            ref[0];
 
 
         const position =
             Number(
-                ref.charAt(1)
+                ref[1]
             ) - 1;
 
 
@@ -1849,10 +1726,7 @@ function resolveReference(ref) {
 
 
     /*
-       WINNER
-
-       W1 = Winner M1
-       W15 = Winner M15
+       Winner reference
     */
 
     if (
@@ -1873,10 +1747,7 @@ function resolveReference(ref) {
 
 
     /*
-       LOSER
-
-       L1 = Loser M1
-       L15 = Loser M15
+       Loser reference
     */
 
     if (
@@ -1896,11 +1767,6 @@ function resolveReference(ref) {
             return null;
         }
 
-
-        /*
-           Loser cannot be known
-           before winner is selected.
-        */
 
         if (!match.winner) {
             return null;
@@ -1938,32 +1804,39 @@ function resolveReference(ref) {
 
 
 /* =========================================================
-   RESOLVE ALL MATCHES
+   RESOLVE ALL
 ========================================================= */
 
 function resolveAllMatches() {
 
-    /*
-       Repeat to propagate dependencies.
-    */
-
     for (
         let pass = 0;
-        pass < 40;
+        pass < 50;
         pass++
     ) {
 
         let changed = false;
 
 
-        Object.keys(
-            bracketDefinition
-        ).forEach(matchId => {
+        for (
+            let i = 1;
+            i <= 22;
+            i++
+        ) {
+
+            const matchId =
+                "M" + i;
+
 
             const definition =
                 bracketDefinition[
                     matchId
                 ];
+
+
+            if (!definition) {
+                continue;
+            }
 
 
             const newA =
@@ -1993,13 +1866,14 @@ function resolveAllMatches() {
 
 
                 /*
-                   Keep winner only if
-                   winner still exists in match.
+                   Remove winner if the
+                   participant is no longer
+                   valid.
                 */
 
                 if (
-                    match.winner !== newA &&
-                    match.winner !== newB
+                    match.winner !== match.a &&
+                    match.winner !== match.b
                 ) {
 
                     match.winner = null;
@@ -2011,7 +1885,7 @@ function resolveAllMatches() {
 
             }
 
-        });
+        }
 
 
         if (!changed) {
@@ -2024,7 +1898,7 @@ function resolveAllMatches() {
 
 
 /* =========================================================
-   CHOOSE WINNER
+   SELECT WINNER
 ========================================================= */
 
 function chooseWinner(
@@ -2041,46 +1915,27 @@ function chooseWinner(
     }
 
 
-    if (!team) {
-        return;
-    }
-
-
-    /*
-       Team must actually belong
-       to this match.
-    */
-
     if (
         team !== match.a &&
         team !== match.b
     ) {
 
         return;
+
     }
 
-
-    /*
-       Select winner.
-    */
 
     match.winner =
         team;
 
 
     /*
-       Recalculate every dependent match.
+       Recalculate complete bracket.
     */
 
     resolveAllMatches();
 
-
-    /*
-       Re-render entire bracket.
-    */
-
     renderBracket();
-
 
     updateChampion();
 
@@ -2105,184 +1960,171 @@ function renderBracket() {
     container.innerHTML = "";
 
 
-    rounds.forEach(round => {
+    /*
+       IMPORTANT:
+       Strict M1 → M22 order.
+    */
+
+    for (
+        let i = 1;
+        i <= 22;
+        i++
+    ) {
+
+        const matchId =
+            "M" + i;
+
 
         const column =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         column.className =
-            "round";
+            "match-column";
 
 
-        const title =
-            document.createElement("div");
+        column.innerHTML = `
 
+            <div class="match-number">
+                ${matchId}
+            </div>
 
-        title.className =
-            "round-title";
+            <div class="match">
 
+                ${createMatchTeamHtml(
+                    matchId,
+                    matches[matchId].a
+                )}
 
-        title.innerText =
-            round.title;
+                ${createMatchTeamHtml(
+                    matchId,
+                    matches[matchId].b
+                )}
 
+            </div>
 
-        column.appendChild(title);
+            <div class="match-type">
 
+                ${getMatchType(matchId)}
 
-        round.ids.forEach(matchId => {
-
-            column.appendChild(
-                createMatchElement(
-                    matchId
-                )
-            );
-
-        });
-
-
-        container.appendChild(column);
-
-    });
-
-}
-
-
-/* =========================================================
-   CREATE MATCH
-========================================================= */
-
-function createMatchElement(
-    matchId
-) {
-
-    const match =
-        matches[matchId];
-
-
-    const box =
-        document.createElement("div");
-
-
-    box.className =
-        "match";
-
-
-    const header =
-        document.createElement("div");
-
-
-    header.className =
-        "match-header";
-
-
-    header.innerText =
-        matchId;
-
-
-    box.appendChild(header);
-
-
-    box.appendChild(
-        createMatchTeam(
-            matchId,
-            match.a
-        )
-    );
-
-
-    box.appendChild(
-        createMatchTeam(
-            matchId,
-            match.b
-        )
-    );
-
-
-    return box;
-
-}
-
-
-/* =========================================================
-   CREATE MATCH TEAM
-========================================================= */
-
-function createMatchTeam(
-    matchId,
-    team
-) {
-
-    const div =
-        document.createElement("div");
-
-
-    div.className =
-        "match-team";
-
-
-    /*
-       Empty / waiting
-    */
-
-    if (!team) {
-
-        div.classList.add(
-            "empty"
-        );
-
-
-        div.innerHTML = `
-
-            <span class="team-name">
-                Waiting...
-            </span>
+            </div>
 
         `;
 
 
-        return div;
+        /*
+           Add click handlers
+        */
+
+        const teamElements =
+            column.querySelectorAll(
+                ".match-team"
+            );
+
+
+        teamElements.forEach(element => {
+
+            const team =
+                element.dataset.team;
+
+
+            if (
+                team &&
+                element.dataset.available ===
+                "true"
+            ) {
+
+                element.addEventListener(
+                    "click",
+                    () => {
+
+                        chooseWinner(
+                            matchId,
+                            team
+                        );
+
+                    }
+                );
+
+            }
+
+        });
+
+
+        container.appendChild(
+            column
+        );
 
     }
 
+}
+
+
+/* =========================================================
+   MATCH TEAM HTML
+========================================================= */
+
+function createMatchTeamHtml(
+    matchId,
+    team
+) {
 
     const match =
         matches[matchId];
 
 
+    if (!team) {
+
+        return `
+
+            <div class="match-team waiting">
+
+                <span>
+                    Waiting...
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
     /*
-       WINNER
+       Winner selected
     */
 
     if (
         match.winner === team
     ) {
 
-        div.classList.add(
-            "winner"
-        );
+        return `
 
+            <div
+                class="match-team selected"
+                data-team="${escapeAttribute(team)}"
+                data-available="false">
 
-        div.innerHTML = `
+                <span>
+                    ${escapeHtml(team)}
+                </span>
 
-            <span class="team-name">
-                ${escapeHtml(team)}
-            </span>
+                <span class="match-result">
+                    ✓
+                </span>
 
-            <span class="match-status">
-                ✓ WIN
-            </span>
+            </div>
 
         `;
-
-
-        return div;
 
     }
 
 
     /*
-       LOSER
+       Someone else won this match.
+       This team is eliminated.
     */
 
     if (
@@ -2290,59 +2132,84 @@ function createMatchTeam(
         match.winner !== team
     ) {
 
-        div.classList.add(
-            "loser"
-        );
+        return `
 
+            <div
+                class="match-team eliminated"
+                data-team="${escapeAttribute(team)}"
+                data-available="false">
 
-        div.innerHTML = `
+                <span>
+                    ${escapeHtml(team)}
+                </span>
 
-            <span class="team-name">
-                ${escapeHtml(team)}
-            </span>
+                <span class="match-result">
+                    ✕
+                </span>
 
-            <span class="match-status">
-                ✕
-            </span>
+            </div>
 
         `;
-
-
-        return div;
 
     }
 
 
     /*
-       AVAILABLE TEAM
-
-       Clicking it means:
-       "I predict this team wins."
+       No winner yet.
+       Team is clickable.
     */
 
-    div.innerHTML = `
+    return `
 
-        <span class="team-name">
-            ${escapeHtml(team)}
-        </span>
+        <div
+            class="match-team"
+            data-team="${escapeAttribute(team)}"
+            data-available="true">
+
+            <span>
+                ${escapeHtml(team)}
+            </span>
+
+        </div>
 
     `;
 
-
-    div.addEventListener(
-        "click",
-        () => {
-
-            chooseWinner(
-                matchId,
-                team
-            );
-
-        }
-    );
+}
 
 
-    return div;
+/* =========================================================
+   MATCH TYPE
+========================================================= */
+
+function getMatchType(matchId) {
+
+    const number =
+        Number(
+            matchId.substring(1)
+        );
+
+
+    if (number <= 8) {
+        return "Upper Bracket";
+    }
+
+
+    if (number <= 19) {
+        return "Lower Bracket";
+    }
+
+
+    if (number === 20) {
+        return "Upper Final";
+    }
+
+
+    if (number === 21) {
+        return "Lower Final";
+    }
+
+
+    return "Grand Final";
 
 }
 
@@ -2353,32 +2220,32 @@ function createMatchTeam(
 
 function updateChampion() {
 
+    const final =
+        matches["M22"];
+
+
     const name =
         document.getElementById(
             "championName"
         );
 
 
-    const hint =
+    const info =
         document.getElementById(
-            "championHint"
+            "championInfo"
         );
 
 
-    const finalMatch =
-        matches["M22"];
-
-
     if (
-        finalMatch &&
-        finalMatch.winner
+        final &&
+        final.winner
     ) {
 
         name.innerText =
-            finalMatch.winner;
+            final.winner;
 
 
-        hint.innerText =
+        info.innerText =
             "🏆 Tournament Champion";
 
     } else {
@@ -2387,8 +2254,8 @@ function updateChampion() {
             "—";
 
 
-        hint.innerText =
-            "Complete M22 to determine the champion.";
+        info.innerText =
+            "Click a team in each match to predict the winner.";
 
     }
 
@@ -2396,51 +2263,34 @@ function updateChampion() {
 
 
 /* =========================================================
-   CLEAR BRACKET
-========================================================= */
-
-function clearBracketOnly() {
-
-    matches = {};
-
-
-    document.getElementById(
-        "bracket"
-    ).innerHTML = "";
-
-
-    document.getElementById(
-        "championName"
-    ).innerText = "—";
-
-
-    document.getElementById(
-        "championHint"
-    ).innerText =
-        "Complete M22 to determine the champion.";
-
-}
-
-
-/* =========================================================
-   RESET EVERYTHING
+   RESET
 ========================================================= */
 
 function resetAll() {
 
-    const confirmed =
-        confirm(
-            "Reset all rankings and predictions?"
-        );
+    if (
+        !confirm(
+            "Reset all group rankings and tournament predictions?"
+        )
+    ) {
 
-
-    if (!confirmed) {
         return;
+
     }
 
 
     groups =
         clone(defaultGroups);
+
+
+    confirmed = {
+
+        A: false,
+        B: false,
+        C: false,
+        D: false
+
+    };
 
 
     qualified = {
@@ -2460,13 +2310,27 @@ function resetAll() {
 
     renderQualified();
 
-    clearBracketOnly();
+
+    document.getElementById(
+        "bracket"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "championName"
+    ).innerText = "—";
+
+
+    document.getElementById(
+        "championInfo"
+    ).innerText =
+        "Complete the tournament to determine the champion.";
 
 }
 
 
 /* =========================================================
-   CLONE OBJECT
+   HELPERS
 ========================================================= */
 
 function clone(object) {
@@ -2477,10 +2341,6 @@ function clone(object) {
 
 }
 
-
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
 
 function escapeHtml(value) {
 
@@ -2514,8 +2374,35 @@ function escapeHtml(value) {
 }
 
 
+function escapeAttribute(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        );
+
+}
+
+
 /* =========================================================
-   INITIALIZE
+   START
 ========================================================= */
 
 renderGroups();
