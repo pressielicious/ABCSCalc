@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Tournament Simulator</title>
+<title>Tournament Bracket Simulator</title>
 
 <style>
 
@@ -71,10 +71,17 @@ header {
     text-align: center;
 }
 
-header h1 {
-    margin: 0;
+.site-logo {
+    display: block;
 
-    font-size: 25px;
+    width: min(320px, 80vw);
+    height: auto;
+
+    max-height: 90px;
+
+    margin: 0 auto 8px;
+
+    object-fit: contain;
 }
 
 header p {
@@ -141,13 +148,11 @@ section {
 .section-title {
     max-width: 1500px;
 
-    margin:
-        0 auto 18px;
+    margin: 0 auto 18px;
 
     padding-left: 10px;
 
-    border-left:
-        4px solid var(--red2);
+    border-left: 4px solid var(--red2);
 
     font-size: 20px;
     font-weight: bold;
@@ -212,8 +217,7 @@ section {
 
     gap: 8px;
 
-    padding:
-        0 9px;
+    padding: 0 9px;
 
     background: var(--panel2);
 
@@ -383,8 +387,7 @@ section {
 }
 
 .qualified-box h3 {
-    margin:
-        0 0 10px;
+    margin: 0 0 10px;
 
     font-size: 14px;
 }
@@ -461,11 +464,6 @@ section {
         touch;
 }
 
-
-/* =========================================================
-   BRACKET LAYOUT
-========================================================= */
-
 .upper-layout,
 .lower-layout {
     min-width: 1450px;
@@ -504,7 +502,9 @@ section {
 }
 
 
-/* Upper */
+/* =========================================================
+   BRACKET SPACING
+========================================================= */
 
 .upper-row-1 {
     margin-top: 0;
@@ -521,9 +521,6 @@ section {
 .upper-row-4 {
     margin-top: 55px;
 }
-
-
-/* Lower */
 
 .lower-row-1 {
     margin-top: 0;
@@ -745,7 +742,7 @@ section {
 
 
 /* =========================================================
-   GRAND FINAL
+   FINAL
 ========================================================= */
 
 .final-section {
@@ -799,7 +796,7 @@ section {
 
 
 /* =========================================================
-   PLACEMENT
+   TOP 4
 ========================================================= */
 
 .placement-section {
@@ -938,8 +935,9 @@ section {
             15px 12px;
     }
 
-    header h1 {
-        font-size: 21px;
+    .site-logo {
+        width: min(260px, 82vw);
+        max-height: 75px;
     }
 
     section {
@@ -997,9 +995,16 @@ section {
 
 <header>
 
-    <h1>
-        🏆 Tournament Simulator
-    </h1>
+    <!--
+        Letak logo.png dalam folder yang sama
+        dengan index.html
+    -->
+
+    <img
+        src="logo.png"
+        alt="Tournament Logo"
+        class="site-logo"
+    >
 
     <p>
         24 Teams • 4 Groups • Top 3 • Double Elimination
@@ -1443,7 +1448,7 @@ section {
 
 
         <!-- =================================================
-             TOP 4 PLACEMENT
+             TOP 4
         ================================================== -->
 
         <div class="placement-section">
@@ -1681,162 +1686,154 @@ const bracketDefinition = {
 
 
 /* =========================================================
-   RENDER GROUPS
+   GROUP RENDER
 ========================================================= */
 
 function renderGroups() {
 
     const container =
-        document.getElementById(
-            "groups"
-        );
+        document.getElementById("groups");
 
     container.innerHTML = "";
 
 
-    Object.keys(groups).forEach(
-        group => {
+    Object.keys(groups).forEach(group => {
 
-            const box =
-                document.createElement(
-                    "div"
-                );
+        const box =
+            document.createElement("div");
 
-            box.className = "group";
+        box.className = "group";
 
 
-            const locked =
-                confirmed[group];
+        const locked =
+            confirmed[group];
 
 
-            box.innerHTML = `
+        box.innerHTML = `
 
-                <h3>
-                    GROUP ${group}
-                </h3>
+            <h3>
+                GROUP ${group}
+            </h3>
 
-                <div class="group-help">
+            <div class="group-help">
+
+                ${
+                    locked
+                    ? "Ranking confirmed."
+                    : "Drag teams to arrange ranking."
+                }
+
+            </div>
+
+            <div
+                class="team-list"
+                data-group="${group}">
+            </div>
+
+            <div class="group-footer">
+
+                <div
+                    class="group-status ${
+                        locked
+                        ? "confirmed"
+                        : ""
+                    }">
 
                     ${
                         locked
-                        ? "Ranking confirmed."
-                        : "Drag teams to arrange ranking."
+                        ? "✓ GROUP CONFIRMED"
+                        : "TOP 3 NOT CONFIRMED"
                     }
 
                 </div>
 
-                <div
-                    class="team-list"
-                    data-group="${group}">
-                </div>
+                <div class="group-actions">
 
-                <div class="group-footer">
+                    ${
+                        locked
 
-                    <div
-                        class="group-status ${
-                            locked
-                            ? "confirmed"
-                            : ""
-                        }">
+                        ? `
 
-                        ${
-                            locked
-                            ? "✓ GROUP CONFIRMED"
-                            : "TOP 3 NOT CONFIRMED"
-                        }
+                            <button
+                                onclick="editGroup('${group}')">
 
-                    </div>
+                                EDIT
 
-                    <div class="group-actions">
+                            </button>
 
-                        ${
-                            locked
+                        `
 
-                            ? `
+                        : `
 
-                                <button
-                                    onclick="editGroup('${group}')">
+                            <button
+                                class="confirm-btn"
+                                onclick="confirmGroup('${group}')">
 
-                                    EDIT
+                                CONFIRM GROUP
 
-                                </button>
+                            </button>
 
-                            `
-
-                            : `
-
-                                <button
-                                    class="confirm-btn"
-                                    onclick="confirmGroup('${group}')">
-
-                                    CONFIRM GROUP
-
-                                </button>
-
-                            `
-                        }
-
-                    </div>
-
-                </div>
-
-            `;
-
-
-            const list =
-                box.querySelector(
-                    ".team-list"
-                );
-
-
-            groups[group].forEach(
-                (team, index) => {
-
-                    list.appendChild(
-                        createTeamItem(
-                            group,
-                            team,
-                            index,
-                            locked
-                        )
-                    );
-
-                }
-            );
-
-
-            if (!locked) {
-
-                list.addEventListener(
-                    "dragover",
-                    handleDragOver
-                );
-
-                list.addEventListener(
-                    "drop",
-                    handleDrop
-                );
-
-                list.addEventListener(
-                    "touchmove",
-                    handleTouchMove,
-                    {
-                        passive: false
+                        `
                     }
-                );
 
-                list.addEventListener(
-                    "touchend",
-                    handleTouchEnd
+                </div>
+
+            </div>
+
+        `;
+
+
+        const list =
+            box.querySelector(".team-list");
+
+
+        groups[group].forEach(
+            (team, index) => {
+
+                list.appendChild(
+                    createTeamItem(
+                        group,
+                        team,
+                        index,
+                        locked
+                    )
                 );
 
             }
+        );
 
 
-            container.appendChild(box);
+        if (!locked) {
+
+            list.addEventListener(
+                "dragover",
+                handleDragOver
+            );
+
+            list.addEventListener(
+                "drop",
+                handleDrop
+            );
+
+            list.addEventListener(
+                "touchmove",
+                handleTouchMove,
+                {
+                    passive: false
+                }
+            );
+
+            list.addEventListener(
+                "touchend",
+                handleTouchEnd
+            );
 
         }
-    );
+
+
+        container.appendChild(box);
+
+    });
 
 
     updateBuildButton();
@@ -1856,9 +1853,7 @@ function createTeamItem(
 ) {
 
     const item =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     item.className =
@@ -1998,15 +1993,13 @@ function handleDragOver(event) {
         .querySelectorAll(
             ".drag-over"
         )
-        .forEach(
-            el => {
+        .forEach(el => {
 
-                el.classList.remove(
-                    "drag-over"
-                );
+            el.classList.remove(
+                "drag-over"
+            );
 
-            }
-        );
+        });
 
 
     target.classList.add(
@@ -2112,15 +2105,13 @@ function handleTouchMove(event) {
         .querySelectorAll(
             ".drag-over"
         )
-        .forEach(
-            el => {
+        .forEach(el => {
 
-                el.classList.remove(
-                    "drag-over"
-                );
+            el.classList.remove(
+                "drag-over"
+            );
 
-            }
-        );
+        });
 
 
     if (
@@ -2201,15 +2192,13 @@ function cleanupDrag() {
         .querySelectorAll(
             ".drag-over"
         )
-        .forEach(
-            el => {
+        .forEach(el => {
 
-                el.classList.remove(
-                    "drag-over"
-                );
+            el.classList.remove(
+                "drag-over"
+            );
 
-            }
-        );
+        });
 
 
     draggedElement = null;
@@ -2359,68 +2348,67 @@ function renderQualified() {
     container.innerHTML = "";
 
 
-    Object.keys(qualified)
-        .forEach(
-            group => {
+    Object.keys(qualified).forEach(
+        group => {
 
-                const box =
-                    document.createElement(
-                        "div"
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+
+            box.className =
+                "qualified-box";
+
+
+            box.innerHTML =
+                `<h3>GROUP ${group}</h3>`;
+
+
+            if (
+                qualified[group].length !== 3
+            ) {
+
+                box.innerHTML += `
+
+                    <div class="qualified-empty">
+
+                        Waiting for Group ${group}.
+
+                    </div>
+
+                `;
+
+            } else {
+
+                qualified[group]
+                    .forEach(
+                        (team, index) => {
+
+                            box.innerHTML += `
+
+                                <div class="qualified-team">
+
+                                    <span>
+                                        ${index + 1}.
+                                    </span>
+
+                                    ${escapeHtml(team)}
+
+                                </div>
+
+                            `;
+
+                        }
                     );
 
-
-                box.className =
-                    "qualified-box";
-
-
-                box.innerHTML =
-                    `<h3>GROUP ${group}</h3>`;
-
-
-                if (
-                    qualified[group].length !== 3
-                ) {
-
-                    box.innerHTML += `
-
-                        <div class="qualified-empty">
-
-                            Waiting for Group ${group}.
-
-                        </div>
-
-                    `;
-
-                } else {
-
-                    qualified[group]
-                        .forEach(
-                            (team, index) => {
-
-                                box.innerHTML += `
-
-                                    <div class="qualified-team">
-
-                                        <span>
-                                            ${index + 1}.
-                                        </span>
-
-                                        ${escapeHtml(team)}
-
-                                    </div>
-
-                                `;
-
-                            }
-                        );
-
-                }
-
-
-                container.appendChild(box);
-
             }
-        );
+
+
+            container.appendChild(box);
+
+        }
+    );
 
 }
 
@@ -2477,20 +2465,17 @@ function buildBracket() {
     renderPlacements();
 
 
-    setTimeout(
-        () => {
+    setTimeout(() => {
 
-            document
-                .querySelector(
-                    ".bracket-section"
-                )
-                .scrollIntoView({
-                    behavior: "smooth"
-                });
+        document
+            .querySelector(
+                ".bracket-section"
+            )
+            .scrollIntoView({
+                behavior: "smooth"
+            });
 
-        },
-        100
-    );
+    }, 100);
 
 }
 
@@ -2540,16 +2525,6 @@ function resolveReference(ref) {
     }
 
 
-    /*
-       GROUP POSITION
-
-       A1
-       A2
-       A3
-
-       B1 etc.
-    */
-
     if (
         /^[ABCD][123]$/.test(ref)
     ) {
@@ -2572,10 +2547,6 @@ function resolveReference(ref) {
     }
 
 
-    /*
-       WINNER
-    */
-
     if (
         ref.startsWith("W")
     ) {
@@ -2593,10 +2564,6 @@ function resolveReference(ref) {
     }
 
 
-    /*
-       LOSER
-    */
-
     if (
         ref.startsWith("L")
     ) {
@@ -2606,41 +2573,7 @@ function resolveReference(ref) {
             ref.substring(1);
 
 
-        const match =
-            matches[matchId];
-
-
-        if (
-            !match ||
-            !match.completed
-        ) {
-
-            return null;
-
-        }
-
-
-        if (
-            match.a ===
-            match.winner
-        ) {
-
-            return match.b;
-
-        }
-
-
-        if (
-            match.b ===
-            match.winner
-        ) {
-
-            return match.a;
-
-        }
-
-
-        return null;
+        return getLoser(matchId);
 
     }
 
@@ -2712,12 +2645,6 @@ function resolveAllMatches() {
                     newB;
 
 
-                /*
-                   If old winner
-                   no longer exists,
-                   clear it.
-                */
-
                 if (
                     match.winner &&
                     match.winner !== match.a &&
@@ -2750,7 +2677,7 @@ function resolveAllMatches() {
 
 
 /* =========================================================
-   STRICT MATCH ORDER
+   ACTIVE MATCH
 ========================================================= */
 
 function getActiveMatch() {
@@ -2790,6 +2717,34 @@ function getActiveMatch() {
 
 function canPlayMatch(matchId) {
 
+    const match =
+        matches[matchId];
+
+
+    if (!match) {
+        return false;
+    }
+
+
+    if (
+        match.completed
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !match.a ||
+        !match.b
+    ) {
+
+        return false;
+
+    }
+
+
     return (
         getActiveMatch() ===
         matchId
@@ -2816,34 +2771,12 @@ function chooseWinner(
     }
 
 
-    /*
-       Strict order
-    */
-
     if (
         !canPlayMatch(matchId)
     ) {
 
         alert(
             `${matchId} is locked. Complete the matches in order.`
-        );
-
-        return;
-
-    }
-
-
-    /*
-       Both teams required
-    */
-
-    if (
-        !match.a ||
-        !match.b
-    ) {
-
-        alert(
-            `${matchId} is waiting for both teams.`
         );
 
         return;
@@ -2878,46 +2811,36 @@ function chooseWinner(
     renderPlacements();
 
 
-    /*
-       Scroll next match
-    */
+    setTimeout(() => {
 
-    setTimeout(
-        () => {
-
-            const next =
-                getActiveMatch();
+        const next =
+            getActiveMatch();
 
 
-            if (!next) {
-                return;
-            }
+        if (!next) {
+            return;
+        }
 
 
-            const nextElement =
-                document.getElementById(
-                    "slot-" + next
-                );
+        const nextElement =
+            document.getElementById(
+                "slot-" + next
+            );
 
 
-            if (
-                nextElement &&
-                nextElement.offsetParent !== null
-            ) {
+        if (nextElement) {
 
-                nextElement.scrollIntoView({
-                    behavior: "smooth",
+            nextElement.scrollIntoView({
+                behavior: "smooth",
 
-                    block: "center",
+                block: "center",
 
-                    inline: "center"
-                });
+                inline: "center"
+            });
 
-            }
+        }
 
-        },
-        150
-    );
+    }, 150);
 
 }
 
@@ -3005,13 +2928,6 @@ function undoMatch(matchId) {
     }
 
 
-    /*
-       Because the tournament
-       is strictly sequential,
-       reset this match and
-       everything after it.
-    */
-
     for (
         let i = number;
         i <= 22;
@@ -3046,36 +2962,33 @@ function undoMatch(matchId) {
     renderPlacements();
 
 
-    setTimeout(
-        () => {
+    setTimeout(() => {
 
-            const element =
-                document.getElementById(
-                    "slot-" + matchId
-                );
+        const element =
+            document.getElementById(
+                "slot-" + matchId
+            );
 
 
-            if (element) {
+        if (element) {
 
-                element.scrollIntoView({
-                    behavior: "smooth",
+            element.scrollIntoView({
+                behavior: "smooth",
 
-                    block: "center",
+                block: "center",
 
-                    inline: "center"
-                });
+                inline: "center"
+            });
 
-            }
+        }
 
-        },
-        100
-    );
+    }, 100);
 
 }
 
 
 /* =========================================================
-   CREATE MATCH HTML
+   MATCH HTML
 ========================================================= */
 
 function createMatchHtml(matchId) {
@@ -3226,7 +3139,7 @@ function createMatchHtml(matchId) {
 
 
 /* =========================================================
-   CREATE MATCH TEAM
+   MATCH TEAM HTML
 ========================================================= */
 
 function createMatchTeamHtml(
@@ -3254,10 +3167,6 @@ function createMatchTeamHtml(
 
     }
 
-
-    /*
-       Completed
-    */
 
     if (match.completed) {
 
@@ -3314,10 +3223,6 @@ function createMatchTeamHtml(
     }
 
 
-    /*
-       Active
-    */
-
     if (
         canPlayMatch(matchId)
     ) {
@@ -3347,10 +3252,6 @@ function createMatchTeamHtml(
 
     }
 
-
-    /*
-       Locked
-    */
 
     return `
 
@@ -3415,60 +3316,48 @@ function renderBracket() {
     }
 
 
-    /*
-       Winner buttons
-    */
-
     document
         .querySelectorAll(
             ".match-team.clickable"
         )
-        .forEach(
-            element => {
+        .forEach(element => {
 
-                element.addEventListener(
-                    "click",
-                    () => {
+            element.addEventListener(
+                "click",
+                () => {
 
-                        chooseWinner(
-                            element.dataset.match,
-                            element.dataset.team
-                        );
+                    chooseWinner(
+                        element.dataset.match,
+                        element.dataset.team
+                    );
 
-                    }
-                );
+                }
+            );
 
-            }
-        );
+        });
 
-
-    /*
-       Undo buttons
-    */
 
     document
         .querySelectorAll(
             ".undo-btn"
         )
-        .forEach(
-            button => {
+        .forEach(button => {
 
-                button.addEventListener(
-                    "click",
-                    event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-                        event.stopPropagation();
+                    event.stopPropagation();
 
 
-                        undoMatch(
-                            button.dataset.match
-                        );
+                    undoMatch(
+                        button.dataset.match
+                    );
 
-                    }
-                );
+                }
+            );
 
-            }
-        );
+        });
 
 }
 
@@ -3558,7 +3447,6 @@ function renderPlacements() {
 
     /*
        1st
-       Winner M22
     */
 
     const final =
@@ -3589,7 +3477,6 @@ function renderPlacements() {
 
         /*
            2nd
-           Loser M22
         */
 
         const second =
@@ -3620,7 +3507,6 @@ function renderPlacements() {
 
     /*
        3rd
-       Loser M21
     */
 
     const third =
@@ -3649,7 +3535,6 @@ function renderPlacements() {
 
     /*
        4th
-       Loser M19
     */
 
     const fourth =
@@ -3675,10 +3560,6 @@ function renderPlacements() {
 
     }
 
-
-    /*
-       Nothing yet
-    */
 
     if (
         placements.length === 0
