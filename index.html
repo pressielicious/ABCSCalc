@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ABCS Simulator</title>
+<title>Tournament Simulator</title>
 
 <style>
 * {
@@ -12,10 +12,22 @@
     -webkit-tap-highlight-color: transparent;
 }
 
+:root {
+    --bg: #08080b;
+    --panel: #111116;
+    --panel2: #18181e;
+    --border: #2b2b33;
+    --text: #ffffff;
+    --muted: #777780;
+    --red: #650000;
+    --red2: #8a0000;
+    --green: #174d2a;
+}
+
 body {
     margin: 0;
-    background: #08080b;
-    color: #fff;
+    background: var(--bg);
+    color: var(--text);
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -24,8 +36,10 @@ header {
     top: 0;
     z-index: 100;
 
-    background: #101014;
-    border-bottom: 1px solid #292930;
+    background: rgba(12,12,16,.96);
+    backdrop-filter: blur(10px);
+
+    border-bottom: 1px solid var(--border);
 
     padding: 18px;
     text-align: center;
@@ -33,30 +47,32 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 27px;
+    font-size: 26px;
 }
 
 header p {
     margin: 7px 0 0;
-    color: #85858e;
+    color: var(--muted);
     font-size: 13px;
 }
 
 .controls {
+    margin-top: 15px;
+
     display: flex;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    margin-top: 16px;
 }
 
 button {
     border: 0;
     border-radius: 8px;
-    padding: 11px 18px;
 
-    background: #292930;
+    padding: 11px 17px;
+
     color: white;
+    background: #292930;
 
     font-weight: bold;
     cursor: pointer;
@@ -66,22 +82,23 @@ button:hover {
     background: #3a3a43;
 }
 
-.primary {
-    background: #650000;
-}
-
-.primary:hover {
-    background: #850000;
-}
-
 button:disabled {
     opacity: .35;
     cursor: not-allowed;
 }
 
-/* =========================
-   SECTION
-========================= */
+.primary {
+    background: var(--red);
+}
+
+.primary:hover {
+    background: var(--red2);
+}
+
+
+/* =========================================================
+   GENERAL
+========================================================= */
 
 section {
     padding: 30px 18px;
@@ -89,18 +106,19 @@ section {
 
 .section-title {
     max-width: 1500px;
-    margin: 0 auto 20px;
+    margin: 0 auto 18px;
 
-    border-left: 4px solid #850000;
+    border-left: 4px solid var(--red2);
     padding-left: 10px;
 
     font-size: 21px;
     font-weight: bold;
 }
 
-/* =========================
-   GROUPS
-========================= */
+
+/* =========================================================
+   GROUP STAGE
+========================================================= */
 
 .groups {
     max-width: 1500px;
@@ -108,24 +126,28 @@ section {
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 15px;
 }
 
 .group {
-    background: #121217;
-    border: 1px solid #292930;
+    background: var(--panel);
+
+    border: 1px solid var(--border);
     border-radius: 12px;
+
     padding: 15px;
 }
 
 .group h3 {
-    margin: 0 0 6px;
+    margin: 0;
+    font-size: 17px;
 }
 
 .group-help {
-    color: #66666e;
-    font-size: 12px;
-    margin-bottom: 13px;
+    margin: 6px 0 13px;
+
+    color: var(--muted);
+    font-size: 11px;
 }
 
 .team-list {
@@ -134,43 +156,38 @@ section {
     gap: 7px;
 }
 
-/* =========================
-   TEAM
-========================= */
-
 .team-item {
-    min-height: 47px;
+    min-height: 46px;
 
     display: flex;
     align-items: center;
     gap: 9px;
 
-    padding: 0 10px;
+    padding: 0 9px;
 
-    background: #1b1b21;
-    border: 1px solid #2d2d35;
+    background: var(--panel2);
+
+    border: 1px solid #303038;
     border-radius: 8px;
 
     cursor: grab;
 
     user-select: none;
-    -webkit-user-select: none;
-
     touch-action: none;
 
     transition: .15s;
 }
 
 .team-item:hover {
-    background: #24242b;
+    background: #222229;
 }
 
 .team-item.dragging {
-    opacity: .35;
+    opacity: .3;
 }
 
 .team-item.drag-over {
-    border-color: #a00000;
+    border-color: var(--red2);
     background: #351010;
 }
 
@@ -182,12 +199,11 @@ section {
     width: 18px;
     color: #686870;
     text-align: center;
-    flex-shrink: 0;
 }
 
 .rank {
-    width: 24px;
-    height: 24px;
+    width: 25px;
+    height: 25px;
 
     display: flex;
     align-items: center;
@@ -196,80 +212,83 @@ section {
     border-radius: 50%;
 
     background: #292930;
+
     color: #aaa;
 
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
 
     flex-shrink: 0;
 }
 
 .team-item:nth-child(-n+3) .rank {
-    background: #650000;
+    background: var(--red);
     color: white;
 }
 
 .team-name {
+    font-size: 13px;
     font-weight: bold;
-    font-size: 14px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .qualify {
     margin-left: auto;
 
-    font-size: 9px;
+    font-size: 8px;
     font-weight: bold;
 
     color: #777;
 }
 
 .team-item:nth-child(-n+3) .qualify {
-    color: #c45c5c;
+    color: #d07a7a;
 }
 
 .group-footer {
-    margin-top: 12px;
+    margin-top: 11px;
 }
 
 .group-status {
     padding: 9px;
 
-    background: #1b1b21;
+    background: #19191f;
     border-radius: 7px;
 
-    color: #777;
     text-align: center;
 
-    font-size: 11px;
+    color: #666;
+    font-size: 10px;
 }
 
 .group-status.confirmed {
-    background: #350000;
-    color: #e9a4a4;
+    background: #300000;
+    color: #df9c9c;
 }
 
 .group-actions {
     display: flex;
     gap: 7px;
+
     margin-top: 8px;
 }
 
 .group-actions button {
     flex: 1;
-    font-size: 11px;
+    font-size: 10px;
 }
 
 .confirm-btn {
-    background: #650000;
+    background: var(--red);
 }
 
-.edit-btn {
-    background: #292930;
-}
 
-/* =========================
+/* =========================================================
    QUALIFIED
-========================= */
+========================================================= */
 
 .qualified {
     max-width: 1500px;
@@ -277,27 +296,31 @@ section {
 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 15px;
 }
 
 .qualified-box {
-    background: #121217;
-    border: 1px solid #292930;
+    background: var(--panel);
+
+    border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 14px;
+
+    padding: 13px;
 }
 
 .qualified-box h3 {
     margin: 0 0 10px;
+    font-size: 15px;
 }
 
 .qualified-team {
-    padding: 10px;
     margin-bottom: 6px;
+    padding: 9px;
 
-    background: #1b1b21;
+    background: var(--panel2);
     border-radius: 7px;
 
+    font-size: 13px;
     font-weight: bold;
 }
 
@@ -309,188 +332,303 @@ section {
 
 .qualified-empty {
     color: #666;
-    font-size: 12px;
+    font-size: 11px;
 }
 
-/* =========================
+
+/* =========================================================
    BRACKET
-========================= */
+========================================================= */
 
 .bracket-section {
-    padding-bottom: 60px;
+    padding-bottom: 50px;
+}
+
+.bracket-area {
+    max-width: 1600px;
+    margin: auto;
+}
+
+.bracket-title {
+    margin: 20px 0 12px;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    color: #ddd;
 }
 
 .bracket-scroll {
-    width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
 
-    padding: 5px 0 25px;
+    padding: 10px 5px 25px;
 
     -webkit-overflow-scrolling: touch;
 }
 
 .bracket {
+    min-width: 1450px;
+
     display: flex;
-    gap: 14px;
+    gap: 20px;
 
-    min-width: max-content;
-
-    padding: 0 20px;
+    align-items: flex-start;
 }
 
-/* Every match gets its own column */
 
-.match-column {
-    width: 190px;
+/* =========================================================
+   COLUMNS
+========================================================= */
+
+.bracket-column {
+    width: 180px;
     flex-shrink: 0;
+
+    display: flex;
+    flex-direction: column;
 }
 
-.match-number {
-    height: 36px;
+.column-label {
+    height: 25px;
 
     display: flex;
     align-items: center;
+
     justify-content: center;
 
-    background: #15151a;
-    border: 1px solid #292930;
-    border-radius: 8px 8px 0 0;
-
-    font-size: 13px;
-    font-weight: bold;
-
-    color: #aaa;
+    color: #666;
+    font-size: 9px;
+    text-transform: uppercase;
 }
 
-/* =========================
-   MATCH
-========================= */
 
-.match {
-    border: 1px solid #292930;
-    border-top: 0;
+/* =========================================================
+   MATCH CARD
+========================================================= */
 
-    border-radius: 0 0 8px 8px;
+.match-card {
+    background: var(--panel);
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
 
     overflow: hidden;
 
-    background: #111116;
+    box-shadow: 0 4px 14px rgba(0,0,0,.2);
+}
+
+.match-header {
+    padding: 8px 10px;
+
+    background: #19191f;
+
+    border-bottom: 1px solid var(--border);
+
+    font-size: 11px;
+    font-weight: bold;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.match-header span {
+    color: #666;
+    font-size: 8px;
+    font-weight: normal;
 }
 
 .match-team {
-    min-height: 49px;
+    min-height: 42px;
 
-    padding: 10px;
+    padding: 9px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    border-top: 1px solid #28282f;
+    background: #141419;
 
-    background: #17171d;
+    border-bottom: 1px solid #28282f;
+
+    font-size: 12px;
+    font-weight: bold;
 
     cursor: pointer;
+}
 
-    transition: .15s;
+.match-team:last-child {
+    border-bottom: 0;
 }
 
 .match-team:hover {
-    background: #292930;
-}
-
-.match-team:first-child {
-    border-top: 0;
+    background: #25252c;
 }
 
 .match-team.waiting {
-    color: #555;
+    color: #4d4d54;
     cursor: default;
 }
 
 .match-team.selected {
-    background: #650000;
+    background: #4b0000;
     color: white;
-    font-weight: bold;
 }
 
 .match-team.eliminated {
-    opacity: .32;
+    opacity: .28;
     cursor: default;
+    text-decoration: line-through;
 }
 
-.match-team span:first-child {
+.match-result {
+    margin-left: 5px;
+    font-size: 9px;
+    flex-shrink: 0;
+}
+
+.team-text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.match-result {
-    margin-left: 7px;
-    flex-shrink: 0;
 
-    font-size: 9px;
-    font-weight: bold;
+/* =========================================================
+   UPPER BRACKET LAYOUT
+========================================================= */
+
+.upper-bracket {
+    position: relative;
 }
 
-/* =========================
-   MATCH TYPE
-========================= */
+.upper-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
 
-.match-type {
-    margin-top: 7px;
+    min-width: 1450px;
+}
+
+/*
+    M1-M4
+*/
+
+.upper-r1 .bracket-column {
+    margin-top: 0;
+}
+
+/*
+    M5-M8
+*/
+
+.upper-r2 .bracket-column {
+    margin-top: 55px;
+}
+
+/*
+    M15-M16
+*/
+
+.upper-r3 .bracket-column {
+    margin-top: 110px;
+}
+
+/*
+    M20
+*/
+
+.upper-r4 .bracket-column {
+    margin-top: 220px;
+}
+
+
+/* =========================================================
+   LOWER BRACKET LAYOUT
+========================================================= */
+
+.lower-bracket {
+    position: relative;
+
+    margin-top: 10px;
+}
+
+.lower-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+
+    min-width: 1450px;
+}
+
+.lower-r1 .bracket-column {
+    margin-top: 0;
+}
+
+.lower-r2 .bracket-column {
+    margin-top: 55px;
+}
+
+.lower-r3 .bracket-column {
+    margin-top: 110px;
+}
+
+.lower-r4 .bracket-column {
+    margin-top: 165px;
+}
+
+.lower-r5 .bracket-column {
+    margin-top: 220px;
+}
+
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final-section {
+    max-width: 700px;
+    margin: 35px auto 60px;
 
     text-align: center;
-
-    font-size: 9px;
-    color: #555;
-    text-transform: uppercase;
 }
 
-/* =========================
-   CHAMPION
-========================= */
+.final-card {
+    background: var(--panel);
 
-.champion {
-    width: calc(100% - 36px);
-    max-width: 650px;
+    border: 1px solid var(--red);
 
-    margin: 0 auto 60px;
-
-    padding: 28px;
-
-    background: #121217;
-
-    border: 1px solid #650000;
     border-radius: 14px;
 
-    text-align: center;
+    padding: 25px;
 }
 
-.champion h2 {
-    margin: 0 0 10px;
+.final-card h2 {
+    margin: 0 0 15px;
+}
+
+.final-match {
+    margin-bottom: 20px;
 }
 
 .champion-name {
-    font-size: 34px;
+    font-size: 30px;
     font-weight: bold;
 
-    color: #ffb000;
+    margin-top: 15px;
 
-    word-break: break-word;
+    color: #ffb000;
 }
 
 .champion-info {
-    margin-top: 8px;
-
     color: #666;
-    font-size: 12px;
+    font-size: 11px;
 }
 
-/* =========================
+
+/* =========================================================
    MOBILE
-========================= */
+========================================================= */
 
 @media (max-width: 1000px) {
 
@@ -498,16 +636,17 @@ section {
     .qualified {
         grid-template-columns: repeat(2, 1fr);
     }
+
 }
 
 @media (max-width: 600px) {
 
     header h1 {
-        font-size: 22px;
+        font-size: 21px;
     }
 
     section {
-        padding: 24px 12px;
+        padding: 25px 12px;
     }
 
     .groups,
@@ -515,26 +654,25 @@ section {
         grid-template-columns: 1fr;
     }
 
-    .controls button {
-        min-width: 140px;
-    }
-
     .bracket {
-        padding: 0 12px;
+        min-width: 1450px;
     }
 
-    .match-column {
-        width: 175px;
+    .bracket-column {
+        width: 165px;
     }
 
-    .champion {
-        width: calc(100% - 24px);
+    .match-team {
+        min-height: 45px;
     }
+
 }
 </style>
 </head>
 
+
 <body>
+
 
 <!-- =====================================================
      HEADER
@@ -542,7 +680,7 @@ section {
 
 <header>
 
-    <h1>🏆 4P ABCS Simulator</h1>
+    <h1>🏆 Tournament Simulator</h1>
 
     <p>
         24 Teams • 4 Groups • Top 3 • Double Elimination
@@ -576,7 +714,7 @@ section {
 <section>
 
     <div class="section-title">
-        Group Stage
+        GROUP STAGE
     </div>
 
     <div
@@ -594,7 +732,7 @@ section {
 <section>
 
     <div class="section-title">
-        Qualified Teams
+        QUALIFIED TEAMS
     </div>
 
     <div
@@ -612,46 +750,298 @@ section {
 <section class="bracket-section">
 
     <div class="section-title">
-        Double Elimination — M1 → M22
+        DOUBLE ELIMINATION
     </div>
 
-    <div class="bracket-scroll">
 
-        <div
-            class="bracket"
-            id="bracket">
+    <div class="bracket-area">
+
+
+        <!-- ==============================
+             UPPER BRACKET
+        =============================== -->
+
+        <div class="bracket-title">
+            🔼 UPPER BRACKET
         </div>
+
+        <div class="bracket-scroll">
+
+            <div class="upper-bracket">
+
+
+                <!-- M1-M4 -->
+
+                <div class="upper-row upper-r1">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Round 1
+                        </div>
+                        <div id="slot-M1"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Round 1
+                        </div>
+                        <div id="slot-M2"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Round 1
+                        </div>
+                        <div id="slot-M3"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Round 1
+                        </div>
+                        <div id="slot-M4"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- M5-M8 -->
+
+                <div class="upper-row upper-r2">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Upper Round 2
+                        </div>
+                        <div id="slot-M5"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Upper Round 2
+                        </div>
+                        <div id="slot-M6"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Upper Round 2
+                        </div>
+                        <div id="slot-M7"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Upper Round 2
+                        </div>
+                        <div id="slot-M8"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- M15-M16 -->
+
+                <div class="upper-row upper-r3">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Upper Semi
+                        </div>
+                        <div id="slot-M15"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Upper Semi
+                        </div>
+                        <div id="slot-M16"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- M20 -->
+
+                <div class="upper-row upper-r4">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Upper Final
+                        </div>
+                        <div id="slot-M20"></div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- ==============================
+             LOWER BRACKET
+        =============================== -->
+
+        <div class="bracket-title">
+            🔽 LOWER BRACKET
+        </div>
+
+        <div class="bracket-scroll">
+
+            <div class="lower-bracket">
+
+
+                <!-- M9-M12 -->
+
+                <div class="lower-row lower-r1">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 1
+                        </div>
+                        <div id="slot-M9"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 1
+                        </div>
+                        <div id="slot-M10"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 1
+                        </div>
+                        <div id="slot-M11"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 1
+                        </div>
+                        <div id="slot-M12"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- M13-M14 -->
+
+                <div class="lower-row lower-r2">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 2
+                        </div>
+                        <div id="slot-M13"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 2
+                        </div>
+                        <div id="slot-M14"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- M17-M18 -->
+
+                <div class="lower-row lower-r3">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 3
+                        </div>
+                        <div id="slot-M17"></div>
+                    </div>
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Round 3
+                        </div>
+                        <div id="slot-M18"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- M19 -->
+
+                <div class="lower-row lower-r4">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Lower Final
+                        </div>
+                        <div id="slot-M19"></div>
+                    </div>
+
+                </div>
+
+
+                <!-- M21 -->
+
+                <div class="lower-row lower-r5">
+
+                    <div class="bracket-column">
+                        <div class="column-label">
+                            Grand Final Qualifier
+                        </div>
+                        <div id="slot-M21"></div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- ==============================
+             M22
+        =============================== -->
+
+        <div class="final-section">
+
+            <div class="final-card">
+
+                <h2>🏆 GRAND FINAL — M22</h2>
+
+                <div
+                    class="final-match"
+                    id="slot-M22">
+                </div>
+
+                <div
+                    class="champion-name"
+                    id="championName">
+
+                    —
+
+                </div>
+
+                <div
+                    class="champion-info"
+                    id="championInfo">
+
+                    Complete M22 to determine the champion.
+
+                </div>
+
+            </div>
+
+        </div>
+
 
     </div>
 
 </section>
-
-
-<!-- =====================================================
-     CHAMPION
-===================================================== -->
-
-<div class="champion">
-
-    <h2>🏆 Champion</h2>
-
-    <div
-        class="champion-name"
-        id="championName">
-
-        —
-
-    </div>
-
-    <div
-        class="champion-info"
-        id="championInfo">
-
-        Complete the tournament to determine the champion.
-
-    </div>
-
-</div>
 
 
 <script>
@@ -704,10 +1094,6 @@ const defaultGroups = {
 let groups = clone(defaultGroups);
 
 
-/* =========================================================
-   GROUP CONFIRMATION
-========================================================= */
-
 let confirmed = {
 
     A: false,
@@ -728,26 +1114,16 @@ let qualified = {
 };
 
 
-/* =========================================================
-   DRAG VARIABLES
-========================================================= */
+let matches = {};
+
 
 let draggedElement = null;
-
 let draggedGroup = null;
-
 let draggedIndex = null;
 
 
 /* =========================================================
-   MATCH DATA
-========================================================= */
-
-let matches = {};
-
-
-/* =========================================================
-   EXACT MATCH MAPPING
+   EXACT BRACKET
 ========================================================= */
 
 const bracketDefinition = {
@@ -885,7 +1261,7 @@ function renderGroups() {
         box.className = "group";
 
 
-        const isConfirmed =
+        const locked =
             confirmed[group];
 
 
@@ -895,9 +1271,11 @@ function renderGroups() {
 
             <div class="group-help">
 
-                ${isConfirmed
+                ${
+                    locked
                     ? "Ranking confirmed."
-                    : "Drag teams to set ranking."}
+                    : "Drag and drop to set ranking."
+                }
 
             </div>
 
@@ -909,11 +1287,12 @@ function renderGroups() {
             <div class="group-footer">
 
                 <div
-                    class="group-status ${isConfirmed ? "confirmed" : ""}"
-                    id="status-${group}">
+                    class="group-status ${
+                        locked ? "confirmed" : ""
+                    }">
 
                     ${
-                        isConfirmed
+                        locked
                         ? "✓ GROUP CONFIRMED"
                         : "Top 3 not confirmed"
                     }
@@ -923,7 +1302,7 @@ function renderGroups() {
                 <div class="group-actions">
 
                     ${
-                        isConfirmed
+                        locked
 
                         ? `
                             <button
@@ -960,22 +1339,20 @@ function renderGroups() {
         groups[group].forEach(
             (team, index) => {
 
-                const item =
+                list.appendChild(
                     createTeamItem(
                         group,
                         team,
                         index,
-                        isConfirmed
-                    );
-
-
-                list.appendChild(item);
+                        locked
+                    )
+                );
 
             }
         );
 
 
-        if (!isConfirmed) {
+        if (!locked) {
 
             list.addEventListener(
                 "dragover",
@@ -1014,7 +1391,7 @@ function renderGroups() {
 
 
 /* =========================================================
-   CREATE TEAM
+   TEAM ITEM
 ========================================================= */
 
 function createTeamItem(
@@ -1095,7 +1472,7 @@ function createTeamItem(
 
 
 /* =========================================================
-   DESKTOP DRAG
+   DRAG & DROP
 ========================================================= */
 
 function handleDragStart(event) {
@@ -1121,29 +1498,7 @@ function handleDragStart(event) {
 
 function handleDragEnd() {
 
-    if (draggedElement) {
-
-        draggedElement.classList.remove(
-            "dragging"
-        );
-
-    }
-
-
-    document
-        .querySelectorAll(".drag-over")
-        .forEach(element => {
-
-            element.classList.remove(
-                "drag-over"
-            );
-
-        });
-
-
-    draggedElement = null;
-    draggedGroup = null;
-    draggedIndex = null;
+    cleanupDrag();
 
 }
 
@@ -1173,17 +1528,15 @@ function handleDragOver(event) {
         target.dataset.group !==
         draggedGroup
     ) {
-
         return;
-
     }
 
 
     document
         .querySelectorAll(".drag-over")
-        .forEach(element => {
+        .forEach(el => {
 
-            element.classList.remove(
+            el.classList.remove(
                 "drag-over"
             );
 
@@ -1217,30 +1570,23 @@ function handleDrop(event) {
         target.dataset.group !==
         draggedGroup
     ) {
-
         return;
-
     }
-
-
-    const targetIndex =
-        Number(
-            target.dataset.index
-        );
 
 
     moveTeam(
         draggedGroup,
         draggedIndex,
-        targetIndex
+        Number(
+            target.dataset.index
+        )
     );
+
+
+    cleanupDrag();
 
 }
 
-
-/* =========================================================
-   TOUCH DRAG
-========================================================= */
 
 function handleTouchStart(event) {
 
@@ -1292,9 +1638,9 @@ function handleTouchMove(event) {
 
     document
         .querySelectorAll(".drag-over")
-        .forEach(element => {
+        .forEach(el => {
 
-            element.classList.remove(
+            el.classList.remove(
                 "drag-over"
             );
 
@@ -1348,20 +1694,23 @@ function handleTouchEnd(event) {
         target !== draggedElement
     ) {
 
-        const targetIndex =
-            Number(
-                target.dataset.index
-            );
-
-
         moveTeam(
             draggedGroup,
             draggedIndex,
-            targetIndex
+            Number(
+                target.dataset.index
+            )
         );
 
     }
 
+
+    cleanupDrag();
+
+}
+
+
+function cleanupDrag() {
 
     if (draggedElement) {
 
@@ -1374,9 +1723,9 @@ function handleTouchEnd(event) {
 
     document
         .querySelectorAll(".drag-over")
-        .forEach(element => {
+        .forEach(el => {
 
-            element.classList.remove(
+            el.classList.remove(
                 "drag-over"
             );
 
@@ -1396,8 +1745,8 @@ function handleTouchEnd(event) {
 
 function moveTeam(
     group,
-    fromIndex,
-    toIndex
+    from,
+    to
 ) {
 
     if (confirmed[group]) {
@@ -1405,21 +1754,22 @@ function moveTeam(
     }
 
 
-    const list =
-        groups[group];
+    if (from === to) {
+        return;
+    }
 
 
-    const moved =
-        list.splice(
-            fromIndex,
+    const team =
+        groups[group].splice(
+            from,
             1
         )[0];
 
 
-    list.splice(
-        toIndex,
+    groups[group].splice(
+        to,
         0,
-        moved
+        team
     );
 
 
@@ -1434,11 +1784,6 @@ function moveTeam(
 
 function confirmGroup(group) {
 
-    if (confirmed[group]) {
-        return;
-    }
-
-
     qualified[group] =
         groups[group].slice(0, 3);
 
@@ -1446,29 +1791,15 @@ function confirmGroup(group) {
     confirmed[group] = true;
 
 
+    matches = {};
+
+
+    clearBracket();
+
+
     renderGroups();
 
     renderQualified();
-
-
-    /*
-       If bracket already exists,
-       rebuild because ranking changed.
-    */
-
-    if (
-        Object.keys(matches).length > 0
-    ) {
-
-        initializeMatches();
-
-        resolveAllMatches();
-
-        renderBracket();
-
-        updateChampion();
-
-    }
 
 }
 
@@ -1484,17 +1815,10 @@ function editGroup(group) {
     qualified[group] = [];
 
 
-    /*
-       Changing a group after bracket
-       exists invalidates predictions.
-    */
-
     matches = {};
 
 
-    document.getElementById(
-        "bracket"
-    ).innerHTML = "";
+    clearBracket();
 
 
     document.getElementById(
@@ -1505,7 +1829,7 @@ function editGroup(group) {
     document.getElementById(
         "championInfo"
     ).innerText =
-        "Confirm all groups to rebuild the tournament.";
+        "Confirm all groups to continue.";
 
 
     renderGroups();
@@ -1530,63 +1854,64 @@ function renderQualified() {
     container.innerHTML = "";
 
 
-    Object.keys(qualified).forEach(group => {
+    Object.keys(qualified)
+        .forEach(group => {
 
-        const box =
-            document.createElement("div");
-
-
-        box.className =
-            "qualified-box";
+            const box =
+                document.createElement("div");
 
 
-        box.innerHTML =
-            `<h3>GROUP ${group}</h3>`;
+            box.className =
+                "qualified-box";
 
 
-        if (
-            qualified[group].length !== 3
-        ) {
-
-            box.innerHTML += `
-
-                <div class="qualified-empty">
-
-                    Waiting for Group ${group}
-                    confirmation.
-
-                </div>
-
-            `;
-
-        } else {
-
-            qualified[group].forEach(
-                (team, index) => {
-
-                    box.innerHTML += `
-
-                        <div class="qualified-team">
-
-                            <span>
-                                ${index + 1}.
-                            </span>
-
-                            ${escapeHtml(team)}
-
-                        </div>
-
-                    `;
-
-                }
-            );
-
-        }
+            box.innerHTML =
+                `<h3>GROUP ${group}</h3>`;
 
 
-        container.appendChild(box);
+            if (
+                qualified[group].length !== 3
+            ) {
 
-    });
+                box.innerHTML += `
+
+                    <div class="qualified-empty">
+
+                        Waiting for Group ${group}.
+
+                    </div>
+
+                `;
+
+            } else {
+
+                qualified[group]
+                    .forEach(
+                        (team, index) => {
+
+                            box.innerHTML += `
+
+                                <div class="qualified-team">
+
+                                    <span>
+                                        ${index + 1}.
+                                    </span>
+
+                                    ${escapeHtml(team)}
+
+                                </div>
+
+                            `;
+
+                        }
+                    );
+
+            }
+
+
+            container.appendChild(box);
+
+        });
 
 }
 
@@ -1597,7 +1922,7 @@ function renderQualified() {
 
 function updateBuildButton() {
 
-    const allConfirmed =
+    const ready =
         Object.values(
             confirmed
         ).every(Boolean);
@@ -1606,7 +1931,7 @@ function updateBuildButton() {
     document.getElementById(
         "buildBtn"
     ).disabled =
-        !allConfirmed;
+        !ready;
 
 }
 
@@ -1657,7 +1982,7 @@ function buildBracket() {
 
 
 /* =========================================================
-   INITIALIZE MATCHES
+   INITIALIZE
 ========================================================= */
 
 function initializeMatches() {
@@ -1676,9 +2001,7 @@ function initializeMatches() {
         ] = {
 
             a: null,
-
             b: null,
-
             winner: null
 
         };
@@ -1701,6 +2024,7 @@ function resolveReference(ref) {
 
     /*
        Group position
+       A1 / A2 / A3 etc.
     */
 
     if (
@@ -1726,7 +2050,7 @@ function resolveReference(ref) {
 
 
     /*
-       Winner reference
+       Winner
     */
 
     if (
@@ -1747,7 +2071,7 @@ function resolveReference(ref) {
 
 
     /*
-       Loser reference
+       Loser
     */
 
     if (
@@ -1763,13 +2087,13 @@ function resolveReference(ref) {
             matches[matchId];
 
 
-        if (!match) {
-            return null;
-        }
+        if (
+            !match ||
+            !match.winner
+        ) {
 
-
-        if (!match.winner) {
             return null;
+
         }
 
 
@@ -1804,7 +2128,7 @@ function resolveReference(ref) {
 
 
 /* =========================================================
-   RESOLVE ALL
+   RESOLVE MATCHES
 ========================================================= */
 
 function resolveAllMatches() {
@@ -1824,14 +2148,12 @@ function resolveAllMatches() {
             i++
         ) {
 
-            const matchId =
+            const id =
                 "M" + i;
 
 
             const definition =
-                bracketDefinition[
-                    matchId
-                ];
+                bracketDefinition[id];
 
 
             if (!definition) {
@@ -1852,7 +2174,7 @@ function resolveAllMatches() {
 
 
             const match =
-                matches[matchId];
+                matches[id];
 
 
             if (
@@ -1861,17 +2183,16 @@ function resolveAllMatches() {
             ) {
 
                 match.a = newA;
-
                 match.b = newB;
 
 
                 /*
-                   Remove winner if the
-                   participant is no longer
-                   valid.
+                   If old winner no longer exists,
+                   clear it.
                 */
 
                 if (
+                    match.winner &&
                     match.winner !== match.a &&
                     match.winner !== match.b
                 ) {
@@ -1929,10 +2250,6 @@ function chooseWinner(
         team;
 
 
-    /*
-       Recalculate complete bracket.
-    */
-
     resolveAllMatches();
 
     renderBracket();
@@ -1951,122 +2268,116 @@ function renderBracket() {
     resolveAllMatches();
 
 
-    const container =
-        document.getElementById(
-            "bracket"
-        );
-
-
-    container.innerHTML = "";
-
-
-    /*
-       IMPORTANT:
-       Strict M1 → M22 order.
-    */
-
     for (
         let i = 1;
         i <= 22;
         i++
     ) {
 
-        const matchId =
+        const id =
             "M" + i;
 
 
-        const column =
-            document.createElement(
-                "div"
+        const slot =
+            document.getElementById(
+                "slot-" + id
             );
 
 
-        column.className =
-            "match-column";
+        if (!slot) {
+            continue;
+        }
 
 
-        column.innerHTML = `
-
-            <div class="match-number">
-                ${matchId}
-            </div>
-
-            <div class="match">
-
-                ${createMatchTeamHtml(
-                    matchId,
-                    matches[matchId].a
-                )}
-
-                ${createMatchTeamHtml(
-                    matchId,
-                    matches[matchId].b
-                )}
-
-            </div>
-
-            <div class="match-type">
-
-                ${getMatchType(matchId)}
-
-            </div>
-
-        `;
-
-
-        /*
-           Add click handlers
-        */
-
-        const teamElements =
-            column.querySelectorAll(
-                ".match-team"
-            );
-
-
-        teamElements.forEach(element => {
-
-            const team =
-                element.dataset.team;
-
-
-            if (
-                team &&
-                element.dataset.available ===
-                "true"
-            ) {
-
-                element.addEventListener(
-                    "click",
-                    () => {
-
-                        chooseWinner(
-                            matchId,
-                            team
-                        );
-
-                    }
-                );
-
-            }
-
-        });
-
-
-        container.appendChild(
-            column
-        );
+        slot.innerHTML =
+            createMatchHtml(id);
 
     }
+
+
+    /*
+       Add click events after HTML
+       is rendered.
+    */
+
+    document
+        .querySelectorAll(
+            ".match-team[data-available='true']"
+        )
+        .forEach(element => {
+
+            element.addEventListener(
+                "click",
+                () => {
+
+                    chooseWinner(
+                        element.dataset.match,
+                        element.dataset.team
+                    );
+
+                }
+            );
+
+        });
 
 }
 
 
 /* =========================================================
-   MATCH TEAM HTML
+   MATCH HTML
 ========================================================= */
 
-function createMatchTeamHtml(
+function createMatchHtml(matchId) {
+
+    const match =
+        matches[matchId];
+
+
+    if (!match) {
+
+        return "";
+
+    }
+
+
+    return `
+
+        <div class="match-card">
+
+            <div class="match-header">
+
+                ${matchId}
+
+                <span>
+                    Click winner
+                </span>
+
+            </div>
+
+
+            ${createTeamHtml(
+                matchId,
+                match.a
+            )}
+
+
+            ${createTeamHtml(
+                matchId,
+                match.b
+            )}
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   TEAM HTML
+========================================================= */
+
+function createTeamHtml(
     matchId,
     team
 ) {
@@ -2081,7 +2392,7 @@ function createMatchTeamHtml(
 
             <div class="match-team waiting">
 
-                <span>
+                <span class="team-text">
                     Waiting...
                 </span>
 
@@ -2093,7 +2404,7 @@ function createMatchTeamHtml(
 
 
     /*
-       Winner selected
+       Winner
     */
 
     if (
@@ -2104,10 +2415,11 @@ function createMatchTeamHtml(
 
             <div
                 class="match-team selected"
+                data-match="${matchId}"
                 data-team="${escapeAttribute(team)}"
                 data-available="false">
 
-                <span>
+                <span class="team-text">
                     ${escapeHtml(team)}
                 </span>
 
@@ -2123,8 +2435,7 @@ function createMatchTeamHtml(
 
 
     /*
-       Someone else won this match.
-       This team is eliminated.
+       Loser
     */
 
     if (
@@ -2136,10 +2447,11 @@ function createMatchTeamHtml(
 
             <div
                 class="match-team eliminated"
+                data-match="${matchId}"
                 data-team="${escapeAttribute(team)}"
                 data-available="false">
 
-                <span>
+                <span class="team-text">
                     ${escapeHtml(team)}
                 </span>
 
@@ -2155,61 +2467,24 @@ function createMatchTeamHtml(
 
 
     /*
-       No winner yet.
-       Team is clickable.
+       Available
     */
 
     return `
 
         <div
             class="match-team"
+            data-match="${matchId}"
             data-team="${escapeAttribute(team)}"
             data-available="true">
 
-            <span>
+            <span class="team-text">
                 ${escapeHtml(team)}
             </span>
 
         </div>
 
     `;
-
-}
-
-
-/* =========================================================
-   MATCH TYPE
-========================================================= */
-
-function getMatchType(matchId) {
-
-    const number =
-        Number(
-            matchId.substring(1)
-        );
-
-
-    if (number <= 8) {
-        return "Upper Bracket";
-    }
-
-
-    if (number <= 19) {
-        return "Lower Bracket";
-    }
-
-
-    if (number === 20) {
-        return "Upper Final";
-    }
-
-
-    if (number === 21) {
-        return "Lower Final";
-    }
-
-
-    return "Grand Final";
 
 }
 
@@ -2255,7 +2530,34 @@ function updateChampion() {
 
 
         info.innerText =
-            "Click a team in each match to predict the winner.";
+            "Click a team in every match to simulate the tournament.";
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR BRACKET
+========================================================= */
+
+function clearBracket() {
+
+    for (
+        let i = 1;
+        i <= 22;
+        i++
+    ) {
+
+        const slot =
+            document.getElementById(
+                "slot-M" + i
+            );
+
+
+        if (slot) {
+            slot.innerHTML = "";
+        }
 
     }
 
@@ -2270,7 +2572,7 @@ function resetAll() {
 
     if (
         !confirm(
-            "Reset all group rankings and tournament predictions?"
+            "Reset all groups and predictions?"
         )
     ) {
 
@@ -2310,10 +2612,7 @@ function resetAll() {
 
     renderQualified();
 
-
-    document.getElementById(
-        "bracket"
-    ).innerHTML = "";
+    clearBracket();
 
 
     document.getElementById(
@@ -2324,7 +2623,7 @@ function resetAll() {
     document.getElementById(
         "championInfo"
     ).innerText =
-        "Complete the tournament to determine the champion.";
+        "Complete M22 to determine the champion.";
 
 }
 
@@ -2333,10 +2632,10 @@ function resetAll() {
    HELPERS
 ========================================================= */
 
-function clone(object) {
+function clone(obj) {
 
     return JSON.parse(
-        JSON.stringify(object)
+        JSON.stringify(obj)
     );
 
 }
@@ -2345,31 +2644,11 @@ function clone(object) {
 function escapeHtml(value) {
 
     return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
@@ -2377,26 +2656,10 @@ function escapeHtml(value) {
 function escapeAttribute(value) {
 
     return String(value)
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
 }
 
