@@ -1,242 +1,1037 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ABD Full Craft System</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tournament Predictor</title>
 
 <style>
-:root {
-  --bg:#0d0d10;
-  --card:#1a1a1f;
-  --border:#333;
-  --text:#e6e6eb;
-  --muted:#a0a0ab;
-  --accent:#5c6bc0;
-  --accent-hover:#3f51b5;
-}
+    * {
+        box-sizing: border-box;
+    }
 
-*{box-sizing:border-box;margin:0;padding:0}
+    body {
+        margin: 0;
+        background: #0b0b0f;
+        color: #fff;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-body{
-  font-family:Segoe UI,Roboto;
-  background:var(--bg);
-  color:var(--text);
-  padding:20px;
-}
+    header {
+        padding: 25px;
+        text-align: center;
+        background: #111116;
+        border-bottom: 1px solid #29292f;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+    }
 
-h1{text-align:center;margin-bottom:20px}
-h2{margin-bottom:10px;font-size:1.1rem}
+    header h1 {
+        margin: 0 0 8px;
+        font-size: 28px;
+    }
 
-.box{
-  background:var(--card);
-  padding:20px;
-  border-radius:16px;
-  margin-bottom:20px;
-  box-shadow:0 8px 20px rgba(0,0,0,.5);
-}
+    header p {
+        margin: 0;
+        color: #999;
+        font-size: 14px;
+    }
 
-.input-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-}
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+    }
 
-label{
-  font-size:.85rem;
-  color:var(--muted);
-  display:flex;
-  flex-direction:column;
-}
+    button {
+        border: 0;
+        border-radius: 8px;
+        padding: 11px 18px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+        background: #33333b;
+    }
 
-input{
-  padding:10px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#111;
-  color:var(--text);
-}
+    button:hover {
+        background: #44444e;
+    }
 
-button{
-  margin-top:12px;
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  background:var(--accent);
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
+    .primary {
+        background: #5a0000;
+    }
 
-table{
-  width:100%;
-  margin-top:10px;
-  border-collapse:collapse;
-}
+    .primary:hover {
+        background: #760000;
+    }
 
-th,td{
-  padding:10px;
-  border-bottom:1px solid #333;
-  text-align:left;
-  font-size:.9rem;
-}
+    .danger {
+        background: #7a1515;
+    }
 
-th{
-  color:var(--muted);
-  background:#111;
-}
+    section {
+        padding: 30px;
+    }
+
+    .section-title {
+        font-size: 22px;
+        margin-bottom: 20px;
+        border-left: 4px solid #8b0000;
+        padding-left: 10px;
+    }
+
+    /* GROUPS */
+
+    .groups {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+
+    .group {
+        background: #121217;
+        border: 1px solid #29292f;
+        border-radius: 12px;
+        padding: 16px;
+    }
+
+    .group h3 {
+        margin: 0 0 15px;
+        font-size: 18px;
+    }
+
+    .team-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+    }
+
+    .team-input {
+        flex: 1;
+        min-width: 0;
+        background: #1c1c22;
+        border: 1px solid #303038;
+        color: white;
+        border-radius: 6px;
+        padding: 9px;
+        outline: none;
+    }
+
+    .team-input:focus {
+        border-color: #777;
+    }
+
+    .rank {
+        width: 26px;
+        text-align: center;
+        color: #888;
+        font-size: 13px;
+    }
+
+    .qualify-btn {
+        width: 100%;
+        margin-top: 12px;
+        background: #24242c;
+    }
+
+    .qualify-btn.active {
+        background: #5a0000;
+    }
+
+    /* QUALIFIED */
+
+    .qualified {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+
+    .qualified-group {
+        background: #121217;
+        border: 1px solid #29292f;
+        border-radius: 12px;
+        padding: 16px;
+    }
+
+    .qualified-team {
+        padding: 10px;
+        margin: 6px 0;
+        background: #1d1d23;
+        border-radius: 7px;
+    }
+
+    .qualified-team span {
+        color: #777;
+        margin-right: 7px;
+    }
+
+    /* BRACKET */
+
+    .bracket-wrapper {
+        overflow-x: auto;
+        padding-bottom: 20px;
+    }
+
+    .bracket {
+        display: flex;
+        gap: 28px;
+        min-width: 1700px;
+        align-items: flex-start;
+    }
+
+    .round {
+        width: 230px;
+        flex-shrink: 0;
+    }
+
+    .round-title {
+        text-align: center;
+        font-size: 14px;
+        color: #aaa;
+        margin-bottom: 15px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .match {
+        background: #121217;
+        border: 1px solid #29292f;
+        border-radius: 10px;
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+
+    .match-header {
+        padding: 7px 10px;
+        background: #1b1b21;
+        font-size: 12px;
+        color: #999;
+        font-weight: bold;
+    }
+
+    .match-team {
+        padding: 11px 10px;
+        background: #17171d;
+        border-top: 1px solid #25252b;
+        cursor: pointer;
+        transition: 0.15s;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .match-team:hover {
+        background: #292930;
+    }
+
+    .match-team.empty {
+        color: #555;
+        cursor: default;
+    }
+
+    .match-team.winner {
+        background: #5a0000;
+        font-weight: bold;
+    }
+
+    .match-team.loser {
+        opacity: 0.35;
+    }
+
+    .team-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .status {
+        font-size: 11px;
+        margin-left: 5px;
+    }
+
+    /* GRAND FINAL */
+
+    .champion {
+        margin-top: 35px;
+        background: linear-gradient(135deg, #17171d, #250000);
+        border: 1px solid #650000;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .champion h2 {
+        margin: 0 0 10px;
+        font-size: 25px;
+    }
+
+    .champion-name {
+        font-size: 34px;
+        font-weight: bold;
+        color: #ffb000;
+    }
+
+    .hint {
+        color: #777;
+        font-size: 13px;
+        margin-top: 8px;
+    }
+
+    @media (max-width: 900px) {
+        .groups,
+        .qualified {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 600px) {
+        section {
+            padding: 18px;
+        }
+
+        .groups,
+        .qualified {
+            grid-template-columns: 1fr;
+        }
+
+        header h1 {
+            font-size: 22px;
+        }
+    }
 </style>
 </head>
 
 <body>
 
-<h1>FULL CRAFT SYSTEM</h1>
+<header>
+    <h1>🏆 Tournament Predictor</h1>
+    <p>24 Teams • 4 Groups • Top 3 • Double Elimination</p>
 
-<div class="box">
-  <h2>Input Demand</h2>
-  <div class="input-grid">
-    <label>Vest Armor<input id="vest" type="number" value="0"></label>
-    <label>Ammo Box<input id="ammo" type="number" value="0"></label>
-    <label>Pistol Package<input id="pistol" type="number" value="0"></label>
-  </div>
-  <button onclick="calc()">Kira Full Craft</button>
-</div>
+    <div class="controls">
+        <button class="primary" onclick="buildBracket()">BUILD BRACKET</button>
+        <button onclick="resetPredictions()">RESET PREDICTIONS</button>
+    </div>
+</header>
 
-<div class="box">
-<h2>PRODUCT</h2>
-<table><tbody id="product"></tbody></table>
-</div>
 
-<div class="box">
-<h2>TIER 4</h2>
-<table><tbody id="t4"></tbody></table>
-</div>
+<!-- GROUP STAGE -->
 
-<div class="box">
-<h2>TIER 3</h2>
-<table><tbody id="t3"></tbody></table>
-</div>
+<section>
+    <div class="section-title">Group Stage</div>
 
-<div class="box">
-<h2>RAW MATERIALS</h2>
-<table><tbody id="raw"></tbody></table>
-</div>
+    <div class="groups" id="groups"></div>
+</section>
+
+
+<!-- QUALIFIED -->
+
+<section>
+    <div class="section-title">Qualified Teams — Top 3</div>
+
+    <div class="qualified" id="qualified"></div>
+</section>
+
+
+<!-- BRACKET -->
+
+<section>
+    <div class="section-title">Double Elimination Bracket</div>
+
+    <div class="bracket-wrapper">
+        <div class="bracket" id="bracket"></div>
+    </div>
+
+    <div class="champion" id="champion">
+        <h2>🏆 Champion</h2>
+        <div class="champion-name">—</div>
+        <div class="hint">Complete M22 to determine the champion.</div>
+    </div>
+</section>
+
 
 <script>
-function calc() {
 
-  const vest = +document.getElementById('vest').value;
-  const ammo = +document.getElementById('ammo').value;
-  const pistol = +document.getElementById('pistol').value;
+/* =========================================================
+   FIXED GROUPS
+========================================================= */
 
-  // ================= TIER 4 =================
-  const t4 = {
-    joint: vest * 2,
-    morphine: vest * 1 + ammo * 1 + pistol * 1,
-    heroin: vest * 1 + pistol * 3,
-    cocaine: vest * 2 + ammo * 1 + pistol * 1
-  };
+const initialGroups = {
+    A: ["69D", "7D", "20TS", "MDS", "HST", "ABR"],
+    B: ["BOD", "KPK", "302", "TRL", "KKAB", "BBZ"],
+    C: ["TR", "KAP", "CBR", "PDAB", "JPJ", "24K"],
+    D: ["4P", "BMS", "DRM", "DVX", "S9", "DMF"]
+};
 
-  // ================= TIER 3 =================
-  const t3 = {
-    ammonium: t4.heroin + t4.cocaine,
-    crack: t4.morphine + t4.heroin,
-    purecoke: t4.joint + t4.cocaine
-  };
+let groups = JSON.parse(JSON.stringify(initialGroups));
 
-  // ================= RAW =================
-  const raw = {
-    iron: pistol * 20,
-    kayu: pistol * 20,
+/*
+   qualified[A] = [1st, 2nd, 3rd]
+*/
+let qualified = {
+    A: [],
+    B: [],
+    C: [],
+    D: []
+};
 
-    getah: pistol * 20 + ammo * 5,
-    keluli: pistol * 20 + ammo * 5,
+/*
+   Every match:
+   {
+      a: team,
+      b: team,
+      winner: team
+   }
+*/
+let matches = {};
 
-    tembaga: pistol * 20,
-    kain: pistol * 20,
+const bracketDefinition = {
 
-    weedbud: (t4.joint + t4.morphine) * 5,
-    poppy: t3.crack * 5,
-    cokeleaf: t3.purecoke * 5,
-    acid: t3.ammonium * 5,
+    M1:  { a: "B2",       b: "C3" },
+    M2:  { a: "D2",       b: "A3" },
+    M3:  { a: "A2",       b: "D3" },
+    M4:  { a: "C2",       b: "B3" },
 
-    water: t3.ammonium + t3.crack + t3.purecoke,
-    plastic: t4.joint + t4.morphine + t4.heroin + t4.cocaine
-  };
+    M5:  { a: "A1",       b: "W1" },
+    M6:  { a: "C1",       b: "W2" },
+    M7:  { a: "B1",       b: "W3" },
+    M8:  { a: "D1",       b: "W4" },
 
-  // ================= PRODUCT (FULL SEPARATE) =================
-  const product = {
+    M9:  { a: "L5",       b: "L4" },
+    M10: { a: "L6",       b: "L3" },
+    M11: { a: "L7",       b: "L2" },
+    M12: { a: "L8",       b: "L1" },
 
-    rifle: {
-      iron: pistol * 20,
-      kayu: pistol * 20,
-      joint: pistol * 7,
-      heroin: pistol * 7
-    },
+    M13: { a: "W10",      b: "W9" },
+    M14: { a: "W12",      b: "W11" },
 
-    rifle_ammo: {
-      besi: ammo * 5,
-      kayu: ammo * 5,
-      cocaine: ammo * 1,
-      morphine: ammo * 1
-    },
+    M15: { a: "W5",       b: "W6" },
+    M16: { a: "W7",       b: "W8" },
 
-    smg: {
-      getah: pistol * 20,
-      keluli: pistol * 20,
-      cocaine: pistol * 5,
-      heroin: pistol * 5
-    },
+    M17: { a: "L15",      b: "W14" },
+    M18: { a: "L16",      b: "W13" },
 
-    smg_ammo: {
-      getah: ammo * 5,
-      keluli: ammo * 5,
-      cocaine: ammo * 1,
-      morphine: ammo * 1
-    },
+    M19: { a: "W17",      b: "W18" },
 
-    pistol: {
-      tembaga: pistol * 20,
-      kain: pistol * 20,
-      morphine: pistol * 3,
-      heroin: pistol * 3
-    },
+    M20: { a: "W15",      b: "W16" },
 
-    pistol_ammo: {
-      tembaga: pistol * 5,
-      kain: pistol * 5,
-      cocaine: pistol * 1,
-      morphine: pistol * 1
-    },
+    M21: { a: "L20",      b: "W19" },
 
-    vest_armor: {
-      joint: vest * 2,
-      cocaine: vest * 2,
-      morphine: vest * 1,
-      heroin: vest * 1
-    }
-  };
+    M22: { a: "W21",      b: "W20" }
+};
 
-  render('product', product);
-  render('t4', t4);
-  render('t3', t3);
-  render('raw', raw);
+
+/* =========================================================
+   GROUP UI
+========================================================= */
+
+function renderGroups() {
+
+    const container = document.getElementById("groups");
+    container.innerHTML = "";
+
+    Object.entries(groups).forEach(([group, teams]) => {
+
+        const div = document.createElement("div");
+        div.className = "group";
+
+        div.innerHTML = `
+            <h3>GROUP ${group}</h3>
+        `;
+
+        teams.forEach((team, index) => {
+
+            const row = document.createElement("div");
+            row.className = "team-row";
+
+            row.innerHTML = `
+                <div class="rank">${index + 1}</div>
+                <input
+                    class="team-input"
+                    value="${escapeHtml(team)}"
+                    data-group="${group}"
+                    data-index="${index}"
+                    onchange="updateTeam(this)"
+                >
+            `;
+
+            div.appendChild(row);
+        });
+
+        const button = document.createElement("button");
+        button.className = "qualify-btn";
+        button.innerText = "SELECT TOP 3";
+
+        button.onclick = () => selectTop3(group);
+
+        div.appendChild(button);
+
+        container.appendChild(div);
+    });
 }
 
-function render(id,obj){
-  const el=document.getElementById(id);
-  el.innerHTML='';
-  for(const k in obj){
-    if(typeof obj[k]==='object'){
-      for(const i in obj[k]){
-        el.innerHTML += `<tr><td>${k.toUpperCase()} → ${i.toUpperCase()}</td><td>${obj[k][i]}</td></tr>`;
-      }
+
+function updateTeam(input) {
+
+    const group = input.dataset.group;
+    const index = Number(input.dataset.index);
+
+    groups[group][index] = input.value.trim();
+
+    qualified[group] = [];
+
+    renderQualified();
+    clearBracket();
+}
+
+
+/*
+   User enters group order directly.
+   First 3 = qualified.
+*/
+function selectTop3(group) {
+
+    qualified[group] = groups[group]
+        .slice(0, 3)
+        .map(x => x.trim())
+        .filter(Boolean);
+
+    renderQualified();
+    clearBracket();
+
+    const buttons = document.querySelectorAll(".qualify-btn");
+
+    buttons.forEach(btn => {
+
+        if (btn.parentElement.querySelector("h3").innerText === `GROUP ${group}`) {
+            btn.classList.add("active");
+            btn.innerText = "TOP 3 SELECTED ✓";
+        }
+    });
+}
+
+
+/* =========================================================
+   QUALIFIED UI
+========================================================= */
+
+function renderQualified() {
+
+    const container = document.getElementById("qualified");
+
+    container.innerHTML = "";
+
+    Object.entries(qualified).forEach(([group, teams]) => {
+
+        const div = document.createElement("div");
+
+        div.className = "qualified-group";
+
+        div.innerHTML = `<h3>GROUP ${group}</h3>`;
+
+        if (teams.length === 0) {
+
+            div.innerHTML += `
+                <div class="hint">
+                    Select Top 3 from Group ${group}
+                </div>
+            `;
+
+        } else {
+
+            teams.forEach((team, index) => {
+
+                div.innerHTML += `
+                    <div class="qualified-team">
+                        <span>${index + 1}.</span>
+                        ${escapeHtml(team)}
+                    </div>
+                `;
+            });
+        }
+
+        container.appendChild(div);
+    });
+}
+
+
+/* =========================================================
+   BUILD BRACKET
+========================================================= */
+
+function buildBracket() {
+
+    for (const group of ["A", "B", "C", "D"]) {
+
+        if (qualified[group].length !== 3) {
+
+            alert(`Please select Top 3 for Group ${group} first.`);
+            return;
+        }
+    }
+
+    matches = {};
+
+    Object.keys(bracketDefinition).forEach(id => {
+
+        matches[id] = {
+            a: null,
+            b: null,
+            winner: null
+        };
+    });
+
+    resolveAllMatches();
+
+    renderBracket();
+    updateChampion();
+}
+
+
+/* =========================================================
+   RESOLVE MATCH REFERENCES
+========================================================= */
+
+function resolveReference(ref) {
+
+    if (!ref) return null;
+
+    /*
+       Group placements
+    */
+
+    if (/^[ABCD][123]$/.test(ref)) {
+
+        const group = ref[0];
+        const pos = Number(ref[1]) - 1;
+
+        return qualified[group]?.[pos] || null;
+    }
+
+    /*
+       Winner / loser references
+    */
+
+    if (ref.startsWith("W")) {
+
+        const id = ref.substring(1);
+
+        return matches[id]?.winner || null;
+    }
+
+    if (ref.startsWith("L")) {
+
+        const id = ref.substring(1);
+
+        const match = matches[id];
+
+        if (!match || !match.winner) {
+            return null;
+        }
+
+        if (match.a === match.winner) {
+            return match.b;
+        }
+
+        if (match.b === match.winner) {
+            return match.a;
+        }
+
+        return null;
+    }
+
+    return null;
+}
+
+
+function resolveAllMatches() {
+
+    let changed = true;
+
+    /*
+       Keep resolving until all available
+       dependencies have been populated.
+    */
+
+    while (changed) {
+
+        changed = false;
+
+        for (const id of Object.keys(bracketDefinition)) {
+
+            const def = bracketDefinition[id];
+
+            const a = resolveReference(def.a);
+            const b = resolveReference(def.b);
+
+            if (
+                matches[id].a !== a ||
+                matches[id].b !== b
+            ) {
+
+                matches[id].a = a;
+                matches[id].b = b;
+
+                /*
+                   If a team changes, its previous prediction
+                   may no longer be valid.
+                */
+
+                if (
+                    matches[id].winner !== a &&
+                    matches[id].winner !== b
+                ) {
+                    matches[id].winner = null;
+                }
+
+                changed = true;
+            }
+        }
+    }
+}
+
+
+/* =========================================================
+   SELECT WINNER
+========================================================= */
+
+function chooseWinner(matchId, team) {
+
+    const match = matches[matchId];
+
+    if (!match) return;
+
+    if (!team) return;
+
+    /*
+       Cannot choose a winner if opponent is not present.
+    */
+
+    if (match.a !== team && match.b !== team) {
+        return;
+    }
+
+    match.winner = team;
+
+    /*
+       Clear dependent predictions if necessary.
+    */
+
+    clearInvalidPredictions();
+
+    resolveAllMatches();
+
+    renderBracket();
+    updateChampion();
+}
+
+
+function clearInvalidPredictions() {
+
+    Object.keys(matches).forEach(id => {
+
+        const match = matches[id];
+
+        if (!match.winner) return;
+
+        if (
+            match.winner !== match.a &&
+            match.winner !== match.b
+        ) {
+            match.winner = null;
+        }
+    });
+}
+
+
+/* =========================================================
+   BRACKET RENDERING
+========================================================= */
+
+const rounds = [
+
+    {
+        title: "Round 1",
+        matches: ["M1", "M2", "M3", "M4"]
+    },
+
+    {
+        title: "Upper Round 2",
+        matches: ["M5", "M6", "M7", "M8"]
+    },
+
+    {
+        title: "Lower Round 1",
+        matches: ["M9", "M10", "M11", "M12"]
+    },
+
+    {
+        title: "Upper Semifinal",
+        matches: ["M15", "M16"]
+    },
+
+    {
+        title: "Lower Round 2",
+        matches: ["M13", "M14"]
+    },
+
+    {
+        title: "Lower Round 3",
+        matches: ["M17", "M18"]
+    },
+
+    {
+        title: "Lower Round 4",
+        matches: ["M19"]
+    },
+
+    {
+        title: "Upper Final",
+        matches: ["M20"]
+    },
+
+    {
+        title: "Lower Final",
+        matches: ["M21"]
+    },
+
+    {
+        title: "Grand Final",
+        matches: ["M22"]
+    }
+
+];
+
+
+function renderBracket() {
+
+    resolveAllMatches();
+
+    const container = document.getElementById("bracket");
+
+    container.innerHTML = "";
+
+    rounds.forEach(round => {
+
+        const column = document.createElement("div");
+
+        column.className = "round";
+
+        column.innerHTML = `
+            <div class="round-title">
+                ${round.title}
+            </div>
+        `;
+
+        round.matches.forEach(matchId => {
+
+            column.appendChild(
+                createMatchElement(matchId)
+            );
+        });
+
+        container.appendChild(column);
+    });
+}
+
+
+function createMatchElement(matchId) {
+
+    const match = matches[matchId];
+
+    const box = document.createElement("div");
+
+    box.className = "match";
+
+    const header = document.createElement("div");
+
+    header.className = "match-header";
+
+    header.innerText = matchId;
+
+    box.appendChild(header);
+
+    box.appendChild(
+        createTeamElement(
+            matchId,
+            match.a
+        )
+    );
+
+    box.appendChild(
+        createTeamElement(
+            matchId,
+            match.b
+        )
+    );
+
+    return box;
+}
+
+
+function createTeamElement(matchId, team) {
+
+    const div = document.createElement("div");
+
+    div.className = "match-team";
+
+    if (!team) {
+
+        div.classList.add("empty");
+
+        div.innerHTML = `
+            <span class="team-name">
+                Waiting...
+            </span>
+        `;
+
+        return div;
+    }
+
+    if (matches[matchId].winner === team) {
+
+        div.classList.add("winner");
+
+        div.innerHTML = `
+            <span class="team-name">
+                ${escapeHtml(team)}
+            </span>
+            <span class="status">✓</span>
+        `;
+
     } else {
-      el.innerHTML += `<tr><td>${k.toUpperCase()}</td><td>${obj[k]}</td></tr>`;
+
+        div.innerHTML = `
+            <span class="team-name">
+                ${escapeHtml(team)}
+            </span>
+        `;
+
+        div.onclick = () => {
+            chooseWinner(matchId, team);
+        };
     }
-  }
+
+    /*
+       If another team has won, mark this team as loser.
+    */
+
+    if (
+        matches[matchId].winner &&
+        matches[matchId].winner !== team
+    ) {
+
+        div.classList.add("loser");
+
+        div.innerHTML += `
+            <span class="status">✕</span>
+        `;
+    }
+
+    return div;
 }
+
+
+/* =========================================================
+   CLEAR / RESET
+========================================================= */
+
+function clearBracket() {
+
+    matches = {};
+
+    document.getElementById("bracket").innerHTML = "";
+
+    document.querySelector(".champion-name").innerText = "—";
+
+    document.querySelector(".champion .hint").innerText =
+        "Complete M22 to determine the champion.";
+}
+
+
+function resetPredictions() {
+
+    if (!confirm("Reset all group rankings and predictions?")) {
+        return;
+    }
+
+    groups = JSON.parse(
+        JSON.stringify(initialGroups)
+    );
+
+    qualified = {
+        A: [],
+        B: [],
+        C: [],
+        D: []
+    };
+
+    matches = {};
+
+    renderGroups();
+    renderQualified();
+    clearBracket();
+}
+
+
+/* =========================================================
+   CHAMPION
+========================================================= */
+
+function updateChampion() {
+
+    const championBox =
+        document.querySelector(".champion-name");
+
+    const hint =
+        document.querySelector(".champion .hint");
+
+    const finalMatch = matches["M22"];
+
+    if (finalMatch && finalMatch.winner) {
+
+        championBox.innerText =
+            finalMatch.winner;
+
+        hint.innerText =
+            "🏆 Tournament Champion";
+
+    } else {
+
+        championBox.innerText = "—";
+
+        hint.innerText =
+            "Complete M22 to determine the champion.";
+    }
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+renderGroups();
+renderQualified();
+
 </script>
 
 </body>
