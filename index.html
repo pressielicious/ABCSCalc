@@ -7,6 +7,11 @@
 <title>Tournament Simulator</title>
 
 <style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -18,7 +23,8 @@
     --panel2: #18181e;
     --panel3: #202027;
     --border: #2d2d35;
-    --text: #fff;
+
+    --text: #ffffff;
     --muted: #777780;
 
     --red: #650000;
@@ -27,7 +33,7 @@
     --green: #164b28;
     --green2: #1d6737;
 
-    --yellow: #725900;
+    --gold: #725900;
 }
 
 html {
@@ -38,7 +44,11 @@ body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: Arial, Helvetica, sans-serif;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
 
 
@@ -51,23 +61,27 @@ header {
     top: 0;
     z-index: 100;
 
-    background: rgba(10,10,14,.97);
+    background: rgba(8,8,11,.97);
     backdrop-filter: blur(12px);
 
     border-bottom: 1px solid var(--border);
 
     padding: 18px;
+
     text-align: center;
 }
 
 header h1 {
     margin: 0;
+
     font-size: 25px;
 }
 
 header p {
     margin: 7px 0 0;
+
     color: var(--muted);
+
     font-size: 12px;
 }
 
@@ -77,6 +91,7 @@ header p {
     display: flex;
     justify-content: center;
     gap: 8px;
+
     flex-wrap: wrap;
 }
 
@@ -125,11 +140,14 @@ section {
 
 .section-title {
     max-width: 1500px;
-    margin: 0 auto 18px;
 
-    border-left: 4px solid var(--red2);
+    margin:
+        0 auto 18px;
 
     padding-left: 10px;
+
+    border-left:
+        4px solid var(--red2);
 
     font-size: 20px;
     font-weight: bold;
@@ -142,10 +160,13 @@ section {
 
 .groups {
     max-width: 1500px;
+
     margin: auto;
 
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+
+    grid-template-columns:
+        repeat(4, 1fr);
 
     gap: 15px;
 }
@@ -153,7 +174,9 @@ section {
 .group {
     background: var(--panel);
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
+
     border-radius: 12px;
 
     padding: 15px;
@@ -169,12 +192,15 @@ section {
     margin: 6px 0 13px;
 
     color: var(--muted);
+
     font-size: 10px;
 }
 
 .team-list {
     display: flex;
+
     flex-direction: column;
+
     gap: 7px;
 }
 
@@ -186,16 +212,20 @@ section {
 
     gap: 8px;
 
-    padding: 0 9px;
+    padding:
+        0 9px;
 
     background: var(--panel2);
 
-    border: 1px solid #303038;
+    border:
+        1px solid #303038;
+
     border-radius: 8px;
 
     cursor: grab;
 
     user-select: none;
+
     touch-action: none;
 
     transition: .15s;
@@ -211,6 +241,7 @@ section {
 
 .team-item.drag-over {
     border-color: var(--red2);
+
     background: #350909;
 }
 
@@ -231,6 +262,7 @@ section {
     height: 25px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -243,11 +275,13 @@ section {
     color: #aaa;
 
     font-size: 10px;
+
     font-weight: bold;
 }
 
 .team-item:nth-child(-n+3) .rank {
     background: var(--red);
+
     color: white;
 }
 
@@ -255,9 +289,11 @@ section {
     overflow: hidden;
 
     text-overflow: ellipsis;
+
     white-space: nowrap;
 
     font-size: 13px;
+
     font-weight: bold;
 }
 
@@ -267,6 +303,7 @@ section {
     color: #777;
 
     font-size: 8px;
+
     font-weight: bold;
 }
 
@@ -290,16 +327,19 @@ section {
     text-align: center;
 
     font-size: 9px;
+
     font-weight: bold;
 }
 
 .group-status.confirmed {
     background: #300000;
+
     color: #df9c9c;
 }
 
 .group-actions {
     display: flex;
+
     gap: 7px;
 
     margin-top: 8px;
@@ -320,10 +360,13 @@ section {
 
 .qualified {
     max-width: 1500px;
+
     margin: auto;
 
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+
+    grid-template-columns:
+        repeat(4, 1fr);
 
     gap: 15px;
 }
@@ -331,14 +374,17 @@ section {
 .qualified-box {
     background: var(--panel);
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
+
     border-radius: 10px;
 
     padding: 13px;
 }
 
 .qualified-box h3 {
-    margin: 0 0 10px;
+    margin:
+        0 0 10px;
 
     font-size: 14px;
 }
@@ -353,6 +399,7 @@ section {
     border-radius: 7px;
 
     font-size: 12px;
+
     font-weight: bold;
 }
 
@@ -366,12 +413,13 @@ section {
 
 .qualified-empty {
     color: #555;
+
     font-size: 10px;
 }
 
 
 /* =========================================================
-   BRACKET AREA
+   BRACKET
 ========================================================= */
 
 .bracket-section {
@@ -380,18 +428,22 @@ section {
 
 .bracket-area {
     max-width: 1600px;
+
     margin: auto;
 }
 
 .bracket-title {
-    margin: 20px 0 10px;
+    margin:
+        20px 0 10px;
 
     font-size: 17px;
+
     font-weight: bold;
 }
 
 .bracket-subtitle {
-    margin: 0 0 12px;
+    margin:
+        0 0 12px;
 
     color: #666;
 
@@ -402,21 +454,21 @@ section {
     overflow-x: auto;
     overflow-y: hidden;
 
-    padding: 10px 5px 25px;
+    padding:
+        10px 5px 25px;
 
-    -webkit-overflow-scrolling: touch;
+    -webkit-overflow-scrolling:
+        touch;
 }
 
 
 /* =========================================================
-   BRACKET COLUMNS
+   BRACKET LAYOUT
 ========================================================= */
 
 .upper-layout,
 .lower-layout {
     min-width: 1450px;
-
-    position: relative;
 }
 
 .bracket-row {
@@ -437,18 +489,22 @@ section {
     height: 27px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: center;
 
     color: #666;
 
     font-size: 9px;
+
     font-weight: bold;
+
     text-transform: uppercase;
 }
 
 
-/* Upper positioning */
+/* Upper */
 
 .upper-row-1 {
     margin-top: 0;
@@ -467,7 +523,7 @@ section {
 }
 
 
-/* Lower positioning */
+/* Lower */
 
 .lower-row-1 {
     margin-top: 0;
@@ -497,13 +553,15 @@ section {
 .match-card {
     background: var(--panel);
 
-    border: 1px solid var(--border);
+    border:
+        1px solid var(--border);
 
     border-radius: 9px;
 
     overflow: hidden;
 
-    box-shadow: 0 5px 15px rgba(0,0,0,.25);
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.25);
 
     transition: .2s;
 }
@@ -512,8 +570,11 @@ section {
     border-color: var(--red2);
 
     box-shadow:
-        0 0 0 1px rgba(146,0,0,.2),
-        0 5px 18px rgba(0,0,0,.3);
+        0 0 0 1px
+        rgba(146,0,0,.2),
+
+        0 5px 18px
+        rgba(0,0,0,.3);
 }
 
 .match-card.completed {
@@ -524,30 +585,33 @@ section {
     opacity: .55;
 }
 
-.match-card.waiting {
-    opacity: .65;
-}
-
 .match-header {
     min-height: 35px;
 
-    padding: 7px 9px;
+    padding:
+        7px 9px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     background: #19191f;
 
-    border-bottom: 1px solid var(--border);
+    border-bottom:
+        1px solid var(--border);
 
     font-size: 11px;
+
     font-weight: bold;
 }
 
 .match-header-right {
     display: flex;
+
     align-items: center;
+
     gap: 5px;
 }
 
@@ -570,7 +634,8 @@ section {
 }
 
 .undo-btn {
-    padding: 4px 6px;
+    padding:
+        4px 6px;
 
     background: #2b2020;
 
@@ -589,23 +654,28 @@ section {
 
 
 /* =========================================================
-   MATCH TEAM
+   MATCH TEAMS
 ========================================================= */
 
 .match-team {
     min-height: 43px;
 
-    padding: 9px;
+    padding:
+        9px;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     background: #141419;
 
-    border-bottom: 1px solid #28282f;
+    border-bottom:
+        1px solid #28282f;
 
     font-size: 12px;
+
     font-weight: bold;
 
     transition: .15s;
@@ -629,13 +699,15 @@ section {
 
 .match-team.selected {
     background: #470000;
+
     color: white;
 }
 
 .match-team.loser {
     opacity: .27;
 
-    text-decoration: line-through;
+    text-decoration:
+        line-through;
 }
 
 .match-team.locked-team {
@@ -646,6 +718,7 @@ section {
     overflow: hidden;
 
     text-overflow: ellipsis;
+
     white-space: nowrap;
 }
 
@@ -658,7 +731,8 @@ section {
 }
 
 .match-lock {
-    padding: 7px 9px;
+    padding:
+        7px 9px;
 
     background: #0f0f13;
 
@@ -671,13 +745,14 @@ section {
 
 
 /* =========================================================
-   FINAL
+   GRAND FINAL
 ========================================================= */
 
 .final-section {
     max-width: 700px;
 
-    margin: 35px auto 60px;
+    margin:
+        35px auto 40px;
 
     text-align: center;
 }
@@ -685,7 +760,8 @@ section {
 .final-card {
     background: var(--panel);
 
-    border: 1px solid var(--red);
+    border:
+        1px solid var(--red);
 
     border-radius: 14px;
 
@@ -693,7 +769,8 @@ section {
 }
 
 .final-card h2 {
-    margin: 0 0 16px;
+    margin:
+        0 0 16px;
 
     font-size: 20px;
 }
@@ -708,6 +785,7 @@ section {
     color: #ffb000;
 
     font-size: 30px;
+
     font-weight: bold;
 }
 
@@ -721,6 +799,125 @@ section {
 
 
 /* =========================================================
+   PLACEMENT
+========================================================= */
+
+.placement-section {
+    max-width: 700px;
+
+    margin:
+        0 auto 60px;
+}
+
+.placement-card {
+    background: var(--panel);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 20px;
+}
+
+.placement-card h2 {
+    margin: 0;
+
+    font-size: 20px;
+}
+
+.placement-subtitle {
+    margin:
+        7px 0 18px;
+
+    color: #666;
+
+    font-size: 10px;
+}
+
+.placement-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.placement-row {
+    display: grid;
+
+    grid-template-columns:
+        75px 1fr auto;
+
+    align-items: center;
+
+    min-height: 48px;
+
+    padding:
+        8px 12px;
+
+    background: var(--panel2);
+
+    border:
+        1px solid #292930;
+
+    border-radius: 8px;
+}
+
+.placement-rank {
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+.placement-team {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+
+    font-size: 12px;
+
+    font-weight: bold;
+}
+
+.placement-source {
+    color: #555;
+
+    font-size: 8px;
+}
+
+.placement-row.champion {
+    border-color: var(--gold);
+
+    background: #211c08;
+}
+
+.placement-row.second {
+    border-color: #555;
+}
+
+.placement-row.third {
+    border-color: #5a321d;
+}
+
+.placement-empty {
+    padding: 20px;
+
+    background: var(--panel2);
+
+    border-radius: 8px;
+
+    color: #555;
+
+    text-align: center;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
    MOBILE
 ========================================================= */
 
@@ -728,7 +925,8 @@ section {
 
     .groups,
     .qualified {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns:
+            repeat(2, 1fr);
     }
 
 }
@@ -736,7 +934,8 @@ section {
 @media (max-width: 600px) {
 
     header {
-        padding: 15px 12px;
+        padding:
+            15px 12px;
     }
 
     header h1 {
@@ -744,7 +943,8 @@ section {
     }
 
     section {
-        padding: 25px 12px;
+        padding:
+            25px 12px;
     }
 
     .groups,
@@ -765,12 +965,25 @@ section {
         min-height: 45px;
     }
 
-    .final-section {
+    .final-section,
+    .placement-section {
         padding-left: 12px;
         padding-right: 12px;
     }
 
+    .placement-row {
+        grid-template-columns:
+            65px 1fr;
+
+        gap: 4px;
+    }
+
+    .placement-source {
+        grid-column: 2;
+    }
+
 }
+
 </style>
 </head>
 
@@ -778,13 +991,15 @@ section {
 <body>
 
 
-<!-- =====================================================
+<!-- =========================================================
      HEADER
-===================================================== -->
+========================================================= -->
 
 <header>
 
-    <h1>🏆 Tournament Simulator</h1>
+    <h1>
+        🏆 Tournament Simulator
+    </h1>
 
     <p>
         24 Teams • 4 Groups • Top 3 • Double Elimination
@@ -803,7 +1018,9 @@ section {
         </button>
 
         <button onclick="resetAll()">
+
             RESET
+
         </button>
 
     </div>
@@ -811,9 +1028,9 @@ section {
 </header>
 
 
-<!-- =====================================================
+<!-- =========================================================
      GROUP STAGE
-===================================================== -->
+========================================================= -->
 
 <section>
 
@@ -829,9 +1046,9 @@ section {
 </section>
 
 
-<!-- =====================================================
+<!-- =========================================================
      QUALIFIED
-===================================================== -->
+========================================================= -->
 
 <section>
 
@@ -847,9 +1064,9 @@ section {
 </section>
 
 
-<!-- =====================================================
-     DOUBLE ELIMINATION
-===================================================== -->
+<!-- =========================================================
+     BRACKET
+========================================================= -->
 
 <section class="bracket-section">
 
@@ -869,7 +1086,8 @@ section {
         </div>
 
         <div class="bracket-subtitle">
-            Matches unlock strictly in order: M1 → M2 → M3 → ...
+            Matches must be completed in order:
+            M1 → M22
         </div>
 
         <div class="bracket-scroll">
@@ -984,7 +1202,7 @@ section {
                     <div class="bracket-column">
 
                         <div class="column-label">
-                            Upper Semi
+                            Upper Semi Final
                         </div>
 
                         <div id="slot-M15"></div>
@@ -995,7 +1213,7 @@ section {
                     <div class="bracket-column">
 
                         <div class="column-label">
-                            Upper Semi
+                            Upper Semi Final
                         </div>
 
                         <div id="slot-M16"></div>
@@ -1036,7 +1254,7 @@ section {
         </div>
 
         <div class="bracket-subtitle">
-            Losers are automatically transferred according to the bracket mapping.
+            Losers are automatically transferred according to the bracket.
         </div>
 
         <div class="bracket-scroll">
@@ -1174,7 +1392,7 @@ section {
                     <div class="bracket-column">
 
                         <div class="column-label">
-                            Grand Final Qualifier
+                            Lower Final
                         </div>
 
                         <div id="slot-M21"></div>
@@ -1190,7 +1408,7 @@ section {
 
 
         <!-- =================================================
-             GRAND FINAL M22
+             GRAND FINAL
         ================================================== -->
 
         <div class="final-section">
@@ -1216,6 +1434,39 @@ section {
                     id="championInfo">
 
                     Complete all matches to determine the champion.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             TOP 4 PLACEMENT
+        ================================================== -->
+
+        <div class="placement-section">
+
+            <div class="placement-card">
+
+                <h2>
+                    🏅 FINAL PLACEMENT
+                </h2>
+
+                <p class="placement-subtitle">
+                    Top 4 placement based on the final bracket results.
+                </p>
+
+                <div
+                    class="placement-list"
+                    id="placementList">
+
+                    <div class="placement-empty">
+
+                        Complete the tournament to determine Top 4.
+
+                    </div>
 
                 </div>
 
@@ -1280,31 +1531,38 @@ const defaultGroups = {
    STATE
 ========================================================= */
 
-let groups = clone(defaultGroups);
+let groups =
+    clone(defaultGroups);
 
 let confirmed = {
+
     A: false,
     B: false,
     C: false,
     D: false
+
 };
 
 let qualified = {
+
     A: [],
     B: [],
     C: [],
     D: []
+
 };
 
 let matches = {};
 
 let draggedElement = null;
+
 let draggedGroup = null;
+
 let draggedIndex = null;
 
 
 /* =========================================================
-   EXACT BRACKET MAPPING
+   BRACKET DEFINITION
 ========================================================= */
 
 const bracketDefinition = {
@@ -1429,144 +1687,156 @@ const bracketDefinition = {
 function renderGroups() {
 
     const container =
-        document.getElementById("groups");
+        document.getElementById(
+            "groups"
+        );
 
     container.innerHTML = "";
 
 
-    Object.keys(groups).forEach(group => {
+    Object.keys(groups).forEach(
+        group => {
 
-        const box =
-            document.createElement("div");
+            const box =
+                document.createElement(
+                    "div"
+                );
 
-        box.className = "group";
-
-
-        const locked =
-            confirmed[group];
+            box.className = "group";
 
 
-        box.innerHTML = `
+            const locked =
+                confirmed[group];
 
-            <h3>GROUP ${group}</h3>
 
-            <div class="group-help">
+            box.innerHTML = `
 
-                ${
-                    locked
-                    ? "Ranking confirmed."
-                    : "Drag teams to arrange ranking."
-                }
+                <h3>
+                    GROUP ${group}
+                </h3>
 
-            </div>
+                <div class="group-help">
 
-            <div
-                class="team-list"
-                data-group="${group}">
-            </div>
+                    ${
+                        locked
+                        ? "Ranking confirmed."
+                        : "Drag teams to arrange ranking."
+                    }
 
-            <div class="group-footer">
+                </div>
 
                 <div
-                    class="group-status ${
-                        locked ? "confirmed" : ""
-                    }">
+                    class="team-list"
+                    data-group="${group}">
+                </div>
 
-                    ${
-                        locked
-                        ? "✓ GROUP CONFIRMED"
-                        : "TOP 3 NOT CONFIRMED"
-                    }
+                <div class="group-footer">
+
+                    <div
+                        class="group-status ${
+                            locked
+                            ? "confirmed"
+                            : ""
+                        }">
+
+                        ${
+                            locked
+                            ? "✓ GROUP CONFIRMED"
+                            : "TOP 3 NOT CONFIRMED"
+                        }
+
+                    </div>
+
+                    <div class="group-actions">
+
+                        ${
+                            locked
+
+                            ? `
+
+                                <button
+                                    onclick="editGroup('${group}')">
+
+                                    EDIT
+
+                                </button>
+
+                            `
+
+                            : `
+
+                                <button
+                                    class="confirm-btn"
+                                    onclick="confirmGroup('${group}')">
+
+                                    CONFIRM GROUP
+
+                                </button>
+
+                            `
+                        }
+
+                    </div>
 
                 </div>
 
-                <div class="group-actions">
+            `;
 
-                    ${
-                        locked
 
-                        ? `
+            const list =
+                box.querySelector(
+                    ".team-list"
+                );
 
-                            <button
-                                onclick="editGroup('${group}')">
 
-                                EDIT
+            groups[group].forEach(
+                (team, index) => {
 
-                            </button>
+                    list.appendChild(
+                        createTeamItem(
+                            group,
+                            team,
+                            index,
+                            locked
+                        )
+                    );
 
-                        `
+                }
+            );
 
-                        : `
 
-                            <button
-                                class="confirm-btn"
-                                onclick="confirmGroup('${group}')">
+            if (!locked) {
 
-                                CONFIRM GROUP
+                list.addEventListener(
+                    "dragover",
+                    handleDragOver
+                );
 
-                            </button>
+                list.addEventListener(
+                    "drop",
+                    handleDrop
+                );
 
-                        `
+                list.addEventListener(
+                    "touchmove",
+                    handleTouchMove,
+                    {
+                        passive: false
                     }
+                );
 
-                </div>
-
-            </div>
-
-        `;
-
-
-        const list =
-            box.querySelector(".team-list");
-
-
-        groups[group].forEach(
-            (team, index) => {
-
-                list.appendChild(
-                    createTeamItem(
-                        group,
-                        team,
-                        index,
-                        locked
-                    )
+                list.addEventListener(
+                    "touchend",
+                    handleTouchEnd
                 );
 
             }
-        );
 
 
-        if (!locked) {
-
-            list.addEventListener(
-                "dragover",
-                handleDragOver
-            );
-
-            list.addEventListener(
-                "drop",
-                handleDrop
-            );
-
-            list.addEventListener(
-                "touchmove",
-                handleTouchMove,
-                {
-                    passive: false
-                }
-            );
-
-            list.addEventListener(
-                "touchend",
-                handleTouchEnd
-            );
+            container.appendChild(box);
 
         }
-
-
-        container.appendChild(box);
-
-    });
+    );
 
 
     updateBuildButton();
@@ -1586,12 +1856,18 @@ function createTeamItem(
 ) {
 
     const item =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     item.className =
         "team-item" +
-        (locked ? " locked" : "");
+        (
+            locked
+            ? " locked"
+            : ""
+        );
 
 
     item.draggable =
@@ -1656,7 +1932,7 @@ function createTeamItem(
 
 
 /* =========================================================
-   DRAG DESKTOP
+   DESKTOP DRAG
 ========================================================= */
 
 function handleDragStart(event) {
@@ -1719,14 +1995,18 @@ function handleDragOver(event) {
 
 
     document
-        .querySelectorAll(".drag-over")
-        .forEach(el => {
+        .querySelectorAll(
+            ".drag-over"
+        )
+        .forEach(
+            el => {
 
-            el.classList.remove(
-                "drag-over"
-            );
+                el.classList.remove(
+                    "drag-over"
+                );
 
-        });
+            }
+        );
 
 
     target.classList.add(
@@ -1777,7 +2057,7 @@ function handleDrop(event) {
 
 
 /* =========================================================
-   DRAG MOBILE
+   MOBILE DRAG
 ========================================================= */
 
 function handleTouchStart(event) {
@@ -1829,14 +2109,18 @@ function handleTouchMove(event) {
 
 
     document
-        .querySelectorAll(".drag-over")
-        .forEach(el => {
+        .querySelectorAll(
+            ".drag-over"
+        )
+        .forEach(
+            el => {
 
-            el.classList.remove(
-                "drag-over"
-            );
+                el.classList.remove(
+                    "drag-over"
+                );
 
-        });
+            }
+        );
 
 
     if (
@@ -1914,18 +2198,24 @@ function cleanupDrag() {
 
 
     document
-        .querySelectorAll(".drag-over")
-        .forEach(el => {
+        .querySelectorAll(
+            ".drag-over"
+        )
+        .forEach(
+            el => {
 
-            el.classList.remove(
-                "drag-over"
-            );
+                el.classList.remove(
+                    "drag-over"
+                );
 
-        });
+            }
+        );
 
 
     draggedElement = null;
+
     draggedGroup = null;
+
     draggedIndex = null;
 
 }
@@ -1977,16 +2267,15 @@ function moveTeam(
 function confirmGroup(group) {
 
     qualified[group] =
-        groups[group].slice(0, 3);
+        groups[group].slice(
+            0,
+            3
+        );
 
 
-    confirmed[group] = true;
+    confirmed[group] =
+        true;
 
-
-    /*
-       Any existing bracket prediction
-       becomes invalid.
-    */
 
     matches = {};
 
@@ -1997,6 +2286,8 @@ function confirmGroup(group) {
     renderGroups();
 
     renderQualified();
+
+    renderPlacements();
 
 }
 
@@ -2009,7 +2300,7 @@ function editGroup(group) {
 
     if (
         !confirm(
-            "Editing this group will reset the bracket predictions. Continue?"
+            "Editing this group will reset all bracket predictions. Continue?"
         )
     ) {
 
@@ -2018,9 +2309,12 @@ function editGroup(group) {
     }
 
 
-    confirmed[group] = false;
+    confirmed[group] =
+        false;
 
-    qualified[group] = [];
+
+    qualified[group] =
+        [];
 
 
     matches = {};
@@ -2031,7 +2325,8 @@ function editGroup(group) {
 
     document.getElementById(
         "championName"
-    ).innerText = "—";
+    ).innerText =
+        "—";
 
 
     document.getElementById(
@@ -2043,6 +2338,8 @@ function editGroup(group) {
     renderGroups();
 
     renderQualified();
+
+    renderPlacements();
 
 }
 
@@ -2063,63 +2360,67 @@ function renderQualified() {
 
 
     Object.keys(qualified)
-        .forEach(group => {
+        .forEach(
+            group => {
 
-            const box =
-                document.createElement("div");
-
-
-            box.className =
-                "qualified-box";
-
-
-            box.innerHTML =
-                `<h3>GROUP ${group}</h3>`;
-
-
-            if (
-                qualified[group].length !== 3
-            ) {
-
-                box.innerHTML += `
-
-                    <div class="qualified-empty">
-
-                        Waiting for Group ${group}.
-
-                    </div>
-
-                `;
-
-            } else {
-
-                qualified[group]
-                    .forEach(
-                        (team, index) => {
-
-                            box.innerHTML += `
-
-                                <div class="qualified-team">
-
-                                    <span>
-                                        ${index + 1}.
-                                    </span>
-
-                                    ${escapeHtml(team)}
-
-                                </div>
-
-                            `;
-
-                        }
+                const box =
+                    document.createElement(
+                        "div"
                     );
 
+
+                box.className =
+                    "qualified-box";
+
+
+                box.innerHTML =
+                    `<h3>GROUP ${group}</h3>`;
+
+
+                if (
+                    qualified[group].length !== 3
+                ) {
+
+                    box.innerHTML += `
+
+                        <div class="qualified-empty">
+
+                            Waiting for Group ${group}.
+
+                        </div>
+
+                    `;
+
+                } else {
+
+                    qualified[group]
+                        .forEach(
+                            (team, index) => {
+
+                                box.innerHTML += `
+
+                                    <div class="qualified-team">
+
+                                        <span>
+                                            ${index + 1}.
+                                        </span>
+
+                                        ${escapeHtml(team)}
+
+                                    </div>
+
+                                `;
+
+                            }
+                        );
+
+                }
+
+
+                container.appendChild(box);
+
             }
-
-
-            container.appendChild(box);
-
-        });
+        );
 
 }
 
@@ -2173,18 +2474,23 @@ function buildBracket() {
 
     updateChampion();
 
+    renderPlacements();
 
-    setTimeout(() => {
 
-        document
-            .querySelector(
-                ".bracket-section"
-            )
-            .scrollIntoView({
-                behavior: "smooth"
-            });
+    setTimeout(
+        () => {
 
-    }, 100);
+            document
+                .querySelector(
+                    ".bracket-section"
+                )
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        },
+        100
+    );
 
 }
 
@@ -2209,6 +2515,7 @@ function initializeMatches() {
         ] = {
 
             a: null,
+
             b: null,
 
             winner: null,
@@ -2235,7 +2542,12 @@ function resolveReference(ref) {
 
     /*
        GROUP POSITION
-       A1 / A2 / A3 etc.
+
+       A1
+       A2
+       A3
+
+       B1 etc.
     */
 
     if (
@@ -2393,14 +2705,17 @@ function resolveAllMatches() {
                 match.b !== newB
             ) {
 
-                match.a = newA;
-                match.b = newB;
+                match.a =
+                    newA;
+
+                match.b =
+                    newB;
 
 
                 /*
-                   If the old winner
+                   If old winner
                    no longer exists,
-                   clear result.
+                   clear it.
                 */
 
                 if (
@@ -2409,8 +2724,11 @@ function resolveAllMatches() {
                     match.winner !== match.b
                 ) {
 
-                    match.winner = null;
-                    match.completed = false;
+                    match.winner =
+                        null;
+
+                    match.completed =
+                        false;
 
                 }
 
@@ -2435,12 +2753,6 @@ function resolveAllMatches() {
    STRICT MATCH ORDER
 ========================================================= */
 
-/*
-    Only ONE match can be active.
-
-    M1 → M2 → M3 → ... → M22
-*/
-
 function getActiveMatch() {
 
     for (
@@ -2450,7 +2762,9 @@ function getActiveMatch() {
     ) {
 
         const match =
-            matches["M" + i];
+            matches[
+                "M" + i
+            ];
 
 
         if (
@@ -2471,17 +2785,14 @@ function getActiveMatch() {
 
 
 /* =========================================================
-   CAN PLAY MATCH
+   CAN PLAY
 ========================================================= */
 
 function canPlayMatch(matchId) {
 
-    const active =
-        getActiveMatch();
-
-
     return (
-        active === matchId
+        getActiveMatch() ===
+        matchId
     );
 
 }
@@ -2496,17 +2807,17 @@ function chooseWinner(
     team
 ) {
 
-    if (
-        !matches[matchId]
-    ) {
+    const match =
+        matches[matchId];
 
+
+    if (!match) {
         return;
-
     }
 
 
     /*
-       STRICT ORDER LOCK
+       Strict order
     */
 
     if (
@@ -2522,12 +2833,8 @@ function chooseWinner(
     }
 
 
-    const match =
-        matches[matchId];
-
-
     /*
-       Both teams must exist.
+       Both teams required
     */
 
     if (
@@ -2536,7 +2843,7 @@ function chooseWinner(
     ) {
 
         alert(
-            `${matchId} is waiting for its teams.`
+            `${matchId} is waiting for both teams.`
         );
 
         return;
@@ -2568,43 +2875,95 @@ function chooseWinner(
 
     updateChampion();
 
+    renderPlacements();
+
 
     /*
-       Automatically scroll to
-       next active match.
+       Scroll next match
     */
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        const next =
-            getActiveMatch();
-
-
-        if (!next) {
-            return;
-        }
+            const next =
+                getActiveMatch();
 
 
-        const nextElement =
-            document.getElementById(
-                "slot-" + next
-            );
+            if (!next) {
+                return;
+            }
 
 
-        if (
-            nextElement &&
-            nextElement.offsetParent !== null
-        ) {
+            const nextElement =
+                document.getElementById(
+                    "slot-" + next
+                );
 
-            nextElement.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-                inline: "center"
-            });
 
-        }
+            if (
+                nextElement &&
+                nextElement.offsetParent !== null
+            ) {
 
-    }, 150);
+                nextElement.scrollIntoView({
+                    behavior: "smooth",
+
+                    block: "center",
+
+                    inline: "center"
+                });
+
+            }
+
+        },
+        150
+    );
+
+}
+
+
+/* =========================================================
+   GET LOSER
+========================================================= */
+
+function getLoser(matchId) {
+
+    const match =
+        matches[matchId];
+
+
+    if (
+        !match ||
+        !match.completed ||
+        !match.winner
+    ) {
+
+        return null;
+
+    }
+
+
+    if (
+        match.a ===
+        match.winner
+    ) {
+
+        return match.b;
+
+    }
+
+
+    if (
+        match.b ===
+        match.winner
+    ) {
+
+        return match.a;
+
+    }
+
+
+    return null;
 
 }
 
@@ -2615,28 +2974,24 @@ function chooseWinner(
 
 function undoMatch(matchId) {
 
+    const match =
+        matches[matchId];
+
+
+    if (
+        !match ||
+        !match.completed
+    ) {
+
+        return;
+
+    }
+
+
     const number =
         Number(
             matchId.substring(1)
         );
-
-
-    if (
-        !matches[matchId]
-    ) {
-
-        return;
-
-    }
-
-
-    if (
-        !matches[matchId].completed
-    ) {
-
-        return;
-
-    }
 
 
     const ok =
@@ -2651,8 +3006,10 @@ function undoMatch(matchId) {
 
 
     /*
-       Because matches are strictly sequential,
-       reset this match and every match after it.
+       Because the tournament
+       is strictly sequential,
+       reset this match and
+       everything after it.
     */
 
     for (
@@ -2663,6 +3020,11 @@ function undoMatch(matchId) {
 
         const id =
             "M" + i;
+
+
+        if (!matches[id]) {
+            continue;
+        }
 
 
         matches[id].winner =
@@ -2681,135 +3043,39 @@ function undoMatch(matchId) {
 
     updateChampion();
 
-
-    /*
-       Return to undone match.
-    */
-
-    setTimeout(() => {
-
-        const element =
-            document.getElementById(
-                "slot-" + matchId
-            );
+    renderPlacements();
 
 
-        if (element) {
+    setTimeout(
+        () => {
 
-            element.scrollIntoView({
-                behavior: "smooth",
-                block: "center",
-                inline: "center"
-            });
-
-        }
-
-    }, 100);
-
-}
+            const element =
+                document.getElementById(
+                    "slot-" + matchId
+                );
 
 
-/* =========================================================
-   RENDER BRACKET
-========================================================= */
+            if (element) {
 
-function renderBracket() {
+                element.scrollIntoView({
+                    behavior: "smooth",
 
-    if (
-        Object.keys(matches).length === 0
-    ) {
+                    block: "center",
 
-        return;
+                    inline: "center"
+                });
 
-    }
+            }
 
-
-    resolveAllMatches();
-
-
-    for (
-        let i = 1;
-        i <= 22;
-        i++
-    ) {
-
-        const id =
-            "M" + i;
-
-
-        const slot =
-            document.getElementById(
-                "slot-" + id
-            );
-
-
-        if (!slot) {
-            continue;
-        }
-
-
-        slot.innerHTML =
-            createMatchHtml(id);
-
-    }
-
-
-    /*
-       Add click events.
-    */
-
-    document
-        .querySelectorAll(
-            ".match-team.clickable"
-        )
-        .forEach(element => {
-
-            element.addEventListener(
-                "click",
-                () => {
-
-                    chooseWinner(
-                        element.dataset.match,
-                        element.dataset.team
-                    );
-
-                }
-            );
-
-        });
-
-
-    /*
-       Add undo events.
-    */
-
-    document
-        .querySelectorAll(
-            ".undo-btn"
-        )
-        .forEach(button => {
-
-            button.addEventListener(
-                "click",
-                event => {
-
-                    event.stopPropagation();
-
-
-                    undoMatch(
-                        button.dataset.match
-                    );
-
-                }
-            );
-
-        });
+        },
+        100
+    );
 
 }
 
 
 /* =========================================================
-   CREATE MATCH
+   CREATE MATCH HTML
 ========================================================= */
 
 function createMatchHtml(matchId) {
@@ -2868,7 +3134,10 @@ function createMatchHtml(matchId) {
     }
 
 
-    if (!active && !completed) {
+    if (
+        !active &&
+        !completed
+    ) {
 
         cardClass +=
             " locked";
@@ -2904,7 +3173,11 @@ function createMatchHtml(matchId) {
                     <button
                         class="undo-btn"
                         data-match="${matchId}"
-                        ${completed ? "" : "disabled"}>
+                        ${
+                            completed
+                            ? ""
+                            : "disabled"
+                        }>
 
                         UNDO
 
@@ -2928,7 +3201,8 @@ function createMatchHtml(matchId) {
 
 
             ${
-                !active && !completed
+                !active &&
+                !completed
 
                 ? `
 
@@ -2952,7 +3226,7 @@ function createMatchHtml(matchId) {
 
 
 /* =========================================================
-   CREATE TEAM
+   CREATE MATCH TEAM
 ========================================================= */
 
 function createMatchTeamHtml(
@@ -2982,13 +3256,14 @@ function createMatchTeamHtml(
 
 
     /*
-       Match completed
+       Completed
     */
 
     if (match.completed) {
 
         if (
-            match.winner === team
+            match.winner ===
+            team
         ) {
 
             return `
@@ -2997,11 +3272,15 @@ function createMatchTeamHtml(
                     class="match-team selected">
 
                     <span class="team-text">
+
                         ${escapeHtml(team)}
+
                     </span>
 
                     <span class="result">
+
                         ✓
+
                     </span>
 
                 </div>
@@ -3017,11 +3296,15 @@ function createMatchTeamHtml(
                 class="match-team loser">
 
                 <span class="team-text">
+
                     ${escapeHtml(team)}
+
                 </span>
 
                 <span class="result">
+
                     ✕
+
                 </span>
 
             </div>
@@ -3032,7 +3315,7 @@ function createMatchTeamHtml(
 
 
     /*
-       Active match
+       Active
     */
 
     if (
@@ -3047,11 +3330,15 @@ function createMatchTeamHtml(
                 data-team="${escapeAttribute(team)}">
 
                 <span class="team-text">
+
                     ${escapeHtml(team)}
+
                 </span>
 
                 <span class="result">
+
                     →
+
                 </span>
 
             </div>
@@ -3062,7 +3349,7 @@ function createMatchTeamHtml(
 
 
     /*
-       Locked match
+       Locked
     */
 
     return `
@@ -3071,12 +3358,117 @@ function createMatchTeamHtml(
             class="match-team locked-team">
 
             <span class="team-text">
+
                 ${escapeHtml(team)}
+
             </span>
 
         </div>
 
     `;
+
+}
+
+
+/* =========================================================
+   RENDER BRACKET
+========================================================= */
+
+function renderBracket() {
+
+    if (
+        Object.keys(matches).length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    resolveAllMatches();
+
+
+    for (
+        let i = 1;
+        i <= 22;
+        i++
+    ) {
+
+        const id =
+            "M" + i;
+
+
+        const slot =
+            document.getElementById(
+                "slot-" + id
+            );
+
+
+        if (!slot) {
+            continue;
+        }
+
+
+        slot.innerHTML =
+            createMatchHtml(id);
+
+    }
+
+
+    /*
+       Winner buttons
+    */
+
+    document
+        .querySelectorAll(
+            ".match-team.clickable"
+        )
+        .forEach(
+            element => {
+
+                element.addEventListener(
+                    "click",
+                    () => {
+
+                        chooseWinner(
+                            element.dataset.match,
+                            element.dataset.team
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+       Undo buttons
+    */
+
+    document
+        .querySelectorAll(
+            ".undo-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.stopPropagation();
+
+
+                        undoMatch(
+                            button.dataset.match
+                        );
+
+                    }
+                );
+
+            }
+        );
 
 }
 
@@ -3145,6 +3537,219 @@ function updateChampion() {
 
 
 /* =========================================================
+   TOP 4 PLACEMENT
+========================================================= */
+
+function renderPlacements() {
+
+    const container =
+        document.getElementById(
+            "placementList"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const placements = [];
+
+
+    /*
+       1st
+       Winner M22
+    */
+
+    const final =
+        matches["M22"];
+
+
+    if (
+        final &&
+        final.completed &&
+        final.winner
+    ) {
+
+        placements.push({
+
+            rank: "🥇 1st",
+
+            team:
+                final.winner,
+
+            source:
+                "Winner M22",
+
+            className:
+                "champion"
+
+        });
+
+
+        /*
+           2nd
+           Loser M22
+        */
+
+        const second =
+            getLoser("M22");
+
+
+        if (second) {
+
+            placements.push({
+
+                rank: "🥈 2nd",
+
+                team:
+                    second,
+
+                source:
+                    "Loser M22",
+
+                className:
+                    "second"
+
+            });
+
+        }
+
+    }
+
+
+    /*
+       3rd
+       Loser M21
+    */
+
+    const third =
+        getLoser("M21");
+
+
+    if (third) {
+
+        placements.push({
+
+            rank: "🥉 3rd",
+
+            team:
+                third,
+
+            source:
+                "Loser M21",
+
+            className:
+                "third"
+
+        });
+
+    }
+
+
+    /*
+       4th
+       Loser M19
+    */
+
+    const fourth =
+        getLoser("M19");
+
+
+    if (fourth) {
+
+        placements.push({
+
+            rank: "4th",
+
+            team:
+                fourth,
+
+            source:
+                "Loser M19",
+
+            className:
+                ""
+
+        });
+
+    }
+
+
+    /*
+       Nothing yet
+    */
+
+    if (
+        placements.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="placement-empty">
+
+                Complete the tournament to determine Top 4.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    placements.forEach(
+        placement => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "placement-row " +
+                placement.className;
+
+
+            row.innerHTML = `
+
+                <div class="placement-rank">
+
+                    ${placement.rank}
+
+                </div>
+
+                <div class="placement-team">
+
+                    ${escapeHtml(
+                        placement.team
+                    )}
+
+                </div>
+
+                <div class="placement-source">
+
+                    ${placement.source}
+
+                </div>
+
+            `;
+
+
+            container.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
    CLEAR BRACKET
 ========================================================= */
 
@@ -3197,8 +3802,11 @@ function resetAll() {
     confirmed = {
 
         A: false,
+
         B: false,
+
         C: false,
+
         D: false
 
     };
@@ -3207,8 +3815,11 @@ function resetAll() {
     qualified = {
 
         A: [],
+
         B: [],
+
         C: [],
+
         D: []
 
     };
@@ -3222,6 +3833,8 @@ function resetAll() {
     renderQualified();
 
     clearBracket();
+
+    renderPlacements();
 
 
     document.getElementById(
@@ -3254,11 +3867,26 @@ function clone(obj) {
 function escapeHtml(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -3266,10 +3894,22 @@ function escapeHtml(value) {
 function escapeAttribute(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        );
 
 }
 
@@ -3281,6 +3921,8 @@ function escapeAttribute(value) {
 renderGroups();
 
 renderQualified();
+
+renderPlacements();
 
 </script>
 
