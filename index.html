@@ -2,560 +2,1710 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>ABCS Predictor</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
-    body {
-        margin: 0;
-        background: #0b0b0f;
-        color: #fff;
-        font-family: Arial, Helvetica, sans-serif;
-    }
+html {
+    scroll-behavior: smooth;
+}
 
-    header {
-        padding: 25px;
-        text-align: center;
-        background: #111116;
-        border-bottom: 1px solid #29292f;
-        position: sticky;
-        top: 0;
-        z-index: 20;
-    }
+body {
+    margin: 0;
+    background: #08080b;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-    header h1 {
-        margin: 0 0 8px;
-        font-size: 28px;
-    }
+/* =========================
+   HEADER
+========================= */
 
-    header p {
-        margin: 0;
-        color: #999;
-        font-size: 14px;
-    }
+header {
+    background: #101014;
+    border-bottom: 1px solid #292930;
+    padding: 22px 18px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 
-    .controls {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 18px;
-        flex-wrap: wrap;
-    }
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
 
-    button {
-        border: 0;
-        border-radius: 8px;
-        padding: 11px 18px;
-        cursor: pointer;
-        font-weight: bold;
-        color: white;
-        background: #33333b;
-    }
+header p {
+    margin: 7px 0 0;
+    color: #888891;
+    font-size: 14px;
+}
 
-    button:hover {
-        background: #44444e;
-    }
+.controls {
+    margin-top: 17px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
-    .primary {
-        background: #5a0000;
-    }
+button {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 18px;
+    color: #fff;
+    background: #292930;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.15s;
+}
 
-    .primary:hover {
-        background: #760000;
-    }
+button:hover {
+    background: #3b3b44;
+}
 
-    .danger {
-        background: #7a1515;
+button:active {
+    transform: scale(0.97);
+}
+
+.primary {
+    background: #650000;
+}
+
+.primary:hover {
+    background: #850000;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+section {
+    padding: 30px 20px;
+}
+
+.section-title {
+    max-width: 1600px;
+    margin: 0 auto 20px;
+    padding-left: 10px;
+    border-left: 4px solid #850000;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* =========================
+   GROUP STAGE
+========================= */
+
+.groups {
+    max-width: 1600px;
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.group {
+    background: #121217;
+    border: 1px solid #292930;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.group h3 {
+    margin: 0 0 14px;
+    font-size: 18px;
+}
+
+.group-instruction {
+    color: #707078;
+    font-size: 12px;
+    margin-bottom: 12px;
+}
+
+/* =========================
+   DRAG LIST
+========================= */
+
+.team-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.team-item {
+    position: relative;
+
+    min-height: 47px;
+    padding: 0 11px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    background: #1b1b21;
+    border: 1px solid #2d2d35;
+    border-radius: 8px;
+
+    cursor: grab;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    touch-action: none;
+
+    transition:
+        transform 0.15s,
+        background 0.15s,
+        border-color 0.15s,
+        opacity 0.15s;
+}
+
+.team-item:hover {
+    background: #25252c;
+}
+
+.team-item:active {
+    cursor: grabbing;
+}
+
+.team-item.dragging {
+    opacity: 0.35;
+    transform: scale(0.98);
+}
+
+.team-item.drag-over {
+    border-color: #8b0000;
+    background: #2b1111;
+}
+
+.drag-handle {
+    width: 20px;
+    color: #666;
+    font-size: 17px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.rank-number {
+    width: 23px;
+    height: 23px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    background: #292930;
+
+    color: #aaa;
+    font-size: 12px;
+    font-weight: bold;
+
+    flex-shrink: 0;
+}
+
+.team-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.team-item:nth-child(-n+3) .rank-number {
+    background: #5a0000;
+    color: white;
+}
+
+.qualify-status {
+    margin-left: auto;
+    font-size: 10px;
+    color: #888;
+}
+
+.team-item:nth-child(-n+3) .qualify-status {
+    color: #b94b4b;
+}
+
+.group-status {
+    margin-top: 12px;
+    text-align: center;
+
+    padding: 9px;
+
+    border-radius: 7px;
+
+    background: #1b1b21;
+    color: #777;
+
+    font-size: 12px;
+}
+
+.group-status.ready {
+    background: #350000;
+    color: #e4a1a1;
+}
+
+/* =========================
+   QUALIFIED
+========================= */
+
+.qualified {
+    max-width: 1600px;
+    margin: auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+
+.qualified-group {
+    background: #121217;
+    border: 1px solid #292930;
+    border-radius: 12px;
+    padding: 15px;
+}
+
+.qualified-group h3 {
+    margin: 0 0 12px;
+}
+
+.qualified-team {
+    padding: 10px;
+    margin: 6px 0;
+
+    background: #1b1b21;
+    border-radius: 7px;
+
+    font-weight: bold;
+}
+
+.qualified-team span {
+    color: #777;
+    margin-right: 8px;
+}
+
+.empty-message {
+    color: #666;
+    font-size: 13px;
+}
+
+/* =========================
+   BRACKET
+========================= */
+
+.bracket-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 25px;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.bracket {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+
+    min-width: 2350px;
+
+    padding: 0 20px 10px;
+}
+
+.round {
+    width: 220px;
+    flex-shrink: 0;
+}
+
+.round-title {
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #aaa;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* =========================
+   MATCH
+========================= */
+
+.match {
+    overflow: hidden;
+
+    margin-bottom: 25px;
+
+    background: #111116;
+    border: 1px solid #2c2c33;
+    border-radius: 9px;
+
+    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+}
+
+.match-header {
+    padding: 7px 10px;
+
+    background: #1c1c22;
+
+    color: #999;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.match-team {
+    min-height: 44px;
+
+    padding: 11px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-top: 1px solid #28282f;
+
+    background: #16161c;
+
+    cursor: pointer;
+
+    transition: 0.15s;
+}
+
+.match-team:hover {
+    background: #28282f;
+}
+
+.match-team.empty {
+    color: #4f4f56;
+    cursor: default;
+}
+
+.match-team.winner {
+    background: #620000;
+    color: #fff;
+    font-weight: bold;
+}
+
+.match-team.loser {
+    opacity: 0.35;
+}
+
+.match-team.pending {
+    color: #777;
+}
+
+.match-status {
+    margin-left: 7px;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+/* =========================
+   CHAMPION
+========================= */
+
+.champion {
+    width: calc(100% - 40px);
+    max-width: 700px;
+
+    margin: 20px auto 60px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    background: linear-gradient(
+        135deg,
+        #131318,
+        #280000
+    );
+
+    border: 1px solid #650000;
+    border-radius: 15px;
+}
+
+.champion h2 {
+    margin: 0 0 12px;
+}
+
+.champion-name {
+    font-size: 36px;
+    font-weight: bold;
+    color: #ffb000;
+    word-break: break-word;
+}
+
+.champion-hint {
+    margin-top: 8px;
+    color: #777;
+    font-size: 13px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 900px) {
+
+    .groups,
+    .qualified {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     section {
-        padding: 30px;
+        padding: 24px 15px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    header {
+        padding: 17px 12px;
+    }
+
+    header h1 {
+        font-size: 22px;
+    }
+
+    header p {
+        font-size: 12px;
+    }
+
+    .controls button {
+        flex: 1;
+        min-width: 140px;
+    }
+
+    .groups,
+    .qualified {
+        grid-template-columns: 1fr;
     }
 
     .section-title {
-        font-size: 22px;
-        margin-bottom: 20px;
-        border-left: 4px solid #8b0000;
-        padding-left: 10px;
+        font-size: 19px;
     }
 
-    /* GROUPS */
-
-    .groups {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
-    }
-
-    .group {
-        background: #121217;
-        border: 1px solid #29292f;
-        border-radius: 12px;
-        padding: 16px;
-    }
-
-    .group h3 {
-        margin: 0 0 15px;
-        font-size: 18px;
-    }
-
-    .team-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 8px;
-    }
-
-    .team-input {
-        flex: 1;
-        min-width: 0;
-        background: #1c1c22;
-        border: 1px solid #303038;
-        color: white;
-        border-radius: 6px;
-        padding: 9px;
-        outline: none;
-    }
-
-    .team-input:focus {
-        border-color: #777;
-    }
-
-    .rank {
-        width: 26px;
-        text-align: center;
-        color: #888;
-        font-size: 13px;
-    }
-
-    .qualify-btn {
-        width: 100%;
-        margin-top: 12px;
-        background: #24242c;
-    }
-
-    .qualify-btn.active {
-        background: #5a0000;
-    }
-
-    /* QUALIFIED */
-
-    .qualified {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
-    }
-
-    .qualified-group {
-        background: #121217;
-        border: 1px solid #29292f;
-        border-radius: 12px;
-        padding: 16px;
-    }
-
-    .qualified-team {
-        padding: 10px;
-        margin: 6px 0;
-        background: #1d1d23;
-        border-radius: 7px;
-    }
-
-    .qualified-team span {
-        color: #777;
-        margin-right: 7px;
-    }
-
-    /* BRACKET */
-
-    .bracket-wrapper {
-        overflow-x: auto;
-        padding-bottom: 20px;
+    .team-item {
+        min-height: 50px;
     }
 
     .bracket {
-        display: flex;
-        gap: 28px;
-        min-width: 1700px;
-        align-items: flex-start;
+        min-width: 2350px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
-
-    .round {
-        width: 230px;
-        flex-shrink: 0;
-    }
-
-    .round-title {
-        text-align: center;
-        font-size: 14px;
-        color: #aaa;
-        margin-bottom: 15px;
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    .match {
-        background: #121217;
-        border: 1px solid #29292f;
-        border-radius: 10px;
-        margin-bottom: 24px;
-        overflow: hidden;
-    }
-
-    .match-header {
-        padding: 7px 10px;
-        background: #1b1b21;
-        font-size: 12px;
-        color: #999;
-        font-weight: bold;
-    }
-
-    .match-team {
-        padding: 11px 10px;
-        background: #17171d;
-        border-top: 1px solid #25252b;
-        cursor: pointer;
-        transition: 0.15s;
-        min-height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .match-team:hover {
-        background: #292930;
-    }
-
-    .match-team.empty {
-        color: #555;
-        cursor: default;
-    }
-
-    .match-team.winner {
-        background: #5a0000;
-        font-weight: bold;
-    }
-
-    .match-team.loser {
-        opacity: 0.35;
-    }
-
-    .team-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .status {
-        font-size: 11px;
-        margin-left: 5px;
-    }
-
-    /* GRAND FINAL */
-
-    .champion {
-        margin-top: 35px;
-        background: linear-gradient(135deg, #17171d, #250000);
-        border: 1px solid #650000;
-        border-radius: 15px;
-        padding: 30px;
-        text-align: center;
-    }
-
-    .champion h2 {
-        margin: 0 0 10px;
-        font-size: 25px;
-    }
-
-    .champion-name {
-        font-size: 34px;
-        font-weight: bold;
-        color: #ffb000;
-    }
-
-    .hint {
-        color: #777;
-        font-size: 13px;
-        margin-top: 8px;
-    }
-
-    @media (max-width: 900px) {
-        .groups,
-        .qualified {
-            grid-template-columns: repeat(2, 1fr);
-        }
-    }
-
-    @media (max-width: 600px) {
-        section {
-            padding: 18px;
-        }
-
-        .groups,
-        .qualified {
-            grid-template-columns: 1fr;
-        }
-
-        header h1 {
-            font-size: 22px;
-        }
-    }
+}
 </style>
 </head>
 
+
 <body>
 
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
 <header>
+
     <h1>🏆 Tournament Predictor</h1>
-    <p>24 Teams • 4 Groups • Top 3 • Double Elimination</p>
+
+    <p>
+        24 Teams • 4 Groups • Top 3 • Double Elimination
+    </p>
 
     <div class="controls">
-        <button class="primary" onclick="buildBracket()">BUILD BRACKET</button>
-        <button onclick="resetPredictions()">RESET PREDICTIONS</button>
+
+        <button
+            class="primary"
+            onclick="buildBracket()">
+
+            BUILD BRACKET
+
+        </button>
+
+        <button
+            onclick="resetAll()">
+
+            RESET
+
+        </button>
+
     </div>
+
 </header>
 
 
-<!-- GROUP STAGE -->
+<!-- =====================================================
+     GROUP STAGE
+===================================================== -->
 
 <section>
-    <div class="section-title">Group Stage</div>
+
+    <div class="section-title">
+        Group Stage
+    </div>
 
     <div class="groups" id="groups"></div>
+
 </section>
 
 
-<!-- QUALIFIED -->
+<!-- =====================================================
+     QUALIFIED
+===================================================== -->
 
 <section>
-    <div class="section-title">Qualified Teams — Top 3</div>
 
-    <div class="qualified" id="qualified"></div>
+    <div class="section-title">
+        Qualified Teams — Top 3
+    </div>
+
+    <div
+        class="qualified"
+        id="qualified">
+
+    </div>
+
 </section>
 
 
-<!-- BRACKET -->
+<!-- =====================================================
+     BRACKET
+===================================================== -->
 
 <section>
-    <div class="section-title">Double Elimination Bracket</div>
+
+    <div class="section-title">
+        Double Elimination Bracket
+    </div>
 
     <div class="bracket-wrapper">
-        <div class="bracket" id="bracket"></div>
+
+        <div
+            class="bracket"
+            id="bracket">
+
+        </div>
+
     </div>
 
-    <div class="champion" id="champion">
-        <h2>🏆 Champion</h2>
-        <div class="champion-name">—</div>
-        <div class="hint">Complete M22 to determine the champion.</div>
-    </div>
 </section>
+
+
+<!-- =====================================================
+     CHAMPION
+===================================================== -->
+
+<div class="champion">
+
+    <h2>🏆 Champion</h2>
+
+    <div
+        class="champion-name"
+        id="championName">
+
+        —
+
+    </div>
+
+    <div
+        class="champion-hint"
+        id="championHint">
+
+        Complete M22 to determine the champion.
+
+    </div>
+
+</div>
 
 
 <script>
 
 /* =========================================================
-   FIXED GROUPS
+   FIXED TEAMS
 ========================================================= */
 
-const initialGroups = {
-    A: ["69D", "7D", "20TS", "MDS", "HST", "ABR"],
-    B: ["BOD", "KPK", "302", "TRL", "KKAB", "BBZ"],
-    C: ["TR", "KAP", "CBR", "PDAB", "JPJ", "24K"],
-    D: ["4P", "BMS", "DRM", "DVX", "S9", "DMF"]
+const defaultGroups = {
+
+    A: [
+        "69D",
+        "7D",
+        "20TS",
+        "MDS",
+        "HST",
+        "ABR"
+    ],
+
+    B: [
+        "BOD",
+        "KPK",
+        "302",
+        "TRL",
+        "KKAB",
+        "BBZ"
+    ],
+
+    C: [
+        "TR",
+        "KAP",
+        "CBR",
+        "PDAB",
+        "JPJ",
+        "24K"
+    ],
+
+    D: [
+        "4P",
+        "BMS",
+        "DRM",
+        "DVX",
+        "S9",
+        "DMF"
+    ]
+
 };
 
-let groups = JSON.parse(JSON.stringify(initialGroups));
 
-/*
-   qualified[A] = [1st, 2nd, 3rd]
-*/
+let groups = clone(defaultGroups);
+
+
+/* =========================================================
+   QUALIFIED
+========================================================= */
+
 let qualified = {
+
     A: [],
     B: [],
     C: [],
     D: []
-};
 
-/*
-   Every match:
-   {
-      a: team,
-      b: team,
-      winner: team
-   }
-*/
-let matches = {};
-
-const bracketDefinition = {
-
-    M1:  { a: "B2",       b: "C3" },
-    M2:  { a: "D2",       b: "A3" },
-    M3:  { a: "A2",       b: "D3" },
-    M4:  { a: "C2",       b: "B3" },
-
-    M5:  { a: "A1",       b: "W1" },
-    M6:  { a: "C1",       b: "W2" },
-    M7:  { a: "B1",       b: "W3" },
-    M8:  { a: "D1",       b: "W4" },
-
-    M9:  { a: "L5",       b: "L4" },
-    M10: { a: "L6",       b: "L3" },
-    M11: { a: "L7",       b: "L2" },
-    M12: { a: "L8",       b: "L1" },
-
-    M13: { a: "W10",      b: "W9" },
-    M14: { a: "W12",      b: "W11" },
-
-    M15: { a: "W5",       b: "W6" },
-    M16: { a: "W7",       b: "W8" },
-
-    M17: { a: "L15",      b: "W14" },
-    M18: { a: "L16",      b: "W13" },
-
-    M19: { a: "W17",      b: "W18" },
-
-    M20: { a: "W15",      b: "W16" },
-
-    M21: { a: "L20",      b: "W19" },
-
-    M22: { a: "W21",      b: "W20" }
 };
 
 
 /* =========================================================
-   GROUP UI
+   MATCHES
+========================================================= */
+
+let matches = {};
+
+
+/* =========================================================
+   EXACT BRACKET
+========================================================= */
+
+const bracketDefinition = {
+
+    /* =====================
+       UPPER ROUND 1
+    ===================== */
+
+    M1: {
+        a: "B2",
+        b: "C3"
+    },
+
+    M2: {
+        a: "D2",
+        b: "A3"
+    },
+
+    M3: {
+        a: "A2",
+        b: "D3"
+    },
+
+    M4: {
+        a: "C2",
+        b: "B3"
+    },
+
+
+    /* =====================
+       UPPER ROUND 2
+    ===================== */
+
+    M5: {
+        a: "A1",
+        b: "W1"
+    },
+
+    M6: {
+        a: "C1",
+        b: "W2"
+    },
+
+    M7: {
+        a: "B1",
+        b: "W3"
+    },
+
+    M8: {
+        a: "D1",
+        b: "W4"
+    },
+
+
+    /* =====================
+       LOWER ROUND 1
+    ===================== */
+
+    M9: {
+        a: "L5",
+        b: "L4"
+    },
+
+    M10: {
+        a: "L6",
+        b: "L3"
+    },
+
+    M11: {
+        a: "L7",
+        b: "L2"
+    },
+
+    M12: {
+        a: "L8",
+        b: "L1"
+    },
+
+
+    /* =====================
+       LOWER ROUND 2
+    ===================== */
+
+    M13: {
+        a: "W10",
+        b: "W9"
+    },
+
+    M14: {
+        a: "W12",
+        b: "W11"
+    },
+
+
+    /* =====================
+       UPPER SEMIFINAL
+    ===================== */
+
+    M15: {
+        a: "W5",
+        b: "W6"
+    },
+
+    M16: {
+        a: "W7",
+        b: "W8"
+    },
+
+
+    /* =====================
+       LOWER ROUND 3
+    ===================== */
+
+    M17: {
+        a: "L15",
+        b: "W14"
+    },
+
+    M18: {
+        a: "L16",
+        b: "W13"
+    },
+
+
+    /* =====================
+       LOWER ROUND 4
+    ===================== */
+
+    M19: {
+        a: "W17",
+        b: "W18"
+    },
+
+
+    /* =====================
+       UPPER FINAL
+    ===================== */
+
+    M20: {
+        a: "W15",
+        b: "W16"
+    },
+
+
+    /* =====================
+       LOWER FINAL
+    ===================== */
+
+    M21: {
+        a: "L20",
+        b: "W19"
+    },
+
+
+    /* =====================
+       GRAND FINAL
+    ===================== */
+
+    M22: {
+        a: "W21",
+        b: "W20"
+    }
+
+};
+
+
+/* =========================================================
+   VISUAL ROUNDS
+========================================================= */
+
+const rounds = [
+
+    {
+        title: "Upper Round 1",
+        ids: [
+            "M1",
+            "M2",
+            "M3",
+            "M4"
+        ]
+    },
+
+    {
+        title: "Upper Round 2",
+        ids: [
+            "M5",
+            "M6",
+            "M7",
+            "M8"
+        ]
+    },
+
+    {
+        title: "Lower Round 1",
+        ids: [
+            "M9",
+            "M10",
+            "M11",
+            "M12"
+        ]
+    },
+
+    {
+        title: "Upper Semifinal",
+        ids: [
+            "M15",
+            "M16"
+        ]
+    },
+
+    {
+        title: "Lower Round 2",
+        ids: [
+            "M13",
+            "M14"
+        ]
+    },
+
+    {
+        title: "Lower Round 3",
+        ids: [
+            "M17",
+            "M18"
+        ]
+    },
+
+    {
+        title: "Lower Round 4",
+        ids: [
+            "M19"
+        ]
+    },
+
+    {
+        title: "Upper Final",
+        ids: [
+            "M20"
+        ]
+    },
+
+    {
+        title: "Lower Final",
+        ids: [
+            "M21"
+        ]
+    },
+
+    {
+        title: "Grand Final",
+        ids: [
+            "M22"
+        ]
+    }
+
+];
+
+
+/* =========================================================
+   DRAG STATE
+========================================================= */
+
+let draggedElement = null;
+
+let draggedGroup = null;
+
+let draggedIndex = null;
+
+
+/* =========================================================
+   RENDER GROUPS
 ========================================================= */
 
 function renderGroups() {
 
-    const container = document.getElementById("groups");
+    const container =
+        document.getElementById("groups");
+
     container.innerHTML = "";
 
-    Object.entries(groups).forEach(([group, teams]) => {
 
-        const div = document.createElement("div");
-        div.className = "group";
+    Object.keys(groups).forEach(group => {
 
-        div.innerHTML = `
+        const box =
+            document.createElement("div");
+
+        box.className = "group";
+
+
+        box.innerHTML = `
+
             <h3>GROUP ${group}</h3>
+
+            <div class="group-instruction">
+                Drag teams to set ranking.
+                Top 3 qualify.
+            </div>
+
+            <div
+                class="team-list"
+                data-group="${group}">
+            </div>
+
+            <div
+                class="group-status"
+                id="status-${group}">
+
+                Top 3 not confirmed
+
+            </div>
+
         `;
 
-        teams.forEach((team, index) => {
 
-            const row = document.createElement("div");
-            row.className = "team-row";
+        const list =
+            box.querySelector(".team-list");
 
-            row.innerHTML = `
-                <div class="rank">${index + 1}</div>
-                <input
-                    class="team-input"
-                    value="${escapeHtml(team)}"
-                    data-group="${group}"
-                    data-index="${index}"
-                    onchange="updateTeam(this)"
-                >
-            `;
 
-            div.appendChild(row);
-        });
+        groups[group].forEach(
+            (team, index) => {
 
-        const button = document.createElement("button");
-        button.className = "qualify-btn";
-        button.innerText = "SELECT TOP 3";
+                const item =
+                    createTeamItem(
+                        group,
+                        team,
+                        index
+                    );
 
-        button.onclick = () => selectTop3(group);
 
-        div.appendChild(button);
+                list.appendChild(item);
 
-        container.appendChild(div);
+            }
+        );
+
+
+        /*
+           Enable desktop drag & drop
+        */
+
+        list.addEventListener(
+            "dragover",
+            handleDragOver
+        );
+
+        list.addEventListener(
+            "drop",
+            handleDrop
+        );
+
+
+        /*
+           Enable touch dragging
+        */
+
+        list.addEventListener(
+            "touchmove",
+            handleTouchMove,
+            {
+                passive: false
+            }
+        );
+
+        list.addEventListener(
+            "touchend",
+            handleTouchEnd
+        );
+
+
+        container.appendChild(box);
+
     });
-}
 
-
-function updateTeam(input) {
-
-    const group = input.dataset.group;
-    const index = Number(input.dataset.index);
-
-    groups[group][index] = input.value.trim();
-
-    qualified[group] = [];
-
-    renderQualified();
-    clearBracket();
-}
-
-
-/*
-   User enters group order directly.
-   First 3 = qualified.
-*/
-function selectTop3(group) {
-
-    qualified[group] = groups[group]
-        .slice(0, 3)
-        .map(x => x.trim())
-        .filter(Boolean);
-
-    renderQualified();
-    clearBracket();
-
-    const buttons = document.querySelectorAll(".qualify-btn");
-
-    buttons.forEach(btn => {
-
-        if (btn.parentElement.querySelector("h3").innerText === `GROUP ${group}`) {
-            btn.classList.add("active");
-            btn.innerText = "TOP 3 SELECTED ✓";
-        }
-    });
 }
 
 
 /* =========================================================
-   QUALIFIED UI
+   CREATE TEAM ITEM
+========================================================= */
+
+function createTeamItem(
+    group,
+    team,
+    index
+) {
+
+    const item =
+        document.createElement("div");
+
+
+    item.className =
+        "team-item";
+
+
+    item.draggable = true;
+
+
+    item.dataset.group =
+        group;
+
+    item.dataset.index =
+        index;
+
+
+    item.innerHTML = `
+
+        <div class="drag-handle">
+            ☰
+        </div>
+
+        <div class="rank-number">
+            ${index + 1}
+        </div>
+
+        <div class="team-name">
+            ${escapeHtml(team)}
+        </div>
+
+        <div class="qualify-status">
+            ${index < 3 ? "QUALIFY" : ""}
+        </div>
+
+    `;
+
+
+    /*
+       Desktop
+    */
+
+    item.addEventListener(
+        "dragstart",
+        handleDragStart
+    );
+
+    item.addEventListener(
+        "dragend",
+        handleDragEnd
+    );
+
+
+    /*
+       Mobile touch
+    */
+
+    item.addEventListener(
+        "touchstart",
+        handleTouchStart,
+        {
+            passive: true
+        }
+    );
+
+
+    return item;
+
+}
+
+
+/* =========================================================
+   DESKTOP DRAG START
+========================================================= */
+
+function handleDragStart(event) {
+
+    draggedElement =
+        event.currentTarget;
+
+
+    draggedGroup =
+        draggedElement.dataset.group;
+
+
+    draggedIndex =
+        Number(
+            draggedElement.dataset.index
+        );
+
+
+    draggedElement.classList.add(
+        "dragging"
+    );
+
+
+    event.dataTransfer.effectAllowed =
+        "move";
+
+}
+
+
+/* =========================================================
+   DESKTOP DRAG END
+========================================================= */
+
+function handleDragEnd() {
+
+    if (draggedElement) {
+
+        draggedElement.classList.remove(
+            "dragging"
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(".drag-over")
+        .forEach(element => {
+
+            element.classList.remove(
+                "drag-over"
+            );
+
+        });
+
+
+    draggedElement = null;
+
+    draggedGroup = null;
+
+    draggedIndex = null;
+
+}
+
+
+/* =========================================================
+   DESKTOP DRAG OVER
+========================================================= */
+
+function handleDragOver(event) {
+
+    event.preventDefault();
+
+
+    const item =
+        event.target.closest(
+            ".team-item"
+        );
+
+
+    if (!item) {
+        return;
+    }
+
+
+    if (
+        item.dataset.group !==
+        draggedGroup
+    ) {
+
+        return;
+    }
+
+
+    document
+        .querySelectorAll(".drag-over")
+        .forEach(element => {
+
+            element.classList.remove(
+                "drag-over"
+            );
+
+        });
+
+
+    item.classList.add(
+        "drag-over"
+    );
+
+}
+
+
+/* =========================================================
+   DESKTOP DROP
+========================================================= */
+
+function handleDrop(event) {
+
+    event.preventDefault();
+
+
+    const target =
+        event.target.closest(
+            ".team-item"
+        );
+
+
+    if (!target) {
+        return;
+    }
+
+
+    const targetGroup =
+        target.dataset.group;
+
+
+    if (
+        targetGroup !==
+        draggedGroup
+    ) {
+
+        return;
+    }
+
+
+    const targetIndex =
+        Number(
+            target.dataset.index
+        );
+
+
+    if (
+        targetIndex ===
+        draggedIndex
+    ) {
+
+        return;
+    }
+
+
+    moveTeam(
+        draggedGroup,
+        draggedIndex,
+        targetIndex
+    );
+
+}
+
+
+/* =========================================================
+   TOUCH START
+========================================================= */
+
+function handleTouchStart(event) {
+
+    draggedElement =
+        event.currentTarget;
+
+
+    draggedGroup =
+        draggedElement.dataset.group;
+
+
+    draggedIndex =
+        Number(
+            draggedElement.dataset.index
+        );
+
+
+    draggedElement.classList.add(
+        "dragging"
+    );
+
+}
+
+
+/* =========================================================
+   TOUCH MOVE
+========================================================= */
+
+function handleTouchMove(event) {
+
+    if (!draggedElement) {
+        return;
+    }
+
+
+    event.preventDefault();
+
+
+    const touch =
+        event.touches[0];
+
+
+    const element =
+        document.elementFromPoint(
+            touch.clientX,
+            touch.clientY
+        );
+
+
+    const target =
+        element?.closest(
+            ".team-item"
+        );
+
+
+    document
+        .querySelectorAll(".drag-over")
+        .forEach(element => {
+
+            element.classList.remove(
+                "drag-over"
+            );
+
+        });
+
+
+    if (
+        target &&
+        target.dataset.group ===
+        draggedGroup &&
+        target !== draggedElement
+    ) {
+
+        target.classList.add(
+            "drag-over"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   TOUCH END
+========================================================= */
+
+function handleTouchEnd(event) {
+
+    if (!draggedElement) {
+        return;
+    }
+
+
+    const touch =
+        event.changedTouches[0];
+
+
+    const element =
+        document.elementFromPoint(
+            touch.clientX,
+            touch.clientY
+        );
+
+
+    const target =
+        element?.closest(
+            ".team-item"
+        );
+
+
+    if (
+        target &&
+        target.dataset.group ===
+        draggedGroup &&
+        target !== draggedElement
+    ) {
+
+        const targetIndex =
+            Number(
+                target.dataset.index
+            );
+
+
+        moveTeam(
+            draggedGroup,
+            draggedIndex,
+            targetIndex
+        );
+
+    }
+
+
+    document
+        .querySelectorAll(".drag-over")
+        .forEach(element => {
+
+            element.classList.remove(
+                "drag-over"
+            );
+
+        });
+
+
+    if (draggedElement) {
+
+        draggedElement.classList.remove(
+            "dragging"
+        );
+
+    }
+
+
+    draggedElement = null;
+
+    draggedGroup = null;
+
+    draggedIndex = null;
+
+}
+
+
+/* =========================================================
+   MOVE TEAM
+========================================================= */
+
+function moveTeam(
+    group,
+    fromIndex,
+    toIndex
+) {
+
+    const list =
+        groups[group];
+
+
+    if (
+        fromIndex < 0 ||
+        toIndex < 0 ||
+        fromIndex >= list.length ||
+        toIndex >= list.length
+    ) {
+
+        return;
+    }
+
+
+    const moved =
+        list.splice(
+            fromIndex,
+            1
+        )[0];
+
+
+    list.splice(
+        toIndex,
+        0,
+        moved
+    );
+
+
+    /*
+       Ranking changed.
+
+       Clear old qualification because
+       Top 3 have changed.
+    */
+
+    qualified[group] = [];
+
+
+    clearBracketOnly();
+
+
+    renderGroups();
+
+    renderQualified();
+
+}
+
+
+/* =========================================================
+   GROUP STATUS
+========================================================= */
+
+function updateGroupStatus() {
+
+    Object.keys(groups).forEach(group => {
+
+        const status =
+            document.getElementById(
+                `status-${group}`
+            );
+
+
+        if (!status) {
+            return;
+        }
+
+
+        if (
+            qualified[group].length === 3
+        ) {
+
+            status.innerText =
+                "TOP 3 CONFIRMED ✓";
+
+            status.classList.add(
+                "ready"
+            );
+
+        } else {
+
+            status.innerText =
+                "Top 3 not confirmed";
+
+            status.classList.remove(
+                "ready"
+            );
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT TOP 3
+=========================================================
+
+   Instead of needing a button,
+   the first 3 positions automatically
+   represent qualification.
+
+   BUILD BRACKET will read positions
+   1, 2 and 3.
+========================================================= */
+
+function autoQualifyGroups() {
+
+    Object.keys(groups).forEach(group => {
+
+        qualified[group] =
+            groups[group]
+                .slice(0, 3);
+
+    });
+
+}
+
+
+/* =========================================================
+   QUALIFIED RENDER
 ========================================================= */
 
 function renderQualified() {
 
-    const container = document.getElementById("qualified");
+    const container =
+        document.getElementById(
+            "qualified"
+        );
+
 
     container.innerHTML = "";
 
-    Object.entries(qualified).forEach(([group, teams]) => {
 
-        const div = document.createElement("div");
+    Object.keys(qualified).forEach(group => {
 
-        div.className = "qualified-group";
+        const box =
+            document.createElement("div");
 
-        div.innerHTML = `<h3>GROUP ${group}</h3>`;
+        box.className =
+            "qualified-group";
 
-        if (teams.length === 0) {
 
-            div.innerHTML += `
-                <div class="hint">
-                    Select Top 3 from Group ${group}
+        box.innerHTML =
+            `<h3>GROUP ${group}</h3>`;
+
+
+        const teams =
+            qualified[group];
+
+
+        if (
+            teams.length !== 3
+        ) {
+
+            box.innerHTML += `
+
+                <div class="empty-message">
+                    Drag teams to set ranking.
+                    Top 3 will qualify.
                 </div>
+
             `;
 
         } else {
 
-            teams.forEach((team, index) => {
+            teams.forEach(
+                (team, index) => {
 
-                div.innerHTML += `
-                    <div class="qualified-team">
-                        <span>${index + 1}.</span>
-                        ${escapeHtml(team)}
-                    </div>
-                `;
-            });
+                    box.innerHTML += `
+
+                        <div class="qualified-team">
+
+                            <span>
+                                ${index + 1}.
+                            </span>
+
+                            ${escapeHtml(team)}
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
         }
 
-        container.appendChild(div);
+
+        container.appendChild(box);
+
     });
+
+
+    updateGroupStatus();
+
 }
 
 
@@ -565,416 +1715,635 @@ function renderQualified() {
 
 function buildBracket() {
 
-    for (const group of ["A", "B", "C", "D"]) {
+    /*
+       Automatically take first 3
+       from every group.
+    */
 
-        if (qualified[group].length !== 3) {
+    autoQualifyGroups();
 
-            alert(`Please select Top 3 for Group ${group} first.`);
+
+    /*
+       Make sure every group has 6 teams.
+    */
+
+    for (
+        const group of
+        ["A", "B", "C", "D"]
+    ) {
+
+        if (
+            groups[group].length !== 6
+        ) {
+
+            alert(
+                `Group ${group} must contain 6 teams.`
+            );
+
             return;
         }
+
     }
 
-    matches = {};
 
-    Object.keys(bracketDefinition).forEach(id => {
+    renderQualified();
 
-        matches[id] = {
-            a: null,
-            b: null,
-            winner: null
-        };
-    });
+
+    initializeMatches();
+
 
     resolveAllMatches();
 
+
     renderBracket();
+
+
     updateChampion();
+
+
+    /*
+       Scroll to bracket
+    */
+
+    setTimeout(() => {
+
+        document
+            .getElementById("bracket")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    }, 100);
+
 }
 
 
 /* =========================================================
-   RESOLVE MATCH REFERENCES
+   INITIALIZE MATCHES
+========================================================= */
+
+function initializeMatches() {
+
+    matches = {};
+
+
+    Object.keys(
+        bracketDefinition
+    ).forEach(matchId => {
+
+        matches[matchId] = {
+
+            a: null,
+
+            b: null,
+
+            winner: null
+
+        };
+
+    });
+
+}
+
+
+/* =========================================================
+   RESOLVE REFERENCE
 ========================================================= */
 
 function resolveReference(ref) {
 
-    if (!ref) return null;
-
-    /*
-       Group placements
-    */
-
-    if (/^[ABCD][123]$/.test(ref)) {
-
-        const group = ref[0];
-        const pos = Number(ref[1]) - 1;
-
-        return qualified[group]?.[pos] || null;
-    }
-
-    /*
-       Winner / loser references
-    */
-
-    if (ref.startsWith("W")) {
-
-        const id = ref.substring(1);
-
-        return matches[id]?.winner || null;
-    }
-
-    if (ref.startsWith("L")) {
-
-        const id = ref.substring(1);
-
-        const match = matches[id];
-
-        if (!match || !match.winner) {
-            return null;
-        }
-
-        if (match.a === match.winner) {
-            return match.b;
-        }
-
-        if (match.b === match.winner) {
-            return match.a;
-        }
-
+    if (!ref) {
         return null;
     }
 
+
+    /*
+       GROUP PLACEMENT
+
+       A1 = 1st Group A
+       A2 = 2nd Group A
+       A3 = 3rd Group A
+    */
+
+    if (
+        /^[ABCD][123]$/.test(ref)
+    ) {
+
+        const group =
+            ref.charAt(0);
+
+
+        const position =
+            Number(
+                ref.charAt(1)
+            ) - 1;
+
+
+        return (
+            qualified[group]?.[position]
+            || null
+        );
+
+    }
+
+
+    /*
+       WINNER
+
+       W1 = Winner M1
+       W15 = Winner M15
+    */
+
+    if (
+        ref.startsWith("W")
+    ) {
+
+        const matchId =
+            "M" +
+            ref.substring(1);
+
+
+        return (
+            matches[matchId]?.winner
+            || null
+        );
+
+    }
+
+
+    /*
+       LOSER
+
+       L1 = Loser M1
+       L15 = Loser M15
+    */
+
+    if (
+        ref.startsWith("L")
+    ) {
+
+        const matchId =
+            "M" +
+            ref.substring(1);
+
+
+        const match =
+            matches[matchId];
+
+
+        if (!match) {
+            return null;
+        }
+
+
+        /*
+           Loser cannot be known
+           before winner is selected.
+        */
+
+        if (!match.winner) {
+            return null;
+        }
+
+
+        if (
+            match.a ===
+            match.winner
+        ) {
+
+            return match.b;
+
+        }
+
+
+        if (
+            match.b ===
+            match.winner
+        ) {
+
+            return match.a;
+
+        }
+
+
+        return null;
+
+    }
+
+
     return null;
+
 }
 
+
+/* =========================================================
+   RESOLVE ALL MATCHES
+========================================================= */
 
 function resolveAllMatches() {
 
-    let changed = true;
-
     /*
-       Keep resolving until all available
-       dependencies have been populated.
+       Repeat to propagate dependencies.
     */
 
-    while (changed) {
+    for (
+        let pass = 0;
+        pass < 40;
+        pass++
+    ) {
 
-        changed = false;
+        let changed = false;
 
-        for (const id of Object.keys(bracketDefinition)) {
 
-            const def = bracketDefinition[id];
+        Object.keys(
+            bracketDefinition
+        ).forEach(matchId => {
 
-            const a = resolveReference(def.a);
-            const b = resolveReference(def.b);
+            const definition =
+                bracketDefinition[
+                    matchId
+                ];
+
+
+            const newA =
+                resolveReference(
+                    definition.a
+                );
+
+
+            const newB =
+                resolveReference(
+                    definition.b
+                );
+
+
+            const match =
+                matches[matchId];
+
 
             if (
-                matches[id].a !== a ||
-                matches[id].b !== b
+                match.a !== newA ||
+                match.b !== newB
             ) {
 
-                matches[id].a = a;
-                matches[id].b = b;
+                match.a = newA;
+
+                match.b = newB;
+
 
                 /*
-                   If a team changes, its previous prediction
-                   may no longer be valid.
+                   Keep winner only if
+                   winner still exists in match.
                 */
 
                 if (
-                    matches[id].winner !== a &&
-                    matches[id].winner !== b
+                    match.winner !== newA &&
+                    match.winner !== newB
                 ) {
-                    matches[id].winner = null;
+
+                    match.winner = null;
+
                 }
 
+
                 changed = true;
+
             }
+
+        });
+
+
+        if (!changed) {
+            break;
         }
+
     }
+
 }
 
 
 /* =========================================================
-   SELECT WINNER
+   CHOOSE WINNER
 ========================================================= */
 
-function chooseWinner(matchId, team) {
+function chooseWinner(
+    matchId,
+    team
+) {
 
-    const match = matches[matchId];
+    const match =
+        matches[matchId];
 
-    if (!match) return;
 
-    if (!team) return;
-
-    /*
-       Cannot choose a winner if opponent is not present.
-    */
-
-    if (match.a !== team && match.b !== team) {
+    if (!match) {
         return;
     }
 
-    match.winner = team;
+
+    if (!team) {
+        return;
+    }
+
 
     /*
-       Clear dependent predictions if necessary.
+       Team must actually belong
+       to this match.
     */
 
-    clearInvalidPredictions();
+    if (
+        team !== match.a &&
+        team !== match.b
+    ) {
+
+        return;
+    }
+
+
+    /*
+       Select winner.
+    */
+
+    match.winner =
+        team;
+
+
+    /*
+       Recalculate every dependent match.
+    */
 
     resolveAllMatches();
 
+
+    /*
+       Re-render entire bracket.
+    */
+
     renderBracket();
+
+
     updateChampion();
-}
 
-
-function clearInvalidPredictions() {
-
-    Object.keys(matches).forEach(id => {
-
-        const match = matches[id];
-
-        if (!match.winner) return;
-
-        if (
-            match.winner !== match.a &&
-            match.winner !== match.b
-        ) {
-            match.winner = null;
-        }
-    });
 }
 
 
 /* =========================================================
-   BRACKET RENDERING
+   RENDER BRACKET
 ========================================================= */
-
-const rounds = [
-
-    {
-        title: "Round 1",
-        matches: ["M1", "M2", "M3", "M4"]
-    },
-
-    {
-        title: "Upper Round 2",
-        matches: ["M5", "M6", "M7", "M8"]
-    },
-
-    {
-        title: "Lower Round 1",
-        matches: ["M9", "M10", "M11", "M12"]
-    },
-
-    {
-        title: "Upper Semifinal",
-        matches: ["M15", "M16"]
-    },
-
-    {
-        title: "Lower Round 2",
-        matches: ["M13", "M14"]
-    },
-
-    {
-        title: "Lower Round 3",
-        matches: ["M17", "M18"]
-    },
-
-    {
-        title: "Lower Round 4",
-        matches: ["M19"]
-    },
-
-    {
-        title: "Upper Final",
-        matches: ["M20"]
-    },
-
-    {
-        title: "Lower Final",
-        matches: ["M21"]
-    },
-
-    {
-        title: "Grand Final",
-        matches: ["M22"]
-    }
-
-];
-
 
 function renderBracket() {
 
     resolveAllMatches();
 
-    const container = document.getElementById("bracket");
+
+    const container =
+        document.getElementById(
+            "bracket"
+        );
+
 
     container.innerHTML = "";
 
+
     rounds.forEach(round => {
 
-        const column = document.createElement("div");
+        const column =
+            document.createElement("div");
 
-        column.className = "round";
 
-        column.innerHTML = `
-            <div class="round-title">
-                ${round.title}
-            </div>
-        `;
+        column.className =
+            "round";
 
-        round.matches.forEach(matchId => {
+
+        const title =
+            document.createElement("div");
+
+
+        title.className =
+            "round-title";
+
+
+        title.innerText =
+            round.title;
+
+
+        column.appendChild(title);
+
+
+        round.ids.forEach(matchId => {
 
             column.appendChild(
-                createMatchElement(matchId)
+                createMatchElement(
+                    matchId
+                )
             );
+
         });
 
+
         container.appendChild(column);
+
     });
+
 }
 
 
-function createMatchElement(matchId) {
+/* =========================================================
+   CREATE MATCH
+========================================================= */
 
-    const match = matches[matchId];
+function createMatchElement(
+    matchId
+) {
 
-    const box = document.createElement("div");
+    const match =
+        matches[matchId];
 
-    box.className = "match";
 
-    const header = document.createElement("div");
+    const box =
+        document.createElement("div");
 
-    header.className = "match-header";
 
-    header.innerText = matchId;
+    box.className =
+        "match";
+
+
+    const header =
+        document.createElement("div");
+
+
+    header.className =
+        "match-header";
+
+
+    header.innerText =
+        matchId;
+
 
     box.appendChild(header);
 
+
     box.appendChild(
-        createTeamElement(
+        createMatchTeam(
             matchId,
             match.a
         )
     );
 
+
     box.appendChild(
-        createTeamElement(
+        createMatchTeam(
             matchId,
             match.b
         )
     );
 
+
     return box;
-}
 
-
-function createTeamElement(matchId, team) {
-
-    const div = document.createElement("div");
-
-    div.className = "match-team";
-
-    if (!team) {
-
-        div.classList.add("empty");
-
-        div.innerHTML = `
-            <span class="team-name">
-                Waiting...
-            </span>
-        `;
-
-        return div;
-    }
-
-    if (matches[matchId].winner === team) {
-
-        div.classList.add("winner");
-
-        div.innerHTML = `
-            <span class="team-name">
-                ${escapeHtml(team)}
-            </span>
-            <span class="status">✓</span>
-        `;
-
-    } else {
-
-        div.innerHTML = `
-            <span class="team-name">
-                ${escapeHtml(team)}
-            </span>
-        `;
-
-        div.onclick = () => {
-            chooseWinner(matchId, team);
-        };
-    }
-
-    /*
-       If another team has won, mark this team as loser.
-    */
-
-    if (
-        matches[matchId].winner &&
-        matches[matchId].winner !== team
-    ) {
-
-        div.classList.add("loser");
-
-        div.innerHTML += `
-            <span class="status">✕</span>
-        `;
-    }
-
-    return div;
 }
 
 
 /* =========================================================
-   CLEAR / RESET
+   CREATE MATCH TEAM
 ========================================================= */
 
-function clearBracket() {
+function createMatchTeam(
+    matchId,
+    team
+) {
 
-    matches = {};
-
-    document.getElementById("bracket").innerHTML = "";
-
-    document.querySelector(".champion-name").innerText = "—";
-
-    document.querySelector(".champion .hint").innerText =
-        "Complete M22 to determine the champion.";
-}
+    const div =
+        document.createElement("div");
 
 
-function resetPredictions() {
+    div.className =
+        "match-team";
 
-    if (!confirm("Reset all group rankings and predictions?")) {
-        return;
+
+    /*
+       Empty / waiting
+    */
+
+    if (!team) {
+
+        div.classList.add(
+            "empty"
+        );
+
+
+        div.innerHTML = `
+
+            <span class="team-name">
+                Waiting...
+            </span>
+
+        `;
+
+
+        return div;
+
     }
 
-    groups = JSON.parse(
-        JSON.stringify(initialGroups)
+
+    const match =
+        matches[matchId];
+
+
+    /*
+       WINNER
+    */
+
+    if (
+        match.winner === team
+    ) {
+
+        div.classList.add(
+            "winner"
+        );
+
+
+        div.innerHTML = `
+
+            <span class="team-name">
+                ${escapeHtml(team)}
+            </span>
+
+            <span class="match-status">
+                ✓ WIN
+            </span>
+
+        `;
+
+
+        return div;
+
+    }
+
+
+    /*
+       LOSER
+    */
+
+    if (
+        match.winner &&
+        match.winner !== team
+    ) {
+
+        div.classList.add(
+            "loser"
+        );
+
+
+        div.innerHTML = `
+
+            <span class="team-name">
+                ${escapeHtml(team)}
+            </span>
+
+            <span class="match-status">
+                ✕
+            </span>
+
+        `;
+
+
+        return div;
+
+    }
+
+
+    /*
+       AVAILABLE TEAM
+
+       Clicking it means:
+       "I predict this team wins."
+    */
+
+    div.innerHTML = `
+
+        <span class="team-name">
+            ${escapeHtml(team)}
+        </span>
+
+    `;
+
+
+    div.addEventListener(
+        "click",
+        () => {
+
+            chooseWinner(
+                matchId,
+                team
+            );
+
+        }
     );
 
-    qualified = {
-        A: [],
-        B: [],
-        C: [],
-        D: []
-    };
 
-    matches = {};
+    return div;
 
-    renderGroups();
-    renderQualified();
-    clearBracket();
 }
 
 
@@ -984,44 +2353,164 @@ function resetPredictions() {
 
 function updateChampion() {
 
-    const championBox =
-        document.querySelector(".champion-name");
+    const name =
+        document.getElementById(
+            "championName"
+        );
+
 
     const hint =
-        document.querySelector(".champion .hint");
+        document.getElementById(
+            "championHint"
+        );
 
-    const finalMatch = matches["M22"];
 
-    if (finalMatch && finalMatch.winner) {
+    const finalMatch =
+        matches["M22"];
 
-        championBox.innerText =
+
+    if (
+        finalMatch &&
+        finalMatch.winner
+    ) {
+
+        name.innerText =
             finalMatch.winner;
+
 
         hint.innerText =
             "🏆 Tournament Champion";
 
     } else {
 
-        championBox.innerText = "—";
+        name.innerText =
+            "—";
+
 
         hint.innerText =
             "Complete M22 to determine the champion.";
+
     }
+
 }
 
 
 /* =========================================================
-   HTML ESCAPE
+   CLEAR BRACKET
+========================================================= */
+
+function clearBracketOnly() {
+
+    matches = {};
+
+
+    document.getElementById(
+        "bracket"
+    ).innerHTML = "";
+
+
+    document.getElementById(
+        "championName"
+    ).innerText = "—";
+
+
+    document.getElementById(
+        "championHint"
+    ).innerText =
+        "Complete M22 to determine the champion.";
+
+}
+
+
+/* =========================================================
+   RESET EVERYTHING
+========================================================= */
+
+function resetAll() {
+
+    const confirmed =
+        confirm(
+            "Reset all rankings and predictions?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    groups =
+        clone(defaultGroups);
+
+
+    qualified = {
+
+        A: [],
+        B: [],
+        C: [],
+        D: []
+
+    };
+
+
+    matches = {};
+
+
+    renderGroups();
+
+    renderQualified();
+
+    clearBracketOnly();
+
+}
+
+
+/* =========================================================
+   CLONE OBJECT
+========================================================= */
+
+function clone(object) {
+
+    return JSON.parse(
+        JSON.stringify(object)
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
 ========================================================= */
 
 function escapeHtml(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
 }
 
 
@@ -1030,6 +2519,7 @@ function escapeHtml(value) {
 ========================================================= */
 
 renderGroups();
+
 renderQualified();
 
 </script>
